@@ -1,0 +1,32 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore the virtual environment directory
+env/
+*.env
+.env
+# Ignore local development settings
+local_settings.py
+
+# Ignore SQLite database file
+db.sqlite3
+sqlite.db
+sqlite.db
+constants.py
+# Ignore IDE or editor specific files
+.vscode/
+.idea/
+
+# Ignore staticfiles directory (collected static files)
+staticfiles/
+static/
+**/migrations/
+
+# Ignore media files
+media/
+
+# Ignore secret key file
+secret_key.txt
+
+# Ignore logs
+*.log

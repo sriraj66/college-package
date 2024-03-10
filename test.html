@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Data to Django URL</title>
+</head>
+<body>
+    <h2>Post Data to Django URL</h2>
+    <label for="uuid">UUID:</label>
+    <input type="text" id="uuid" name="uuid" value="3bb915ee-dfa9-46fb-8a1c-4142fccf2194"><br><br>
+    <label for="query">Query:</label>
+    <input type="text" id="query" name="query" value="placement Details"><br><br>
+    <button onclick="postData()">Send POST Request</button>
+    <p id="container" ></p>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function postData() {
+            var uuid = document.getElementById("uuid").value;
+            var query = document.getElementById("query").value;
+            var data = new FormData();
+            data.append('uuid', uuid);
+            data.append('query', query);
+
+                const response = await axios.post('http://127.0.0.1:8000/api/get_responce', data, {
+                    timeout: 10000,
+                });
+                console.log('Response:', response.data);
+                document.getElementById("container").innerText= response.data.response;
+                
+        }
+    </script>
+</body>
+</html>
