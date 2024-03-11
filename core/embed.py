@@ -87,7 +87,7 @@ class Emmbedded(threading.Thread):
 
     def query(self,urls=[]):
         if self.clg.state == False:
-            t = threading.Thread(target=self.add_sources,args=(urls,))
+            t = threading.Thread(target=self.add_sources)
             t.start()
             return "The Server is down... Try after some time"
         else:
