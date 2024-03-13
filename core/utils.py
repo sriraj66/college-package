@@ -91,3 +91,5 @@ def start_page_source(id):
     
     t.start()
 
+if __name__ == '__main__':
+    pass

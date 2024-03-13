@@ -4,11 +4,12 @@ from django.shortcuts import render, redirect
 from .forms import *
 from .utils import *
 from .embed import *
+from django.contrib.auth.decorators import login_required
 import threading
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.templatetags.static import static
-
+@login_required
 def index(request):
     context = {
       "college":College.objects.all(),
@@ -110,7 +111,6 @@ def get_chat_responce(request):
         clg = College.objects.get(uid=uid)
         print(clg.name)
         responce['name'] = clg.name
-        responce['profile_url'] = clg.logo
         print(responce['profile_url'])
         responce['updated'] = clg.updated.date()
         try:

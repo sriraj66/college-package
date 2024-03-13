@@ -1,7 +1,7 @@
 import threading
 from embedchain import App
 from .models import College
-
+from core import utils
 class Emmbedded(threading.Thread):
     
     def __init__(self, uid, prompt,urls = []):
@@ -26,9 +26,9 @@ class Emmbedded(threading.Thread):
                 "max_tokens": 1000,
                 "top_p": 1,
                 "stream": False,
-                "prompt": "Use the following pieces of context to answer the query at the end.\nIf you don't know the answer, just say that you don't know.\n$context\n\nQuery: $query\n\nHelpful Answer:",
+                "prompt": "$history Use the following pieces of query to answer  at the end.\nIf you don't know the answer, just say that you don't know.\n$context\n\nQuery: $query\n\nHelpful Answer:",
                 "system_prompt": (
-                "Act as Assistant. Answer the following questions in the style of Professional Assistant.\n"
+                "Act as Assistant. Answer the following questions in the style of Professional Assistant. give  sweet answers.\n"
                 
                 ),
                 "api_key": self.key
@@ -45,7 +45,7 @@ class Emmbedded(threading.Thread):
             "embedder": {
                 "provider": "openai",
                 "config": {
-                "model": "text-embedding-ada-002",
+                "model": "text-embedding-3-large",
                 "api_key": self.key
                 }
             },
@@ -83,12 +83,14 @@ class Emmbedded(threading.Thread):
         self.clg.state = True
         self.clg.running = True
         self.clg.save()
+        print("State : " , self.clg.state)
+        print("Running : " , self.clg.running)
         return True
 
     def query(self,urls=[]):
-        if self.clg.state == False:
-            t = threading.Thread(target=self.add_sources)
-            t.start()
+        if self.clg.state is False or self.clg.running is False:
+            utils.start_page_source(self.clg.id)
+
             return "The Server is down... Try after some time"
         else:
             return self.app.chat(self.prompt,citations=True)[0].replace(",[object Object]"," ")
