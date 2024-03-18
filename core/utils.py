@@ -55,6 +55,7 @@ def callback_function(id,urls):
     print("Embeding urls to the models")
     emb = Emmbedded(uid=obj.uid,prompt="SETUP",urls=urls)
     emb.add_sources()
+    obj.state = True
     obj.save()
 
  

@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class PROMPTS(models.Model):
+class CONTENTS(models.Model):
 
     platform = models.CharField(max_length=50)
     post_type = models.CharField(max_length=50)

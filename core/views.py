@@ -111,6 +111,7 @@ def get_chat_responce(request):
         clg = College.objects.get(uid=uid)
         print(clg.name)
         responce['name'] = clg.name
+        responce['profile_url'] = clg.logo
         print(responce['profile_url'])
         responce['updated'] = clg.updated.date()
         try:

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST</title>
+</head>
+<body>
+
+  <h1>KRGI BOT</h1>
+
+  <ol>
+    <li>KRCT</li>
+    <li>MKCE</li>
+    <li>KRCE</li>
+  </ol>
+
+
+
+
+  <link rel="stylesheet" href="http://3.13.145.63/static/css/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  const URL = 'http://3.13.145.63/api/get_responce'
+  </script>
+  <button class="btn-pop-message" onclick="toggleMessage()"><span><i class="fas fa-close"></i></span></button>
+
+  <section class="msger --hide" id="msger">
+    <header class="msger-header">
+      <div class="msger-header-title">
+        <i class="fas fa-comment-alt"></i> KRGI BOT
+      </div>
+      <div class="msger-header-options" onclick="toggleMessage()">
+        <span><i class="fas fa-times"></i></span>
+      </div>
+    </header>
+
+    <main class="msger-chat">
+
+    </main>
+
+    <form class="msger-inputarea">
+      <input type="text" name='query' class="msger-input" placeholder="Enter your message...">
+      <input type="text" name='uuid' value='0ea2717e-5edf-47e1-95c8-92813a6faa52' hidden class="msger-uuid"">
+
+  <button type=" submit" class="msger-send-btn">Send</button>
+    </form>
+  </section>
+  <script src="http://3.13.145.63/static/js/service.js"></script>
+  <script src="http://3.13.145.63/static/js/script.js"></script>
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+
+
+
+
+
+</body>
+</html>

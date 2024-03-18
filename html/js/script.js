@@ -10,7 +10,7 @@ async function postData(uuid,query) {
   data.append('uuid', uuid);
   data.append('query', query);
 
-      const response = await axios.post('http://127.0.0.1:8000/api/get_responce', data, {
+      const response = await axios.post(URL, data, {
           timeout: 30000,
       });
       console.log('Response:', response.data);
@@ -43,7 +43,10 @@ function appendMessage(name, img, side, text) {
           <div class="msg-info-time">${formatDate(new Date())}</div>
         </div>
 
-        <div class="msg-text">${text}</div>
+        <div class="msg-text">
+        
+        ${text}
+        </div>
       </div>
     </div>
   `;

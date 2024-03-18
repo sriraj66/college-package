@@ -28,7 +28,7 @@
 
   <button class="btn-pop-message" onclick="toggleMessage()"><span><i class="fas fa-close"></i></span></button>
   <br>
-  <a href="{% url 'generate_social_media_content' %}" >SMCG</a>
+  <a href="{% url 'generate_social_media_content' %}" >SMCG -</a>
   <br>
   <table class="table table-bordered">
     <thead>
@@ -41,7 +41,7 @@
       {% for i in college %}
       <tr>
         <td>{{i.name}}</td>
-        <td>{{i.uid}}</td>
+        <td><a href="{% url 'source_code' i.uid %}" >{{i.uid}}</a></td>
 
       </tr>
       {% endfor %}
