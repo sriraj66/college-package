@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'crispy_forms',
     'crispy_bootstrap5',
-    'smcg'
+    'smcg',
+    'ATS'
 ]
 
 MIDDLEWARE = [

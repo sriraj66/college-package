@@ -5,6 +5,12 @@ env/
 *.env
 .env
 local_settings.py
+test.py
+test2.py
+test.pdf
+test.html
+test.docx
+template.py
 
 db.sqlite3
 sqlite.db

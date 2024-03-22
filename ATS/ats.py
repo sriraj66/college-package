@@ -1,16 +1,14 @@
 from openai import OpenAI
 import PyPDF2
-from dotenv import load_dotenv
-load_dotenv()
-import  os,docx
-
-class PDFChatAssistant:
+import os, docx, threading
+class ATS:
     def __init__(self, api_key, pdf_path,job_description):
         self.key = api_key
         self.jd = job_description
+
         self.client = OpenAI(api_key=self.key)
         try:
-            self.pdf_text = self.extract_pdf_text(pdf_path) if pdf_path.split(".")[-1] == "pdf" else self.extract_docx_test(pdf_path)
+            self.pdf_text = self.extract_pdf_text(pdf_path) if str(pdf_path).split('.')[-1]=='pdf' else self.extract_docx_test(pdf_path)
         except Exception as e:
             self.pdf_text = "Unable to Extract This is not and resume."
             print(e)
@@ -36,15 +34,13 @@ class PDFChatAssistant:
         return text
 
     def evaluate(self):
+        print(len(self.pdf_text))
         response = self.client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
-                {"role": "system",
-                 "content": "You are Going to chat About the PDF[Resume,CV] of the user .if it not look like a resume or cv Try to change the resume if not possible tell not looks like a resume docx.and Rate matching with the job description  Rate out of 10 and give some tips and accurate number. and make an accurate answer."},
-                {"role": "system",
-                 "content": "The output must be in a json format with max of 400 characters if no error return null [score,tips,error,discription,myfeedback]"},
-                {"role": "system",
-                 "content": "The output of the tips single HTML list element with. express how to improve the resume in creative way with emojies"},
+                {"role": "system", "content": "You are Going to chat About the PDF[Resume,CV] of the user .if it not look like a resume or cv Try to change the resume if not possible tell not looks like a resume docx.and Rate matching with the job description  Rate out of 10 and give some tips and accurate number. and make an accurate answer."},
+                {"role": "system", "content": "The output must be in a json format with max of 400 characters if no error return null [score,tips,error,discription,myfeedback]"},
+                {"role": "system", "content": "The output of the tips as a html list elemen. and tips has some emojies."},
                 {"role": "user", "content": f"Here is the Resume  context : {self.pdf_text}"},
                 {"role": "user", "content": f"Here is the Job Description context : {self.jd}"},
             ]
@@ -53,9 +49,12 @@ class PDFChatAssistant:
         answer = response.choices[0].message.content
 
         return answer
-    def run(self):
-            answer = self.evaluate()
-            print(answer)
+
+
+def run(api_key, pdf_path,job_description):
+    app = ATS(api_key, pdf_path,job_description)
+    return app.evaluate()
+
 
 
 jd = """
@@ -85,5 +84,5 @@ BSc in Computer Science, Engineering or relevant field
 """
 
 if __name__ == "__main__":
-    assistant = PDFChatAssistant(os.getenv("key"), "test.pdf",job_description=jd)
-    assistant.run()
+    assistant = ATS(os.getenv("key"), "test.pdf",job_description=jd)
+    assistant.evaluate()
