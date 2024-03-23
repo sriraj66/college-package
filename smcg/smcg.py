@@ -3,7 +3,7 @@ from openai import OpenAI
 import requests, json
 from smcg.models import *
 from core.models import *
-from django.urls import  reverse
+from django.urls import reverse
 def get_past_data(url, uuid, query):
     data = {'uuid': uuid, 'query': "Details about " + query}
     response = requests.post(url, data=data)

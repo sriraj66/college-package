@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import *
+from smcg.views import *
 
 urlpatterns = [
     path("smcg",generate_social_media_content,name='generate_social_media_content'),

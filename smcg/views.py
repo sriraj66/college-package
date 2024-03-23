@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .constants import *
+from smcg.constants import *
 from django.http import JsonResponse
-from .smcg import *
+from smcg.smcg import *
 def generate_social_media_content(request):
     context = {
         'platform':PLATFORM,
