@@ -11,10 +11,9 @@ test.pdf
 test.html
 .test.docx
 template.py
-
+tests/
 db.sqlite3
 sqlite.db
-constants.py
 .vscode/
 .idea/
 
@@ -27,3 +26,6 @@ media/
 secret_key.txt
 
 *.log
+
+test.py
+eb.yaml

@@ -1,0 +1,361 @@
+{% extends "base.html" %} 
+{% block title %} Path Pilot {% endblock %} 
+
+
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block nav %}
+<a class="navbar-brand" href="{% url 'index' %}">Path Pilot</a>
+<a href="{% url 'logout' %}" class="btn logout" type="submit">logout</a>
+{% endblock %}
+
+{% block main %}
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="cg_form"
+                enctype="multipart/form-data"
+                class=""
+            >
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="">UID</label>
+                    <input
+                        type="text"
+                        placeholder="xxxxx-xxxx-xxxx-xxx"
+                        name="uuid"
+                        id="uuid"
+                        class="form-control"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for=""><h3>Personal Information</h3></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        placeholder="Name"
+                        id="name"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Degree</label>
+                    <select name="degree" id="degree" class="form-control">
+                        {% for i in degree %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Branch</label>
+                    <select name="branch" id="branch" class="form-control">
+                        {% for i in branch %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Year</label>
+                    <select name="year" id="year" class="form-control">
+                        {% for i in year %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Short Introduction about yourself.</label>
+                    <textarea
+                        name="sd"
+                        class="form-control"
+                        id="sd"
+                        cols="30"
+                        rows="2"
+                        placeholder="Eg. I am Good At..."
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for=""><h3>Career Information</h3></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Dream Job</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="dj"
+                        id="dj"
+                        placeholder="Your destination job"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Duration</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="dur"
+                        id="dur"
+                        placeholder=""
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Location</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="loc"
+                        id="loc"
+                        placeholder="Contry"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Expected Salary</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="sal"
+                        id="sal"
+                        placeholder="Salary without Symbole"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Current Skills</label>
+                    <textarea
+                        type="text"
+                        class="form-control"
+                        name="skill"
+                        id="skill"
+                        rows="2"
+                        placeholder="Type Skills seprated by ,"
+                        class="form-control"
+                    ></textarea>
+                </div>
+
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Generate
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        RESET
+                    </button>
+                </div>
+            </form>
+
+            <br /><br />
+        </div>
+        <div class="col-md">
+            <p id="outtit">Map Comes here...</p>
+            <div id="output-container"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container col-md" id="courses"></div>
+        <div class="container col-md" id="profiles"></div>
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+    var form = document.getElementById("cg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        scrollToTop();
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        data.append("uuid", e.target.uuid.value);
+        data.append("name", e.target.name.value);
+        data.append("degree", e.target.degree.value);
+        data.append("branch", e.target.branch.value);
+        data.append("year", e.target.year.value);
+        data.append("sd", e.target.sd.value);
+        data.append("dj", e.target.dj.value);
+        data.append("dur", e.target.dur.value);
+        data.append("loc", e.target.loc.value);
+        data.append("sal", e.target.sal.value);
+        data.append("skill", e.target.skill.value);
+
+        document.getElementById("output-container").innerHTML = "";
+        document.getElementById("profiles").innerHTML = "";
+        document.getElementById("courses").innerHTML = "";
+
+        console.log(data);
+
+        document.getElementById(
+            "outtit"
+        ).innerText = `Generating Map For ${e.target.dj.value}}`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "road_map" %}', true);
+
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    btn.disable = false;
+                    btn.innerHTML = "Generate";
+                    var responce = JSON.parse(xhr.responseText);
+                    displayContent(responce);
+                    document.getElementById(
+                        "outtit"
+                    ).innerText = `Career Map for ${e.target.dj.value}.`;
+
+                    console.log(responce);
+                } else {
+                    console.error("Form submission error:", xhr.status);
+                    btn.innerHTML = `Error [${xhr.status}]`;
+                }
+            }
+        };
+    });
+
+    function displayContent(apiResponse) {
+        const outputContainer = document.getElementById("output-container");
+        outputContainer.innerHTML = "";
+        // Display career guidance roadmap
+        const roadmapContainer = document.createElement("div");
+        roadmapContainer.classList.add("roadmap-container");
+        roadmapContainer.innerHTML = "<h3>Career Guidance Roadmap</h3>";
+
+        apiResponse.careerGuidanceRoadmap.steps.forEach((step, index) => {
+            const year = `Year ${index + 1}`;
+            const stepContent = step[Object.keys(step)[0]];
+
+            const yearContainer = document.createElement("div");
+            yearContainer.classList.add("year-container");
+            yearContainer.innerHTML = `
+                <h5>${year}</h5>
+                <p><strong>Focus:</strong> ${stepContent.focus}</p>
+                <ul>
+                    ${stepContent.actionItems
+                        .map((item) => `<li>${item}</li>`)
+                        .join("")}
+                </ul>
+                <hr />
+            
+                `;
+
+            roadmapContainer.appendChild(yearContainer);
+        });
+
+        outputContainer.appendChild(roadmapContainer);
+
+        // Display courses
+        const cContainer = document.getElementById("courses");
+
+        const coursesContainer = document.createElement("div");
+        coursesContainer.classList.add("courses-container");
+        coursesContainer.innerHTML = "<h3>Courses</h3>";
+
+        apiResponse.courses.forEach((course) => {
+            const courseElement = document.createElement("div");
+            courseElement.classList.add("course");
+            courseElement.innerHTML = `
+            <br/>
+                <h6><a href="${course.link}" target="_blank">${course.title}</a></h6>
+                <p><strong>Platform: </strong>${course.platform}</p>
+            `;
+
+            coursesContainer.appendChild(courseElement);
+        });
+
+        cContainer.appendChild(coursesContainer);
+
+        // Display profiles
+        const pContainer = document.getElementById("profiles");
+
+        const profilesContainer = document.createElement("div");
+        profilesContainer.classList.add("profiles-container");
+        profilesContainer.innerHTML = "<h3>Linkedin Profiles</h3>";
+
+        apiResponse.profiles.forEach((profile) => {
+            const profileElement = document.createElement("div");
+            profileElement.classList.add("profile");
+            profileElement.innerHTML = `
+            <br/>
+                <h6><a href="${profile.profileLink}" target="_blank">${profile.name}</a></h6>
+                <p><strong>Specialization:</strong> ${profile.specialization}</p>
+                
+
+            `;
+
+            profilesContainer.appendChild(profileElement);
+        });
+
+        pContainer.appendChild(profilesContainer);
+    }
+
+    // window.onload = () => {displayContent(apiResponse1)} ;
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }
+</script>
+{% endblock %}

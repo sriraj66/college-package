@@ -9,6 +9,9 @@ import threading
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.templatetags.static import static
+
+from django.contrib.auth import logout
+
 @login_required
 def index(request):
     context = {
@@ -28,7 +31,7 @@ def index(request):
 
 def college_form(request):
     if request.method == 'POST':
-        form = CollegeForm(request.POST)
+        form = CollegeForm(request.POST,request.FILES)
         if form.is_valid():
             mid = form.save()
             root_url = form.cleaned_data['root_url']
@@ -127,3 +130,15 @@ def get_chat_responce(request):
         
         
     return JsonResponse(responce)
+
+
+def log_out(request):
+  logout(request)
+  return redirect("index")
+
+@login_required
+def new_ui(request):
+  context = {
+    'colleges': College.objects.all(),
+  }
+  return render(request,'chatbot/index.html',context=context)

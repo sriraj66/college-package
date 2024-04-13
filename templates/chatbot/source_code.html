@@ -1,57 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CODE</title>
 
-    <style>
-    .code-container {
-    text-align: center;
-}
+        <style>
+            .code-container {
+                text-align: center;
+            }
 
-.code-area {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 14px;
-    color: #333;
-    background-color: #f8f8f8;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: inline-block;
-    white-space: pre-wrap;
-}
+            .code-area {
+                font-family: "Courier New", Courier, monospace;
+                font-size: 14px;
+                color: #333;
+                background-color: #f8f8f8;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                display: inline-block;
+                white-space: pre-wrap;
+            }
 
-#copyButton {
-    margin-top: 10px;
-    cursor: pointer;
-}
+            #copyButton {
+                margin-top: 10px;
+                cursor: pointer;
+            }
+            .container{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="container">
+            <p>Embed This code onto your Respective Sites.</p>
+            <code id="codeArea" class="code-area"> {{ code }} </code>
+            <button id="copyButton">Click to Copy</button>
+            <a href="{% url 'index' %}">Go Back</a>
+        </div>
 
-
-    </style>
-
-</head>
-<body>
-    
-
-    <code id="codeArea" class="code-area">
-        {{ code }}
-    </code>
-    <button id="copyButton">Click to Copy</button>
-
-
-    <script>
-        document.getElementById("copyButton").addEventListener("click", function() {
-    var codeArea = document.getElementById("codeArea");
-    var range = document.createRange();
-    range.selectNode(codeArea);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-    window.getSelection().removeAllRanges();
-    alert("Code copied to clipboard!");
-});
-
-    </script>
-</body>
+        <script>
+            document
+                .getElementById("copyButton")
+                .addEventListener("click", function () {
+                    var codeArea = document.getElementById("codeArea");
+                    var range = document.createRange();
+                    range.selectNode(codeArea);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand("copy");
+                    window.getSelection().removeAllRanges();
+                    alert("Code copied to clipboard!");
+                });
+        </script>
+    </body>
 </html>

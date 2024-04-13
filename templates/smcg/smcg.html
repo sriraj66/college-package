@@ -1,177 +1,231 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %} 
+{% block title %} SMCG {% endblock %} 
+{% block style%}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+</style>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+{% endblock %} {% block nav %}
 
-    <title>
-        Social Media Content Generator
-    </title>
-</head>
+<a class="navbar-brand" href="{% url 'index' %}"
+    >Social Media Content Generator</a
+>
+<a href="{% url 'logout' %}" class="btn logout" type="submit">logout</a>
+{% endblock %} {% block main %}
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="smcg_form"
+                enctype="multipart/form-data"
+                class=""
+            >
+                {% csrf_token %}
 
-<body>
+                <div class="form-group">
+                    <label for="">UID</label>
+                    <input
+                        type="text"
+                        placeholder="xxxxx-xxxx-xxxx-xxx"
+                        name="uuid"
+                        id="uuid"
+                        class="form-control"
+                    />
+                </div>
 
-    <nav class="navbar ">
-        <div class="container">
-            <a class="navbar-brand">Social Media Content Generator</a>
-            <button class="btn btn-outline-dark" type="submit">logout</button>
+                <div class="form-group">
+                    <label for="">Platform</label>
+                    <select name="platform" id="platform" class="form-control">
+                        {% for i in platform %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Post Type</label>
+                    <select
+                        name="post_type"
+                        id="post_type"
+                        class="form-control"
+                    >
+                        {% for i in types %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Goal</label>
+                    <select
+                        name="goal"
+                        id="goal"
+                        class="form-control"
+                        onchange="getTopic()"
+                    >
+                        {% for i in goals %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="topic">Topic</label>
+                    <select name="topic" id="topic" class="form-control">
+                        <option value="None" default>Select Goal</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <textarea
+                        type="text"
+                        name="des"
+                        id="des"
+                        rows="5"
+                        placeholder="Any Specfic Details"
+                        class="form-control"
+                    ></textarea>
+                </div>
+
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Generate
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </form>
+
+            <br /><br />
         </div>
-    </nav>
-
-    <div class="container item-center">
-        <div class="row" style="margin: 10px;">
-            <div class="col-md">
-                <form action="POST" id="smcg_form" class="">
-                    {% csrf_token %}
-
-                    <div class="form-group">
-                        <label for="">UID</label>
-                        <input type="text" name="uuid" id="uuid" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="">Platform</label>
-                        <select name="platform" id="platform" class="form-control">
-                            {% for i in platform %}
-                            <option value="{{i}}">{{i}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-        
-                    
-                    <div class="form-group">
-                        <label for="">Post Type</label>
-                        <select name="post_type" id="post_type" class="form-control">
-                            {% for i in types %}
-                            <option value="{{i}}">{{i}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="">Goal</label>
-                        <select name="goal" id="goal" class="form-control" onchange="getTopic()">
-                            {% for i in goals %}
-                            <option value="{{i}}">{{i}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="topic">Topic</label>
-                        <select name="topic" id="topic" class="form-control">
-                            <option value="None" default>Select Goal</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" name="des" id="des" placeholder="Discription" class="form-control">
-                    </div>
-        
-                    <div class="btn-group" style="width: 100%; justify-content: center; align-items: center;">
-                        <button class="btn btn-outline-success" id="submit" style="width: 80%;" type="submit">Generate</button>
-                        <button type="reset" class="btn btn-outline-danger" style="width: 20%;">Reset</button>
-                    </div>
-        
-                </form>
-        
-                <br><br>
-            </div>
-            <div class="col-md">
-                <p>Output:</p>
-                    <textarea name="" id="outputTextarea" cols="50" rows="20" placeholder="The output Text comes Here..." class="form-control"></textarea>
-                
+        <div class="col-md">
+            <p>Output:</p>
+            <div id="output">
+                <textarea
+                    name=""
+                    value=""
+                    id="outputTextarea"
+                    cols="50"
+                    rows="20"
+                    placeholder="The output Text comes Here..."
+                    class="form-control"
+                ></textarea>
             </div>
         </div>
     </div>
+</div>
+<div class="container" id="desc"></div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+{% endblock %} {% block script %}
+<script>
+    function getTopic() {
+        var goal = document.getElementById("goal");
+        var topic = document.getElementById("topic");
 
-    <script>
-
-        function getTopic(){
-            var goal = document.getElementById("goal");
-            var topic = document.getElementById("topic");
-
-            fetch("{% url 'about_post' %}",
-            {
-                method:"GET",
-                headers: {
-                      'Content-Type': 'application/json',
-                    },
-            }).then(
-                responce => responce.json()
-            ).then(data => {
+        fetch("{% url 'about_post' %}", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((responce) => responce.json())
+            .then((data) => {
                 const topics = data[goal.value];
-                topic.innerHTML = ""
-                topics.forEach(i => {
-                    topic.innerHTML += `<option value="${i}">${i}</option>`
+                topic.innerHTML = "";
+                topics.forEach((i) => {
+                    topic.innerHTML += `<option value="${i}">${i}</option>`;
                 });
+            })
+            .catch((err) => alert(err));
+    }
+</script>
 
-            }).catch(err => alert(err));
+<script>
+    var form = document.getElementById("smcg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        var check = document.getElementById("post_type").value;
 
+        if (check !== "Image") {
+            document.getElementById(
+                "output"
+            ).innerHTML = `<textarea name="" value="Just a Second .. I am Generating..." id="outputTextarea" cols="50" rows="20" placeholder="The output Text comes Here..." class="form-control"></textarea>`;
+        } else {
+            document.getElementById("output").innerHTML =
+                "<p>The image is generating</p>";
         }
 
-    </script>
+        document.getElementById("desc").innerText = "";
 
-    <script>
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        data.append("uuid", e.target.uuid.value);
+        data.append("platform", e.target.platform.value);
+        data.append("post_type", e.target.post_type.value);
+        data.append("goal", e.target.goal.value);
+        data.append("topic", e.target.topic.value);
+        data.append("des", e.target.des.value);
+        // data.append("gen_image",document.getElementById("gen_image").checked)
 
-        var form = document.getElementById("smcg_form");
-        form.addEventListener("submit", (e)=>{
-            e.preventDefault();
-            var btn = document.getElementById("submit");
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
-            btn.disable = true
-            document.getElementById('outputTextarea').value = "Just a Second .. I am Generating...";
-            var data = new FormData();
-            data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value)
-            data.append("uuid", e.target.uuid.value)
-            data.append("platform", e.target.platform.value)
-            data.append("post_type", e.target.post_type.value)
-            data.append("goal", e.target.goal.value)
-            data.append("topic", e.target.topic.value)
-            data.append("des", e.target.des.value)
+        console.log(data);
+        console.log(check);
 
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "gen_smcg" %}', true);
 
-            console.log(data)
+        xhr.send(data);
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '{% url "gen_smcg" %}', true);
-            
-            xhr.send(data);
-
-            xhr.onreadystatechange = function () {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     btn.disable = false;
                     btn.innerHTML = "Generate";
                     var responce = JSON.parse(xhr.responseText);
-                    document.getElementById('outputTextarea').value = responce.output;
+                    console.log(responce);
 
+                    if (responce.image !== false) {
+                        document.getElementById(
+                            "output"
+                        ).innerHTML = `<img width="80%" src="${responce.image}" alt="image.jpg"> <br/> <a href="${responce.image}" download>Download</a> `;
+                        document.getElementById(
+                            "desc"
+                        ).innerHTML = `Description:<br/><p>${responce.output}</p>`;
+                    } else {
+                        document.getElementById("outputTextarea").value =
+                            responce.output;
+                    }
                 } else {
-                    console.error('Form submission error:', xhr.status);
+                    console.error("Form submission error:", xhr.status);
                 }
             }
-            };
-            
-        })
-
-
-    </script>
-
-</body>
-
-</html>
+        };
+    });
+</script>
+{% endblock %}

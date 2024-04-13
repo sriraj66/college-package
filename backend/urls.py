@@ -9,6 +9,8 @@ urlpatterns = [
     path("",include("core.urls")),
     path("ai/",include("smcg.urls")),
     path("ats/",include("ATS.urls")),
+    path("cg/",include("CG.urls")),
+    path("cp/",include("CP.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

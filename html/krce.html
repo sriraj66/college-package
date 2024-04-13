@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRCE</title>
+</head>
+<body>
+     
+  <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/style.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  const URL = 'http://127.0.0.1:8000/api/get_responce'
+  </script>
+  <button class="btn-pop-message" onclick="toggleMessage()"><span><i class="fas fa-close"></i></span></button>
+
+  <section class="msger --hide" id="msger">
+    <header class="msger-header">
+      <div class="msger-header-title">
+        <i class="fas fa-comment-alt"></i> KRCE
+      </div>
+      <div class="msger-header-options" onclick="toggleMessage()">
+        <span><i class="fas fa-times"></i></span>
+      </div>
+    </header>
+
+    <main class="msger-chat">
+
+    </main>
+
+    <form class="msger-inputarea">
+      <input type="text" name='query' class="msger-input" placeholder="Enter your message...">
+      <input type="text" name='uuid' value='2b7cf8c2-6992-48ca-91db-9ad503873c76' hidden class="msger-uuid"">
+
+  <button type=" submit" class="msger-send-btn">Send</button>
+    </form>
+  </section>
+  <script src="http://127.0.0.1:8000/static/js/service.js"></script>
+  <script src="http://127.0.0.1:8000/static/js/script.js"></script>
+  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+     
+  <ul>
+    <li>KRCE WEBSITE</li>
+  </ul>
+</body>
+</html>

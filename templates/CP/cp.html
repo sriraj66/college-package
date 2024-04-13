@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+{% block title %} Path Pilot {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+</style>
+{% endblock %} 
+
+{% block nav %}
+
+<a class="navbar-brand" href="{% url 'index' %}">Profes Pro</a>
+<a href="{% url 'logout' %}" class="btn logout" type="submit">logout</a>
+{% endblock %}
+
+{% block main %}
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="cg_form"
+                enctype="multipart/form-data"
+                class=""
+            >
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="">UID</label>
+                    <input
+                        type="text"
+                        placeholder="xxxxx-xxxx-xxxx-xxx"
+                        name="uuid"
+                        id="uuid"
+                        class="form-control"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for=""><h3>Personal Information</h3></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        placeholder="Name"
+                        id="name"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Major</label>
+
+                    <input
+                        type="text"
+                        name="major"
+                        id="major"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Branch</label>
+                    <input
+                        type="text"
+                        name="branch"
+                        id="branch"
+                        class="form-control"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for=""><h3>Course Information</h3></label>
+                </div>
+                <div class="form-group">
+                    <label for="">Students Branch</label>
+                    <input
+                        type="text"
+                        name="sbranch"
+                        id="sbranch"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Subject Name</label>
+                    <input
+                        type="text"
+                        name="sub"
+                        id="sub"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Syllabus</label>
+                    <textarea
+                        name="syllabus"
+                        class="form-control"
+                        id="syllabus"
+                        cols="30"
+                        rows="5"
+                        placeholder="Lesson Wise Topics"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Total Class Periods</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="tp"
+                        id="tp"
+                        placeholder="Total class periods"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Duration</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="dur"
+                        id="dur"
+                        placeholder="in min"
+                    />
+                </div>
+
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Generate
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        RESET
+                    </button>
+                </div>
+            </form>
+
+            <br /><br />
+        </div>
+        <div class="col-md">
+            <p id="outtit">course Map Comes here...</p>
+            <div id="output-container"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container col-md" id="courses"></div>
+        <div class="container col-md" id="profiles"></div>
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+    const apiResponse1 = {
+        courseplan: {
+            "Week 1": {
+                Topic: "Java Basics",
+                Periods: 10,
+                Hints: "Start with basic syntax, data types, and control structures. Use interactive examples to engage students.",
+                "Learning Resources": {
+                    YouTube: "https://www.youtube.com/watch?v=eIrMbvuWK4c",
+                    Coursera:
+                        "https://www.coursera.org/courses?query=java%20basics",
+                },
+            },
+            "Week 2": {
+                Topic: "Java Introduction to OOPs",
+                Periods: 10,
+                Hints: "Explain the OOPs concepts like classes, objects, inheritance, and polymorphism with real-world examples.",
+                "Learning Resources": {
+                    YouTube: "https://www.youtube.com/watch?v=lbXsrHGhBAU",
+                    Coursera:
+                        "https://www.coursera.org/courses?query=java%20oops",
+                },
+            },
+            "Week 3": {
+                Topic: "Java Advanced OOPs",
+                Periods: 10,
+                Hints: "Cover topics like interfaces, abstraction, and encapsulation. Encourage students to practice coding exercises.",
+                "Learning Resources": {
+                    YouTube: "https://www.youtube.com/watch?v=WLpuUrrFxk8",
+                    Coursera:
+                        "https://www.coursera.org/courses?query=java%20advanced%20oops",
+                },
+            },
+            "Week 4": {
+                Topic: "Java Threads",
+                Periods: 10,
+                Hints: "Introduce multi-threading concepts, synchronization, and concurrent programming. Demonstrate practical examples.",
+                "Learning Resources": {
+                    YouTube: "https://www.youtube.com/watch?v=ggsF3eXQMfQ",
+                    Coursera:
+                        "https://www.coursera.org/courses?query=java%20threads",
+                },
+            },
+            "Week 5": {
+                Topic: "Java Exceptions",
+                Periods: 5,
+                Hints: "Teach exception handling, try-catch blocks, and best practices. Provide scenarios for error handling.",
+                "Learning Resources": {
+                    YouTube: "https://www.youtube.com/watch?v=2p62UBVi1JQ",
+                    Coursera:
+                        "https://www.coursera.org/courses?query=java%20exception%20handling",
+                },
+            },
+        },
+        courses: {
+            YouTube: {
+                Name: "Java Programming | GeeksforGeeks",
+                ProfileLink: "https://www.youtube.com/user/geeksforgeeksvideos",
+            },
+            Coursera: {
+                Name: "Object Oriented Programming in Java | Coursera",
+                ProfileLink:
+                    "https://www.coursera.org/learn/object-oriented-java",
+            },
+        },
+        linkedin: {
+            Name: "Java Software Developer",
+            ProfileLink: "https://www.linkedin.com/in/java-software-developer",
+        },
+    };
+
+    var form = document.getElementById("cg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        scrollToTop();
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        data.append("uuid", e.target.uuid.value);
+        data.append("name", e.target.name.value);
+        data.append("major", e.target.major.value);
+        data.append("branch", e.target.branch.value);
+        data.append("sbranch", e.target.sbranch.value);
+        data.append("sub", e.target.sub.value);
+        data.append("syllabus", e.target.syllabus.value);
+        data.append("dur", e.target.dur.value);
+        data.append("tp", e.target.tp.value);
+
+        document.getElementById("output-container").innerHTML = "";
+        console.log(data);
+
+        document.getElementById(
+            "outtit"
+        ).innerText = `Generating Map For ${e.target.sub.value}.`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "course_map" %}', true);
+
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    btn.disable = false;
+                    btn.innerHTML = "Generate";
+                    var responce = JSON.parse(xhr.responseText);
+                    // displayContent(responce);
+                    load_DOM(responce);
+                    document.getElementById(
+                        "outtit"
+                    ).innerText = `Courses Map for ${e.target.sub.value}.`;
+                    console.log(responce);
+                } else {
+                    console.error("Form submission error:", xhr.status);
+                    btn.innerHTML = `Error [${xhr.status}]`;
+                }
+            }
+        };
+    });
+
+    function generateCoursePlanHTML(courseplan) {
+        let html = "";
+        for (const week in courseplan) {
+            if (courseplan.hasOwnProperty(week)) {
+                const details = courseplan[week];
+                html += `<h3>${week}</h3>`;
+                html += `<ul>`;
+                html += `<li><strong>Topic</strong>: ${details.Topic}</li>`;
+                html += `<li><strong>Periods</strong>: ${details.Periods}</li>`;
+                html += `<li><strong>Hints</strong>: ${details.Hints}</li>`;
+                html += `<li><strong>Learning Resources</strong>:`;
+                html += `<ul>`;
+                for (const resource in details["Learning Resources"]) {
+                    if (
+                        details["Learning Resources"].hasOwnProperty(resource)
+                    ) {
+                        html += `<li><a target="_blank" href="${details["Learning Resources"][resource]}">${resource}</a></li>`;
+                    }
+                }
+                html += `</ul>`;
+                html += `</li>`;
+                html += `</ul>`;
+            }
+        }
+        return html;
+    }
+
+    // Output container
+    function load_DOM(data) {
+        const outputContainer = document.getElementById("output-container");
+        outputContainer.innerHTML = generateCoursePlanHTML(data.courseplan);
+    }
+
+    // window.onload = () => {load_DOM(apiResponse1)} ;
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+    }
+</script>
+{% endblock %}

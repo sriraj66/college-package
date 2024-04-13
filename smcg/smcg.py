@@ -22,7 +22,7 @@ def get_past_data(url, uuid, query):
 
 class SMCG:
 
-    def __init__(self, uid,):
+    def __init__(self, uid):
         self.uid = uid
         self.clg = College.objects.get(uid=uid)
         self.client = OpenAI(api_key=self.clg.api_key)

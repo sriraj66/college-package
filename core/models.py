@@ -22,7 +22,7 @@ class College(models.Model):
     
     hints = models.TextField(verbose_name="Hints")
     
-    
+    banner = models.ImageField(upload_to="Banners",default="defaults/krct.jpg",blank=True)
     messages = models.ManyToManyField('Messages', blank=True) 
     
     created = models.DateTimeField(auto_now_add=True)

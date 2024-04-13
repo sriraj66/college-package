@@ -26,9 +26,9 @@ class Emmbedded(threading.Thread):
                 "max_tokens": 1000,
                 "top_p": 1,
                 "stream": False,
-                "prompt": "$history Use the following pieces of query to answer  at the end.\nIf you don't know the answer, just say that you don't know.\n$context\n\nQuery: $query\n\nHelpful Answer:",
+                "prompt": "$history Use the following pieces of query to answer.\n$context\n\nQuery: $query\n\nHelpful Answer:",
                 "system_prompt": (
-                "Act as Assistant. Answer the following questions in the style of Professional Assistant. give  sweet answers.\n"
+                "Act as Assistant. Answer the following questions in the style of Helping Assistant.Give the Accurate answers.\n"
                 
                 ),
                 "api_key": self.key
@@ -37,7 +37,7 @@ class Emmbedded(threading.Thread):
             "vectordb": {
                 "provider": "chroma",
                 "config": {
-                "collection_name": "full-stack-app",
+                "collection_name": "chat-app",
                 "dir": "db",
                 "allow_reset": True
                 }
