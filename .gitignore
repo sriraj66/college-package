@@ -18,7 +18,7 @@ sqlite.db
 .idea/
 
 .html
-
+html/
 staticfiles/
 static/
 **/migrations/
