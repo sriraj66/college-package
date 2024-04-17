@@ -16,7 +16,7 @@ db.sqlite3
 sqlite.db
 .vscode/
 .idea/
-
+.token
 .html
 html/
 staticfiles/

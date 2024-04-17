@@ -11,3 +11,4 @@ db/
 
 sqlite.db
 db.sqlite3
+.token
