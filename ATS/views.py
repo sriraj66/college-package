@@ -1,16 +1,16 @@
-import threading
-
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import *
+from utils.models import Staffs,Students
 from .ats import run
 import json
-from django.conf import settings
-import os
+from django.contrib.auth.decorators import login_required
+from authentication.views import load_config
 
+@login_required
 def ats(request):
-
-    return  render(request,"ATS/ATS.html")
+    context = load_config(request)
+    return  render(request,"ATS/ATS.html",context)
 
 
 def ats_ev(request):
@@ -19,19 +19,52 @@ def ats_ev(request):
 
     }
 
-    if request.POST:
-        uid = request.POST.get("uuid")
+    
+    if request.POST and request.user.is_authenticated:
+        
         jd = request.POST.get("jd")
 
         pdf = request.FILES.get("file")
-        clg = College.objects.get(uid=uid)
+        user = User.objects.get(id=request.user.id)
+        if user.is_staff or user.is_superuser:
+            profile = Staffs.objects.get(user=user)    
+        else:
+            profile = Students.objects.get(user=user)
+            
+        clg = profile.college
+            
 
-        obj = ATS(college=clg,jd=jd,file=pdf,responce = "0")
+        obj = ATS(user=request.user,jd=jd,file=pdf,responce = "0")
         obj.save()
-        media_path = os.path.join(settings.MEDIA_ROOT, obj.file.name)
+        print(obj.file.url)
+        media_path = obj.file.url
 
         obj.responce = run(clg.api_key,media_path,jd)
         context = json.loads(obj.responce)
+        obj.rating = context['score']
         obj.save()
-
+        
+        profile.ATS_usage.add(obj)
+        profile.save()
+        
     return JsonResponse(context)
+
+@login_required
+def full_history(request):
+    if request.user.is_staff or request.user.is_superuser:
+        profile = Staffs.objects.get(user=request.user)
+    else:
+        profile = Students.objects.get(user=request.user)
+    context = {
+        'profile': profile,
+        'records': profile.ATS_usage.all().order_by("-created"),
+    }
+    return render(request,'ATS/history.html',context)
+
+@login_required
+def view_record(request,id):
+    context = load_config(request)
+    
+    context['record'] = ATS.objects.get(id=id)
+    
+    return render(request,'ATS/view.html',context)

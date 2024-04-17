@@ -1,37 +1,38 @@
 from django.shortcuts import render
 from .constants import *
 from CP.models import *
+from utils.models import Staffs
 from django.http import JsonResponse
 from CP.cp import *
 import json
-def cp(request):
-    
-    return render(request,"CP/cp.html")
+from django.contrib.auth.decorators import login_required
+from authentication.views import load_config
 
+@login_required
+def cp(request):
+    context = load_config(request)
+
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request,"CP/cp.html",context)
+    else:
+        return render(request,"error.html",{'error':"Students not authorized"})
+
+@login_required
 def course_map(request):
     context = {
         "output":""
     }
     
-    if request.POST:
-        
-        uid = request.POST.get("uuid")
-        name = request.POST.get("name")
-        major = request.POST.get("major")
-        branch = request.POST.get("branch")
+    if request.POST and request.user.is_authenticated:
+        staff = Staffs.objects.get(user=request.user)
         sbranch = request.POST.get("sbranch")
         sub = request.POST.get("sub")
         syl = request.POST.get("syllabus"," ")
         dur = request.POST.get("dur")
         tp = request.POST.get("tp")
         
-        clg = College.objects.get(uid=uid)
-        
         obj = CoursePlan(
-            clg=clg,
-            name=name,
-            major = major,
-            branch = branch,
+            user = request.user,
             sbranch = sbranch,
             subject = sub,
             syllbus = syl,
@@ -39,10 +40,11 @@ def course_map(request):
             tp = tp
         )
         
-        app = CMAP(uid)
-        n = app.set_prompt(name=name,major=major,branch=branch,sBranch=sbranch,subject=sub,syllbus=syl,tp=tp,pd=dur)
+        app = CMAP(staff.college.api_key)
+        n = app.set_prompt(name=staff.name,major=staff.degree,branch=staff.branch,sBranch=sbranch,subject=sub,syllbus=syl,tp=tp,pd=dur)
         if n is True:
             responce = app.generate()
+            
             print(responce)
             try:    
                 obj.output = responce
@@ -53,5 +55,38 @@ def course_map(request):
                 print(e)
                 
         obj.save()
+        staff.CP_usage.add(obj)
+        staff.save()
         
     return JsonResponse(context)
+
+
+@login_required
+def full_history(request):
+    if request.user.is_staff or request.user.is_superuser:
+        profile = Staffs.objects.get(user=request.user)
+    else:
+        return render(request,'error.html',{"error":'Access Denied'})
+    context = {
+        'profile': profile,
+        'records': profile.CP_usage.all(),
+    }
+    return render(request,'CP/history.html',context)
+
+
+
+@login_required
+def view_record(request,id):
+    if request.user.is_staff or request.user.is_superuser:
+        profile = Staffs.objects.get(user=request.user)
+
+    else:
+        return render(request, 'error.html', {'error':'Access Denied'})
+        
+    context = {
+        'profile': profile,
+        'record': profile.CP_usage.get(id=id),
+    }
+    print(context['record'].output)
+    
+    return render(request,'CP/view.html',context)

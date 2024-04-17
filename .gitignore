@@ -17,6 +17,8 @@ sqlite.db
 .vscode/
 .idea/
 
+.html
+
 staticfiles/
 static/
 **/migrations/

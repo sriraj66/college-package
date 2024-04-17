@@ -1,15 +1,14 @@
 from openai import OpenAI
 from CG.constants import *
-from CG.models import College
 
 
 class MAP:
     
-    def __init__(self,uid) -> None:
+    def __init__(self,api_key) -> None:
         self.prompt = ""
-        self.clg = College.objects.get(uid=uid)
+        self.key = api_key
         
-        self.client = OpenAI(api_key=self.clg.api_key) 
+        self.client = OpenAI(api_key=self.key) 
         self.messages = [
             {"role": "system", "content": "You are a helpful mentor to provide guidance for my career."},
             {"role": "system", "content": f"Output should be like a structured Json in this format {ft}"},

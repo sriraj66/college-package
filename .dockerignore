@@ -9,3 +9,5 @@ html/
 
 db/
 
+sqlite.db
+db.sqlite3

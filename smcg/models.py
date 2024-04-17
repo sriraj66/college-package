@@ -1,8 +1,10 @@
 from django.db import models
-from core.models import College
+from utils.models import User
 
 class CONTENTS(models.Model):
-    clg = models.ForeignKey(College,on_delete=models.CASCADE)
+    
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="smcg_user")
+    
     platform = models.CharField(max_length=50)
     post_type = models.CharField(max_length=50)
     goal = models.CharField(max_length=50)

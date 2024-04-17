@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load static %}
 {% block title %} SMCG {% endblock %} 
 {% block style%}
 
@@ -11,13 +12,22 @@
     }
 </style>
 
-{% endblock %} {% block nav %}
+{% endblock %} 
 
-<a class="navbar-brand" href="{% url 'index' %}"
-    >Social Media Content Generator</a
->
-<a href="{% url 'logout' %}" class="btn logout" type="submit">logout</a>
-{% endblock %} {% block main %}
+
+{% block main %}
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'generate_social_media_content' %}"> <img src="{% static 'defaults/icon/smcg.png' %}" width="30" style="transform: scale(1.5);"  alt=""> SMCG</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
 <div class="container item-center">
     <div class="row" style="margin: 10px">
         <div class="col-md">
@@ -28,17 +38,24 @@
                 class=""
             >
                 {% csrf_token %}
-
+                {% if user.is_staff %}
                 <div class="form-group">
                     <label for="">UID</label>
-                    <input
+                    <select
                         type="text"
                         placeholder="xxxxx-xxxx-xxxx-xxx"
                         name="uuid"
                         id="uuid"
                         class="form-control"
-                    />
+                    >
+                        {% for i in uids %}
+                        <option value="{{i.uid}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
+                {% else %}
+                <input type="hidden" name="uuid" id="uuid" value="None">
+                {% endif %}
 
                 <div class="form-group">
                     <label for="">Platform</label>
@@ -93,7 +110,20 @@
                         class="form-control"
                     ></textarea>
                 </div>
-
+                {% if user.is_staff or  user.is_superuser %}
+                <div class="form-group"
+                >
+                    <input type="checkbox"  name="past" id="past" />
+                    <label for="">&spades; Generate Using Previous Data?</label>
+                </div>
+                
+                {% else %}
+                <div class="form-group"
+                 hidden>
+                    <input type="checkbox"  name="past" id="past" />
+                    <label for="">&spades; Generate Using Previous Data?</label>
+                </div>
+                {% endif %}
                 <div
                     class="btn-group"
                     style="
@@ -115,11 +145,10 @@
                         class="btn btn-outline-danger"
                         style="width: 20%"
                     >
-                        Reset
+                        RESET
                     </button>
                 </div>
             </form>
-
             <br /><br />
         </div>
         <div class="col-md">
@@ -137,8 +166,9 @@
             </div>
         </div>
     </div>
+    <div class="container" id="desc"></div>
 </div>
-<div class="container" id="desc"></div>
+
 
 {% endblock %} {% block script %}
 <script>
@@ -192,7 +222,7 @@
         data.append("goal", e.target.goal.value);
         data.append("topic", e.target.topic.value);
         data.append("des", e.target.des.value);
-        // data.append("gen_image",document.getElementById("gen_image").checked)
+        data.append("past",document.getElementById("past").checked)
 
         console.log(data);
         console.log(check);

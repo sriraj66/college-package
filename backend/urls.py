@@ -11,6 +11,7 @@ urlpatterns = [
     path("ats/",include("ATS.urls")),
     path("cg/",include("CG.urls")),
     path("cp/",include("CP.urls")),
+    path('accounts/', include('authentication.urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

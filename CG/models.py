@@ -1,16 +1,12 @@
 from django.db import models
-from core.models import College
+from utils.models import User
 
 class CG(models.Model):
     
-    clg = models.ForeignKey(College, related_name='cg',on_delete=models.CASCADE)
-    
-    name = models.CharField(max_length=50)
-    year = models.IntegerField(default="1")
-    deg = models.CharField(max_length=100)
-    branch = models.CharField(max_length=100)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='CG_user')
+        
     sd = models.TextField()
-    
+
     jd = models.CharField(max_length=255)
     loc = models.CharField(max_length=50,default="India")
     sal = models.CharField(max_length=10)

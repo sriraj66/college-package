@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+ {% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'generate_social_media_content' %}">SMCG</a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--c2); text-decoration: none;" href="{% url 'smcg_history' %}">Records</a></li>
+        </ol>
+      </nav>
+    </div>
+<div class="container item-center">
+    {% if records %}
+    <table id="records" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Topic</th>
+                <td scope="col">Resource</td>
+                <td scope="col">created</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in records %}
+            <tr>
+                <th scope="row">SMCG{{i.id}} </th>
+                <td>{{i.topic}} <i></i> </td>
+                {% if i.is_image is True and i.output_image %}
+
+                <td>
+                    <a class="uid" target="_blank" href="{{i.output_image.url}}"
+                        ><i class="fas fa-image"></i></a
+                    >
+                    <div hidden id="smcg{{i.id}}">{{i.responce}}</div>
+                    <button
+                        id="cpybutton"
+                        onclick="copy_text('smcg{{i.id}}')"
+                        class="btn btn-flat"
+                    >
+                    <i class="far fa-clipboard"></i> Click to copy!!
+                    </button>
+                </td>
+                {% else %}
+                <td>
+                    <div hidden id="smcg{{i.id}}">{{i.responce}}</div>
+                    <button
+                        id="cpybutton"
+                        onclick="copy_text('smcg{{i.id}}')"
+                        class="btn btn-flat"
+                    >
+                    <i class="far fa-clipboard"></i> <small> Click to Copy</small>
+
+                    </button>
+                </td>
+                {% endif %}
+                <td>{{i.created}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <h2>No records Found</h2>
+    {% endif %}
+</div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png" style="width: 15px;" class="rounded me-2" alt="...">
+      <strong class="me-auto">Notification</strong>
+      <small>now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body" id="toast_message">
+    </div>
+  </div>
+</div>
+
+<script>
+    var opt = {
+            animation : true,
+            delay : 4000,
+            autohide:true,
+        }
+    function toast_show(text){
+        document.getElementById("toast_message").innerText = text;
+        var tost_html = document.getElementById("liveToast");
+        var toast = new bootstrap.Toast(tost_html,opt);
+        toast.show();
+    }
+
+    function copy_text(id) {
+        console.log(id)
+        var text = document.getElementById(id).innerText;
+        copyToClipboard(text);
+    }
+
+    function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+            .then(() => {                
+                toast_show("Text copied to clipboard");
+
+            })
+            .catch(err => {
+                toast_show(`Could not copy text:${err}`)
+            });
+    } else {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+
+        // Make the textarea hidden
+        textArea.style.position = "fixed";
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.width = "0";
+        textArea.style.height = "0";
+        textArea.style.opacity = "0";
+
+        document.body.appendChild(textArea);
+
+        textArea.focus();
+        textArea.select();
+
+        try {
+            // Execute the copy command
+            var successful = document.execCommand('copy');
+            var message = successful ? 'Copied to clipboard' : 'Unable to copy to clipboard';
+            toast_show(message);
+
+        } catch (err) {
+            toast_show(`Could not copy text:${err}`)
+
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+}
+
+
+</script>
+
+{% endblock %}

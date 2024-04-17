@@ -1,6 +1,8 @@
 from openai import OpenAI
-import PyPDF2
-import os, docx, threading
+import pdfplumber
+import requests
+from io import BytesIO
+import os, docx
 class ATS:
     def __init__(self, api_key, pdf_path,job_description):
         self.key = api_key
@@ -8,33 +10,29 @@ class ATS:
 
         self.client = OpenAI(api_key=self.key)
         try:
-            self.pdf_text = self.extract_pdf_text(pdf_path) if str(pdf_path).split('.')[-1]=='pdf' else self.extract_docx_test(pdf_path)
+            self.pdf_text = self.extract_pdf_text(pdf_path) if str(pdf_path).split('.')[-1]=='pdf' else self.extract_docx_text(pdf_path)
         except Exception as e:
             self.pdf_text = "Unable to Extract This is not and resume."
             print(e)
         self.messages = []
 
-    def extract_pdf_text(self, pdf_path):
-        pdf_file = open(pdf_path, 'rb')
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-        num_pages = len(pdf_reader.pages)
-        pdf_text = ''
-        for page_num in range(num_pages):
-            page = pdf_reader.pages[page_num]
-            pdf_text += page.extract_text()
-        pdf_file.close()
+    def extract_pdf_text(self,pdf_url):
+        with requests.get(pdf_url) as response:
+            with pdfplumber.open(BytesIO(response.content)) as pdf:
+                pdf_text = ""
+                for page in pdf.pages:
+                    pdf_text += page.extract_text()
         return pdf_text
 
-    def extract_docx_test(self,docx_path):
-        doc = docx.Document(docx_path)
+    def extract_docx_text(self,docx_url):
         text = ""
-        for paragraph in doc.paragraphs:
-            text += paragraph.text + "\n"
-
+        with requests.get(docx_url) as response:
+            doc = docx.Document(BytesIO(response.content))            
+            for paragraph in doc.paragraphs:
+                text += paragraph.text + "\n"
         return text
 
     def evaluate(self):
-        print(len(self.pdf_text))
         response = self.client.chat.completions.create(
             model="gpt-3.5-turbo-0125",
             messages=[
@@ -62,7 +60,7 @@ We are looking for a Python Developer to join our engineering team and help us d
 
 Python Developer responsibilities include writing and testing code, debugging programs and integrating applications with third-party web services. To be successful in this role, you should have experience using server-side logic and work well in a team.
 
-Ultimately, you’ll build highly responsive web applications that align with our business needs.
+Ultimately, you'll build highly responsive web applications that align with our business needs.
 
 Responsibilities
 Write effective, scalable code

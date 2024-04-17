@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block style %}
+
+<style>
+    h1 a{
+        text-decoration: none;
+        color: red;
+    }
+</style>
+
+{% endblock %}
+
+{% block main%}
+
+<h1 style="text-align: center;"><a href="{% url 'index' %}">{{ error }}</a></h1>
+
+<!-- <a style=" text-align: center;" href="{% url 'index' %}">go back</a> -->
+
+{% endblock %}

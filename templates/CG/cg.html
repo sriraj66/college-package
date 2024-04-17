@@ -1,8 +1,10 @@
 {% extends "base.html" %} 
+{% load static %}
 {% block title %} Path Pilot {% endblock %} 
 
 
-{% block style %}
+
+{% block main %}
 <style>
     .item-center {
         border: 0.5px dashed var(--c2);
@@ -32,16 +34,21 @@
         text-decoration: underline;
     }
 </style>
-{% endblock %}
 
-{% block nav %}
-<a class="navbar-brand" href="{% url 'index' %}">Path Pilot</a>
-<a href="{% url 'logout' %}" class="btn logout" type="submit">logout</a>
-{% endblock %}
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url 'ats' %}"> <img src="{% static 'defaults/icon/cg.png' %}" width="30" style="transform: scale(1.1);"  alt=""> Path Pilot</a></li>
+          
+        </ol>
+      </nav>
+</div>
 
-{% block main %}
 <div class="container item-center">
-    <div class="row" style="margin: 10px">
+    <div class="row" style="padding: 10px">
         <div class="col-md">
             <form
                 action="POST"
@@ -51,16 +58,7 @@
             >
                 {% csrf_token %}
 
-                <div class="form-group">
-                    <label for="">UID</label>
-                    <input
-                        type="text"
-                        placeholder="xxxxx-xxxx-xxxx-xxx"
-                        name="uuid"
-                        id="uuid"
-                        class="form-control"
-                    />
-                </div>
+                
                 <div class="form-group">
                     <label for=""><h3>Personal Information</h3></label>
                 </div>
@@ -72,6 +70,7 @@
                         class="form-control"
                         name="name"
                         placeholder="Name"
+                        value="{{user.first_name}}"
                         id="name"
                     />
                 </div>
@@ -205,7 +204,7 @@
             <br /><br />
         </div>
         <div class="col-md">
-            <p id="outtit">Map Comes here...</p>
+            <p id="outtit">Map Comes here... </p>
             <div id="output-container"></div>
         </div>
     </div>
@@ -215,7 +214,6 @@
         <div class="container col-md" id="profiles"></div>
     </div>
 </div>
-{% endblock %} {% block script %}
 <script>
     var form = document.getElementById("cg_form");
     form.addEventListener("submit", (e) => {
@@ -227,7 +225,7 @@
 
         var data = new FormData();
         data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
-        data.append("uuid", e.target.uuid.value);
+        
         data.append("name", e.target.name.value);
         data.append("degree", e.target.degree.value);
         data.append("branch", e.target.branch.value);
@@ -263,7 +261,7 @@
                     displayContent(responce);
                     document.getElementById(
                         "outtit"
-                    ).innerText = `Career Map for ${e.target.dj.value}.`;
+                    ).innerText = `Career Map for ${e.target.dj.value}.  <i class="fas fa-spinner fa-spin"></i>`;
 
                     console.log(responce);
                 } else {
@@ -358,4 +356,7 @@
         });
     }
 </script>
+
+
+
 {% endblock %}

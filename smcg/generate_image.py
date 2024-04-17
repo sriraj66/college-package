@@ -2,19 +2,18 @@ from openai import OpenAI
 import requests
 from PIL import Image
 from io import BytesIO
-from core.models import College
+from .models import *
 from smcg.constants import IMAGE_PROMPT
 from django.core.files.base import ContentFile
 from smcg.models import CONTENTS
-from django.core.files import File
 
 class GenerateImage:
     
-    def __init__(self,id,uid,content,extra) -> None:
+    def __init__(self,id,key,content,extra) -> None:
         
-        self.clg = College.objects.get(uid=uid)
+        self.key = key
         
-        self.client = OpenAI(api_key=self.clg.api_key)
+        self.client = OpenAI(api_key=self.key)
 
         self.prompt = IMAGE_PROMPT.format(content,extra)
         self.db = CONTENTS.objects.get(id=id)
@@ -37,7 +36,7 @@ class GenerateImage:
     def combine_images(self, header_path):
         try:
             print("Combining images..")
-            header_img = Image.open(header_path)
+            header_img = self.download_image(header_path)
             body_img = self.generate_image()
 
             header_height = 300
@@ -60,7 +59,7 @@ class GenerateImage:
 
             django_file = ContentFile(image_stream.getvalue())
 
-            self.db.output_image.save(f"{self.db.id}_{self.clg.uid}.jpg", django_file)
+            self.db.output_image.save(f"{self.db.id}_.jpg", django_file)
 
             print(f"Images combined successfully.")
             return True

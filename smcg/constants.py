@@ -2,7 +2,7 @@ PLATFORM = [
     "Facebook", "Twitter", "Instagram", "Linkedin"]
 
 TYPE = [
-    "Image", "Small Article", "Live", "Story", "Infographic", "Testimonial", "Quote"]
+     "Small Article", "Description","Image", "Story", "Infographic", "Testimonial", "Quote"]
 
 GOAL = [
     "Convince", "Educate", "Inspire", "Important_days", "Holidays"

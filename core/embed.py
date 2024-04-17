@@ -1,7 +1,13 @@
 import threading
 from embedchain import App
-from .models import College
+from .models import ChatBot
 from core import utils
+from dotenv import load_dotenv
+from django.conf import settings
+import os
+load_dotenv()
+
+
 class Emmbedded(threading.Thread):
     
     def __init__(self, uid, prompt,urls = []):
@@ -9,8 +15,8 @@ class Emmbedded(threading.Thread):
         self.urls = urls
         self.id = str(uid)
         self.prompt = prompt
-        self.clg = College.objects.get(uid=self.id)
-        self.key = self.clg.api_key
+        self.clg = ChatBot.objects.get(uid=self.id)
+        self.key = self.clg.college.api_key
         self.config = {
             "app": {
                 "config": {
@@ -22,7 +28,7 @@ class Emmbedded(threading.Thread):
                 "provider": "openai",
                 "config": {
                 "model": "gpt-3.5-turbo",
-                "temperature": 0.7,
+                "temperature": 0.5,
                 "max_tokens": 1000,
                 "top_p": 1,
                 "stream": False,
@@ -34,14 +40,7 @@ class Emmbedded(threading.Thread):
                 "api_key": self.key
                 }
             },
-            "vectordb": {
-                "provider": "chroma",
-                "config": {
-                "collection_name": "chat-app",
-                "dir": "db",
-                "allow_reset": True
-                }
-            },
+            
             "embedder": {
                 "provider": "openai",
                 "config": {
@@ -66,7 +65,37 @@ class Emmbedded(threading.Thread):
                 },
             },
         }
+        self.add_db()
+        
         self.app = App.from_config(config=self.config)
+    
+    
+    def add_db(self):
+        name = f"chat-bot-{str(self.clg.id)}"
+        if settings.DEBUG is True:
+            db_config = {
+                    "provider": "chroma",
+                    "config": {
+                    "collection_name": name,
+                    "dir": 'db',
+                    "allow_reset": True
+                }
+            }
+        else:
+            db_config = {
+                    "provider": "chroma",
+                    "config": {
+                    "collection_name": name,
+                    "host": os.getenv("CHROMA_DB_HOST"),
+                    "port":os.getenv("CHROMA_DB_PORT"),
+                    "allow_reset": True
+                }
+            }
+            
+        self.config['vectordb'] = db_config
+        # print(db_config)
+        
+        return True
         
     def add_sources(self):
         print("Adding SOURCE")

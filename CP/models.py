@@ -1,12 +1,9 @@
 from django.db import models
-from core.models import College
+from utils.models import User
 
 class CoursePlan(models.Model):
-    clg = models.ForeignKey(College,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     
-    name=models.CharField(max_length=255)    
-    major=models.CharField(max_length=255)    
-    branch=models.CharField(max_length=255)    
     sbranch=models.CharField(max_length=255)    
     subject=models.CharField(max_length=255)    
     syllbus=models.TextField()

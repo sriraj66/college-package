@@ -1,15 +1,15 @@
 from openai import OpenAI
 from CP.constants import *
-from CP.models import College
+from CP.models import *
 
 
 class CMAP:
     
-    def __init__(self,uid) -> None:
+    def __init__(self,key) -> None:
         self.prompt = ""
-        self.clg = College.objects.get(uid=uid)
+        self.key = key
         
-        self.client = OpenAI(api_key=self.clg.api_key) 
+        self.client = OpenAI(api_key=self.key) 
         self.messages = [
             {"role": "system", "content": "You are a helpful mentor to provide guidance for my career."},
             {"role": "system", "content": f"Output should be like a structured Json in this format {ft}"},
@@ -21,20 +21,13 @@ class CMAP:
             Lecturer info:
             Name : {name}
             Major : {major} {branch}
-
             Student Branch : {sBranch}.
-
-
             Subject : {subject}.
-
             Syllabus : {syllbus}
             Total Periods of classes : {tp}.
             Period Duration : {pd} min
-
-            Give me a  road map to complete the syllabus to the students in a given Class periods and hints to take the class Efectively.
-
+            Give me a  road map to complete the syllabus to the students in a given Class periods use Full peroids and hints to take the class Efectively.
             Add atleast one for each topics some youtube,corsera and other to learn the concepts.
-            and Give atleast one Linked in profiles related to the topics.
             """
         self.messages.append({"role": "user", "content": self.prompt})
                     

@@ -50,7 +50,7 @@ def extract_page_urls(site_url):
         return set(), set(), set(), set()
 
 def callback_function(id,urls):
-    obj = College.objects.get(id=id)
+    obj = ChatBot.objects.get(id=id)
     obj.running = True
     print("Embeding urls to the models")
     emb = Emmbedded(uid=obj.uid,prompt="SETUP",urls=urls)
@@ -62,7 +62,7 @@ def callback_function(id,urls):
 
 def add_source(id,site_url):
     try:
-        obj = College.objects.get(id=id)
+        obj = ChatBot.objects.get(id=id)
         urls = set()
         for i in site_url:    
             page_urls, pdf_urls, png_urls, html_php_urls = extract_page_urls(i)
@@ -81,7 +81,7 @@ def separate_urls(input_string):
     return urls
 
 def start_page_source(id):
-    clg = College.objects.get(id=id)
+    clg = ChatBot.objects.get(id=id)
     urls = set()
     urls.add(clg.root_url)
     sub_urls = separate_urls(clg.aditional_urls)
