@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .constants import *
 from CP.models import *
 from utils.models import Staffs
@@ -11,11 +11,14 @@ from authentication.views import load_config
 @login_required
 def cp(request):
     context = load_config(request)
-
+    if context['profile'].check_credit() is False:
+            
+            return redirect("err","No Credit Left!!")
     if request.user.is_staff or request.user.is_superuser:
         return render(request,"CP/cp.html",context)
     else:
-        return render(request,"error.html",{'error':"Students not authorized"})
+        return redirect("err","Students not authorized")
+
 
 @login_required
 def course_map(request):

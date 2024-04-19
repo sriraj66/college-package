@@ -24,6 +24,7 @@ def index(request):
   context = {
       'colleges': ChatBot.objects.all(),
       'profile' : profile,
+      'complete_triger' : True,
       
   }
   return render(request, 'chatbot/index.html', context=context)

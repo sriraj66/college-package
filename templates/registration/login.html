@@ -1,0 +1,23 @@
+{% extends 'auth_base.html' %}
+
+{% block main %} 
+            <div class="container item-center">
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p}}
+                    <br>
+                    <div class="form-group">
+                        <label for="">
+                            <a href="{% url 'password_reset' %}" class="fp">forget password?</a>
+                        </label>
+                    </div>
+                    <br>
+                    <div class="btn-group">
+                        <button class="btn sub-btn" type="submit">Login <i class="fas fa-arrow-right"></i></button>
+                        <button class="btn btn-outline-danger" type="reset">RESET</button>
+                    </div>
+                </form>
+
+            </div>
+            {% endblock %}

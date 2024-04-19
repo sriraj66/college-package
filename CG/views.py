@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from CG.models import *
 import json
@@ -11,7 +11,9 @@ from authentication.views import load_config
 @login_required
 def cg(request):
     context = load_config(request)
-    
+    if context['profile'].check_credit() is False:
+        
+        return redirect("err","No Credit Left!!")
     try:
         student = Students.objects.get(user=request.user)
     except Exception as e:

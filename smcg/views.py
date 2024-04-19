@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from smcg.constants import *
 from django.http import JsonResponse
 from smcg.smcg import *
@@ -23,9 +23,14 @@ def generate_social_media_content(request):
             new_typ.remove("Image")
     
     except Exception as e:
-        return render(request,'error.html',{"error":e})        
+        return redirect("err",e)
+        
 
     context = load_config(request)
+    if context['profile'].check_credit() is False:
+        
+        return redirect("err","No Credit Left!!")
+    
     context['platform']=PLATFORM
     context['goals']= GOAL
     context['types']= new_typ

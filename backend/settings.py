@@ -25,12 +25,19 @@ ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
+    # Theme
+    'jazzmin',
+    # 'adminlte3',
+    'import_export',
+    
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # local apps
     'core',
     'rest_framework',
     'storages',
@@ -42,7 +49,7 @@ INSTALLED_APPS = [
     'utils',
     'authentication'
 ]
-
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,6 +137,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True
 
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'index'
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -142,3 +151,61 @@ AWS_S3_VERITY = True
 AWS_QUERYSTRING_AUTH = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Email
+
+# settings.py
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'neuraa194@gmail.com'
+EMAIL_HOST_PASSWORD = 'idkiarlzzzbvyitq' 
+
+
+
+# template theme
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Neuraa Admin",
+    "site_header": "Neuraa",
+    "site_brand": "Neuraa Admin",
+    "welcome_sign": "Welcome to the Neuraa Admin panel",
+    "copyright": "Team Neuraa",
+    "usermenu_links": [
+        {"name":"View App","url":'index'},
+        {"name":"Logout","url":'logout_get'},
+        
+    ],
+    "topmenu_links": [
+
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+
+        {"model": "auth.User"},
+
+        {"app": "utils"},
+        
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+    },
+    "show_sidebar": True,
+    "use_google_fonts_cdn": True,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+                                "auth": "collapsible",
+                                "core": "vertical_tabs"
+                                },
+    "navigation_expanded": True,
+    "related_modal_active": False,
+    "search_model": ["auth.User",'utils.Students','utils.Staffs'],
+
+}
+JAZZMIN_SETTINGS["show_ui_builder"] = True

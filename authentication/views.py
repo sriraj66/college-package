@@ -13,37 +13,20 @@ def load_config(request):
             profile = Students.objects.get(user=request.user)
         
         context = {
-            'profile': profile
+            'profile': profile,
+            'complete_triger': True,
         }
         
         return context
     except Exception as e:
         print(e)
         return {}
-        
-def login_view(request):
-    context = {}
-    
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        try:
-            user = authenticate(request,username=username,password=password)
-            if user is not None:
-                login(request,user)
-                success(request,f"Successfully logged in as {username}.")
-                return redirect('index')
-            else:
-                warning(request,f"Invalid username or password!!")
-                return redirect('login')
-        except Exception as e:
-            error(request,f"Error while logging in!!",extra_tags="danger")
-            pass
-    
-    return render(request, 'auth/login.html',context)
 
 
-def log_out(request):
-    logout(request)
-    return redirect("index")
+def render_error(request,err):
+    config = load_config(request)
+    config['error'] = err
+    return render(request,'error.html',config)
+
+def logout_get(request):
+    return render(request, 'registration/logged_out.html')

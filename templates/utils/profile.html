@@ -1,0 +1,164 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %} My Profile {% endblock %} 
+{% block style%}
+
+<style>
+    .item-center,.avatar {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    
+    .avatar{
+        width: 60%;
+        
+    }
+    td{
+        text-align: start;
+    }
+    .profile{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-group{
+        width: 100%;
+    }
+
+    
+
+</style>
+
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container item-center">
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2">
+        <div class="col profile">
+            <img src="{{ profile.profile.url }}" class="rounded-circle avatar"  alt="">
+            <br>
+        </div>
+        <div class="col">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <tr>
+                        <td>Username</td>
+                        <td>{{user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{profile.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{user.email}}</td>
+                    </tr>
+                    <tr>
+                        {% if user.is_staff %}
+                        <td>Roll Number</td>
+                        <td>{{profile.roll}}</td>
+                        {% else %}
+                        
+                        <td>Staff ID</td>
+                        <td>{{profile.roll}}</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>Degree</td>
+                        <td>{{profile.degree}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Branch</td>
+                        <td>{{profile.branch}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Mobile Number</td>
+                        <td>{{profile.phone}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>College</td>
+                        <td>{{profile.college.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Gender</td>
+                        <td>{{profile.gender}}</td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td>Last login</td>
+                        <td>{{user.last_login}}</td>
+                    </tr>
+                    <tr>
+                        <td>Profile Status</td>
+                        <td>{{profile.is_completed}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <table class="table table-hover">
+        <thead class="table-info">
+            <tr>
+                <td>APP NAME</td>
+                <td>COUNTS</td>
+                <td> HISTORY </td>
+            </tr>
+        </thead>
+        <tbody>
+            {% if not user.is_staff %}
+            <tr>
+                <td>Path Pilot</td>
+                <td>{{profile.CG_usage.count}}</td>
+                <td><a href="{% url 'cg_history' %}">View all</a></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>Profes Pro</td>
+                <td>{{profile.CP_usage.count}}</td>
+                <td><a href="{% url 'cp_history' %}">View all</a></td>
+            </tr>
+            
+            {% endif %}
+            <tr>
+                <td>SMCG</td>
+                <td>{{profile.SMCG_usage.count}}</td>
+                <td><a href="{% url 'smcg_history' %}">View all</a></td>
+            </tr>
+
+            <tr>
+                <td>ATS</td>
+                <td>{{profile.ATS_usage.count}}</td>
+                <td><a href="{% url 'smcg_history' %}">View all</a></td>
+            </tr>
+            
+            <tr>
+                <td><b>TOTAL</b></td>
+                <td>USAGE : {{profile.calculate_credit}}</td>
+                <td>BALANCE : {{profile.balance_credit}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+    
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <a type="button" href="{% url 'edit_profile' %}" class="btn btn-outline-warning"><i class="far fa-edit text-warning" ></i> Edit Profile</a>
+        <a type="button" href="{% url 'password_change' %}" class="btn btn-outline-info"><i class="fas fa-key text-info"></i> Change Password</a>
+        <a type="button" href="{% url 'logout_get' %}" type="submit" class="btn btn-outline-danger"><i class="fas fa-skiing-nordic text-danger"></i>Logout</a>
+      </div>
+</div>
+
+{% endblock %}
+

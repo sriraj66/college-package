@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from .models import *
 from utils.models import Staffs,Students
@@ -10,6 +10,9 @@ from authentication.views import load_config
 @login_required
 def ats(request):
     context = load_config(request)
+    if context['profile'].check_credit() is False:
+        
+        return redirect("err","No Credit Left!!")
     return  render(request,"ATS/ATS.html",context)
 
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{% block title %}Neura{% endblock %}</title>
+        <title>{% block title %}Neuraa{% endblock %}</title>
         <link
             rel="shortcut icon"
             href="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png"
@@ -36,7 +36,9 @@
             .navbar {
                 background-color: white;
                 border-radius: 4px;
-                box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
             }
             .navbar-brand {
                 font-family: var(--fnt);
@@ -136,7 +138,9 @@
                 border-radius: 5px;
                 width: 50%;
                 min-width: 450px;
-                box-shadow: 3px 5px 5px rgba(0,0,0,0.4);
+                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
             }
             .btn-group{
                 width: 100%;
@@ -146,8 +150,60 @@
                 text-decoration: none;
                 letter-spacing: 1px;
             }
-        </style>
+            .errorlist{
+                list-style-type:circle;
+            }
+            .errorlist li{
+                text-decoration: none;
+                color: red;
+            }
+            
+           
+            input,.form-control{
+                border-radius: 3px;
+                font-size: medium;
+                width: 100%;
+                min-width: 300px;
+                border: 1px solid var(--c2);
+                text-align: start;
+                padding: 6px;
+                transition: all 0.5s ease;
 
+            }
+
+            input:hover,.form-control:hover{
+                transform: scale(1.01);
+                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+            }
+            input:focus,.form-control:focus{
+                border-radius: 0px;
+                border: 1px dashed var(--c1);
+                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+            }
+            .sub-btn{
+                transition: all 0.5s ease;
+            }
+            .sub-btn:hover i{
+                color: white;
+                transform: translateX(10px);
+            }
+            .sub-btn:hover{
+                color: white !important;
+            }
+
+        </style>
+        <script
+        src="https://kit.fontawesome.com/cb44f917e7.js"
+        crossorigin="anonymous"
+        ></script>
+        <script
+        src="https://kit.fontawesome.com/a076d05399.js"
+        crossorigin="anonymous"
+        ></script>
         {% block style %} {% endblock %}
     </head>
     <body>
@@ -171,44 +227,24 @@
             </nav>
         </div>
         <br /><br />
-
-        <main>{% block main %} 
-            <div class="container item-center">
-                {% if messages %}
-                {% for i in messages %}
-                <div class="alert alert-{{i.tags}}">
-                    {{i}}    
-                                    
-                </div>
-                <br>
-                {% endfor %}
-                {% endif %}
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="">Username</label>
-                        <input type="text" name="username" id="username" required placeholder="Username" class="form-control">
-                    </div>
-                    <br>
-                    
-                    <div class="form-group">
-                        <label for="">Password</label>
-                        <input type="password" name="password" id="password" required placeholder="*******" class="form-control">
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for="">
-                            <a href="" class="fp">forget password?</a>
-                        </label>
-                    </div>
-                    <br>
-                    <div class="btn-group">
-                        <button class="btn sub-btn" type="submit">Login</button>
-                        <button class="btn btn-outline-danger" type="reset">RESET</button>
-                    </div>
-                </form>
-
+        {% if messages %}
+        <div class="container item-center">
+            
+            {% for i in messages %}
+            <div class="alert alert-{{i.tags}}">
+                {{i}}    
+                                
             </div>
+            <br>
+            {% endfor %}
+            
+            
+
+        </div>
+        {% endif %}
+        <main>
+            {% block main %} 
+            
             {% endblock %}</main>
         <br /><br />
         <p class="cpy">&copy; Neuraa . All Rights are Reserved.</p>

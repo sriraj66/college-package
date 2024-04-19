@@ -60,6 +60,13 @@
                 -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
                 -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
             }
+            .item-center{
+                padding-top: 15px;
+                padding: 10px;
+                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+            }
 
             .navbar-brand {
                 font-family: var(--fnt);
@@ -112,6 +119,9 @@
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
+            }
+            i{
+                color: var(--c2);
             }
 
             thead {
@@ -271,6 +281,45 @@
                     </a>
 
                     <div class="d-flex">
+
+                        {% if user.is_superuser %}
+                        <div class="dropdown">
+                            <button
+                                class="btn btn-flat"
+                                
+                                data-bs-toggle="dropdown"
+                                style="
+                                    color: var(--c2);
+                                "
+                                aria-expanded="false"
+                            >
+                            <i class="fas fa-users-cog"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'load_student' %}"
+                                        ><i class="fas fa-user-cog"></i>
+                                        Load Student</a
+                                    >
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <button
+                                        class="dropdown-item"
+                                        href="{% url 'logout' %}"
+                                        ><i class="fas fa-users"></i>
+                                        Load Staff</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                        {% endif %}
+
                         <div class="dropdown">
                             <button
                                 class="btn btn-flat"
@@ -353,7 +402,7 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 
                                 <li>
-                                    <a class="dropdown-item" href="#"
+                                    <a class="dropdown-item" href="{% url 'my_profile' %}"
                                         ><i class="fas fa-user-graduate"></i>
                                         My Profile</a
                                     >
@@ -362,12 +411,14 @@
                                     <hr class="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <a
+                                    <form action="{% url 'logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <button
                                         class="dropdown-item"
                                         href="{% url 'logout' %}"
                                         ><i class="fas fa-door-open"></i>
-                                        Logout</a
-                                    >
+                                        Logout</button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -385,7 +436,62 @@
         </div>
         <br />
 
+        {% if  not profile.check_credit %}
+        <div class="container">
+            <div class="alert alert-danger">Your Credit Balance is {{profile.balance_credit}} </div>
+            <div class="alert alert-warning">please contact <a>{{profile.college.user.email}}</a></div>
+        </div>
+        {% endif %}
+
+        {% if not profile.is_completed and complete_triger %}
+        
+        <style>
+            h3{
+                color: var(--c2);
+            }
+            .item-center{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+            }
+        
+            i,a{
+                text-align: center;
+                
+                color: var(--c3);
+            }
+            .fa-frown-open,.fa-id-badge{
+                font-size: 300px;    
+            }
+            a{
+                text-decoration: none;
+                text-align: center;
+        
+            }
+            .fa-user-lock{
+                color: red;
+            }
+            .fa-user-lock:hover{
+                color: white;
+            }
+        </style>
+        
+        <a href="{% url 'edit_profile' %}" class="container item-center">
+            
+            <h3>Complete The Profile !!</h3>
+            <i class="far fa-id-badge"></i>
+            
+            
+        </a>
+
+        {% else %}
+
         <main>{% block main %} {% endblock %}</main>
+
+        {% endif %}
+
         <br /><br />
         <p class="cpy">&copy; Neuraa . All Rights are Reserved.</p>
 

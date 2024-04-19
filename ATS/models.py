@@ -14,5 +14,7 @@ class ATS(models.Model):
     class Meta:
         ordering = ['-created']
 
+    def get_display_name(self):
+        return f"ATS{self.id}"
 
 

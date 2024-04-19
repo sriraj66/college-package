@@ -1,0 +1,57 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %} My Profile {% endblock %} 
+{% block style%}
+
+<style>
+    .item-center,.avatar {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    
+    .avatar{
+        width: 60%;
+        
+    }
+    td{
+        text-align: start;
+    }
+    .profile{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-group{
+        width: 100%;
+    }
+
+    
+
+</style>
+
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container item-center">
+
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <button type="submit"  type="submit" class="btn btn-outline-success"><i class="fas fa-skiing-nordic text-success"></i>Save</button>
+            <a type="button" href="{% url 'password_change' %}" class="btn btn-outline-info"><i class="fas fa-key text-info"></i> Change Password</a>
+            <a type="button" href="{% url 'my_profile' %}" class="btn btn-outline-danger"><i class="fas fa-arrow-left text-danger"></i> Profile</a>
+        
+        </div>
+    </form>
+    
+</div>
+
+{% endblock %}
+
