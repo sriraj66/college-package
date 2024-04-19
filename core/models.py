@@ -40,8 +40,8 @@ class ChatBot(models.Model):
 class Messages(models.Model):
     to = models.ForeignKey(ChatBot,on_delete=models.CASCADE, related_name='messages_of_college')
     
-    request = models.CharField(max_length=255)
-    responce = models.CharField(max_length=255)
+    request = models.TextField()
+    responce = models.TextField()
     
     
     created = models.DateTimeField(auto_now_add=True)
