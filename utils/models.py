@@ -68,8 +68,8 @@ class Students(models.Model):
     branch = models.CharField(max_length=100,verbose_name='Department',blank=True)
     year = models.IntegerField(default=1,verbose_name="Year")
     
-    phone = models.CharField(max_length=10,verbose_name='Phone Number',blank=True)
-    gender = models.CharField(max_length=10,choices=GENDER,default="None")
+    phone = models.CharField(max_length=12,verbose_name='Phone Number',blank=True)
+    gender = models.CharField(max_length=15,choices=GENDER,default="None")
     
     college = models.ForeignKey(CollegeAdmin,blank=True,null=True,on_delete=models.CASCADE,related_name='student_college')
     
@@ -110,8 +110,8 @@ class Staffs(models.Model):
     roll = models.CharField(max_length=15,verbose_name='Staff ID',blank=True)
     degree = models.CharField(max_length=100,verbose_name='Degree',blank=True)
     branch = models.CharField(max_length=100,verbose_name='Department',blank=True)
-    phone = models.CharField(max_length=10,verbose_name='Phone Number',blank=True)
-    gender = models.CharField(max_length=10,choices=GENDER,default="None")
+    phone = models.CharField(max_length=12,verbose_name='Phone Number',blank=True)
+    gender = models.CharField(max_length=15,choices=GENDER,default="None")
     college = models.ForeignKey(CollegeAdmin,blank=True,on_delete=models.CASCADE,related_name='staff_college',null=True)
     
     
