@@ -87,6 +87,7 @@
     
 
         {% if user.is_superuser %}
+        
         <div class="col m-1 p-1 ">
             <div class="usage">
                 <div class="usage-logo">
@@ -94,7 +95,7 @@
                 </div>
                 <hr>
 
-                <a href="{% url 'college_form' %}" ><i class="fas fa-link"></i>Create Edbud</a>
+                <a href="{% url 'chatbotlist' %}" ><i class="fas fa-link"></i>View all Edbud</a>
             </div>
         </div>
         {% endif %}

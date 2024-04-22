@@ -102,7 +102,7 @@ def source_code(request, uuid):
 
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(['GET',"POST"])
 def get_chat_responce(request):
     responce = {
         "status": 403,
@@ -140,4 +140,14 @@ def get_chat_responce(request):
 
     return JsonResponse(responce)
 
+
+@login_required
+def chatbotlist(request):
+  if not request.user.is_superuser:
+    return redirect("err","Access Resticted")
+  context = load_config(request)
+  
+  context['records'] = ChatBot.objects.filter(user=request.user)
+  
+  return render(request, 'chatbot/chatbotlist.html',context)
 

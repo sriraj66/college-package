@@ -37,6 +37,7 @@
         
         <div class="container">
             <p>Embed This code onto your Respective Sites.</p>
+            {% autoescape off %}{{ code }}{% endautoescape %}
             <code id="codeArea" class="code-area"> {{ code }} </code>
             <button id="copyButton">Click to Copy</button>
             <a href="{% url 'index' %}">Go Back</a>

@@ -47,7 +47,7 @@ class CollegeAdmin(models.Model):
     def CPS(self):
         student_count = self.students.count()
         if student_count > 0:
-            print("CPS:", self.a_credit, student_count)
+            print("CPS:", self.a_credit," / ", student_count)
             return int(self.a_credit / student_count)
         else:
             return 0
@@ -164,9 +164,14 @@ def create_user_profile(sender, instance, created, **kwargs):
         print(f"Profile created for {instance.username}")
 
 
+
 m2m_changed.connect(update_student_credit, sender=Students.SMCG_usage.through)
-pre_save.connect(update_college_credit, sender=Students)
+m2m_changed.connect(update_student_credit, sender=Students.ATS_usage.through)
+m2m_changed.connect(update_student_credit, sender=Students.CG_usage.through)
+pre_save.connect(update_college_credit, sender=CollegeAdmin)
 post_save.connect(create_user_profile, sender=User)
+post_save.connect(create_user_profile, sender=User)
+
 
 
 

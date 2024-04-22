@@ -284,6 +284,7 @@
 
                         {% if user.is_superuser %}
                         <div class="dropdown">
+
                             <button
                                 class="btn btn-flat"
                                 
@@ -301,6 +302,12 @@
                                     <a class="dropdown-item" href="{% url 'load_student' %}"
                                         ><i class="fas fa-user-cog"></i>
                                         Load Student</a
+                                    >
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'my_students' %}"
+                                        ><i class="fas fa-users"></i>
+                                        View Students</a
                                     >
                                 </li>
                                 <li>

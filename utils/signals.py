@@ -27,5 +27,7 @@ def update_student_credit(sender, instance, **kwargs):
         
 
 def update_college_credit(sender, instance, **kwargs):
-    print("College Admin Credit")
-    pass
+    
+    instance.student_credit = instance.CPS()
+    print(instance.student_credit)
+    print(instance.students.count())
