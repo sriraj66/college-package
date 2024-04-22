@@ -97,6 +97,16 @@
                 <a href="{% url 'college_form' %}" ><i class="fas fa-link"></i>Create Edbud</a>
             </div>
         </div>
+        <div class="col m-1 p-1 ">
+            <div class="usage">
+                <div class="usage-logo">
+                    <img src="{% static 'defaults/icon/cb.png' %}" style="transform: scale(1);"  alt="">
+                </div>
+                <hr>
+
+                <a href="{% url 'chatbotlist' %}" ><i class="fas fa-link"></i>View all Edbud</a>
+            </div>
+        </div>
         {% endif %}
         {% if not user.is_staff %}
         <div class="col m-1 p-1 ">
