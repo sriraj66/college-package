@@ -79,12 +79,25 @@ def load_student(request):
                 
                 profile.college = context['profile'].college
                 profile.save()
+                context['profile'].college.students.add(profile)
+                context['profile'].college.save()
+                
                 
             success(request,"Students List Sucessfullt Loded Password : Student@123")
-            return redirect("my_profile")
+            return redirect("my_students")
         except Exception as e:
             error(request,e,extra_tags="danger")
             
     
     return render(request,'utils/load_students.html',context)
     
+def my_students(request):
+    context = load_config(request)
+    
+    if not request.user.is_superuser:
+        return redirect("err","Invalid Access!!")
+    
+    context['records'] = CollegeAdmin.objects.get(user=request.user).students.all()
+    print(context)
+    
+    return render(request,'utils/students.html',context)
