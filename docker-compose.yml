@@ -22,14 +22,16 @@ services:
             - 443:443
         volumes:
             - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./certbot/conf:/etc/letsencrypt
+            - ./certbot/www:/var/www/certbot
           
   certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes: 
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email {email} -d {domain} --agree-tos
-  
+      image: certbot/certbot
+      container_name: certbot
+      volumes: 
+        - ./certbot/conf:/etc/letsencrypt
+        - ./certbot/www:/var/www/certbot
+      command: certonly --webroot -w /var/www/certbot --force-renewal --email sriramrajaclg@gmail.com -d neuraa.cloudplusai.tech --agree-tos
+
 volumes:
   static:
