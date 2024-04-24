@@ -28,6 +28,7 @@ media/
 secret_key.txt
 
 *.log
+*.pem
 
 test.py
 eb.yaml
