@@ -11,17 +11,6 @@ services:
     ports:
       - "8000:8000"
 
-  nginx:
-    build: ./nginx
-    volumes:
-      - static:/static
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - django_gunicorn
-    command: ["/bin/sh", "-c", "crond -f -L /dev/stdout"]
-    entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do certbot -q renew; sleep 12h & wait $${!}; done;"]
-
+  
 volumes:
   static:
