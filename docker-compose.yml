@@ -1,18 +1,15 @@
-version: '3.7'
+version: '3.8'
 
 services:
-  django_gunicorn:
-    container_name: django-gunicorn
+  web:
     volumes:
-      - static:/static
+      - .:/code
     env_file:
       - .env
     build:
       context: .
     expose:
       - 8000
-    
-
   nginx:
     image: nginx:latest
     ports:
@@ -21,18 +18,12 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./letsencrypt:/etc/letsencrypt
-      - ./web/static:/code/static
-      - ./web/media:/code/media
     depends_on:
-      - django_gunicorn
+      - web
+      - certbot
 
   certbot:
-    image: certbot/certbot
-    volumes:
-      - ./letsencrypt:/etc/letsencrypt
-      - ./web/static:/code/static
-      - ./web/media:/code/media
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-volumes:
-  static:
+      image: certbot/certbot
+      volumes:
+        - ./letsencrypt:/etc/letsencrypt
+      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
