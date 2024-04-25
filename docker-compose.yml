@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   web:
     volumes:
-      - .:/code
+      - .:/app
     env_file:
       - .env
     build:
@@ -12,4 +10,3 @@ services:
       - 8000
     ports:
       - 8000:8000
-  
