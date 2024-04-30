@@ -24,8 +24,10 @@ class Form(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def get_responce_count(self):
-        return int(self.responses.count()/self.questions.count())
-
+        try:
+            return int(self.responses.count()/self.questions.count())
+        except:
+            return 0
     def __str__(self) -> str:
         return f"id : {self.id} By : {self.staff.name}"
 
