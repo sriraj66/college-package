@@ -105,10 +105,10 @@
                 <div class="usage-logo">
                     <img src="{% static 'defaults/icon/cg.png' %}"  alt="">
                 </div>
-                <a href="{% url 'cg_history' %}" ><i class="fas fa-link"></i>Path pilot Usage : {{profile.CG_usage.count}}%</a>
+                <a href="{% url 'cg' %}" ><i class="fas fa-link"></i>Path pilot Usage : {{profile.CT_usage.count}}%</a>
                 <hr>
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: {{profile.CG_usage.count}}%;" ></div>
+                    <div class="progress-bar" style="width: {{profile.CT_usage.count}}%;" ></div>
                   </div>
             </div>
         </div>
@@ -118,7 +118,7 @@
                 <div class="usage-logo">
                     <img src="{% static 'defaults/icon/ats.png' %}"  alt="">
                 </div>
-                <a href="{% url 'ats_history' %}"><i class="fas fa-link"></i>Aplicant Tracking System : {{profile.ATS_usage.count}}%</a>
+                <a href="{% url 'ats_history' %}"><i class="fas fa-link"></i>Application Tracking System : {{profile.ATS_usage.count}}%</a>
                 <hr>
                 <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar" style="width: {{profile.ATS_usage.count}}%;" ></div>

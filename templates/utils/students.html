@@ -18,8 +18,8 @@
             <tr>
                 <th scope="col">ROLL NUM</th>
                 <th scope="col">Name</th>
+                <th scope="col">Email</th>
                 <td scope="col">DEPT</td>
-                <td scope="col">YEAR</td>
             </tr>
         </thead>
         <tbody>
@@ -27,8 +27,8 @@
             <tr>
                 <th scope="row">{{i.roll}} </th>
                 <td>{{i.name}}</td>
-                <td>{{i.branch}}</td>
-                <td>{{i.year}}</td>
+                <td>{{i.user.email}}</td>
+                <td>{{i.branch}}- {{i.year}} Year</td>
             </tr>
             {% endfor %}
         </tbody>

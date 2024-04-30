@@ -1,10 +1,9 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
+from utils.models import Students
 from CG.models import *
-import json
 from CG.constants import *
-from CG.cg import MAP
-from utils.models import Students,Staffs
+from CG.cg import Career_Tool
 from django.contrib.auth.decorators import login_required
 from authentication.views import load_config
 
@@ -19,78 +18,67 @@ def cg(request):
     except Exception as e:
         return render(request,"error.html",{"error": "Login as Student"})
     
-    context["degree"]=[student.degree]
-    context["branch"]=[student.branch]
-    context["year"] =[student.year]
-    
+    context['ct'] = CareerTool.objects.filter(user=student.user)
     
     return render(request,'CG/cg.html',context)
 
+def linked_in(request):
+    context = load_config(request)
+    return render(request,'CG/linkedin.html',context)
 
-def road_map(request):
+def generate_sa(request):
     context = {
         "output":""
     }
+    print("SA")
+    if request.POST:
+        strength = request.POST.get("strength")
+        technical_skill = request.POST.get("technical_skill")
+        future_roll = request.POST.get("future_roll")
+        config = load_config(request)
+        
+        ct = Career_Tool(request,api_key=config['profile'].college.api_key)
+        responce = ct.self_assement(strength, technical_skill, future_roll)
+        
+        
+        context['output'] = responce
+    return JsonResponse(context)
     
-    if request.POST and request.user.is_authenticated:
-        student = Students.objects.get(user=request.user)
+    
+@login_required
+def generate_final_map(request):
+    context = {
+        "output":"",
+        "linkedin":"",
+    }
+    
+    if request.POST:
+        ipic = request.POST.get("ipic")
+        role = request.POST.get("role")
+        workspace = request.POST.get("currently")
+        loc = request.POST.get("location")
+        ps = request.POST.get("ps")
+        gc = request.POST.get("gc")
+        config = load_config(request)
         
-        sd = request.POST.get("sd")
-        sj = request.POST.get("dj"," ")
-        dur = request.POST.get("dur")
-        loc = request.POST.get("loc")
-        sal = request.POST.get("sal")
-        skill = request.POST.get("skill")
-
-        obj = CG(
-            user=request.user,
-            sd=sd,jd=sj,loc=loc,sal=sal,skills=skill,
-            duration=dur
+        ct = Career_Tool(request,api_key=config['profile'].college.api_key)
+        responce = ct.generate_final(ipic,role,workspace,loc,ps,gc)
+        linkedin = ct.generate_linked_in(config['profile'].name,responce)
+        context['output'] = responce
+        context['linkedin'] = linkedin
+        
+        
+        obj = CareerTool(
+            user = request.user,
+            messages = request.session["ct_message"],
+            output = responce,
+            linked_in = linkedin,
         )
-        
-        app = MAP(student.college.api_key)
-        n = app.set_prompt(name=student.name, year=student.year,deg=student.degree,branch=student.branch,sd=sd,dur=dur,jd=sj,loc=loc,se=sal,skills=skill)
-        if n is True:
-            responce = app.generate()
-            print(responce)
-            try:    
-                obj.output = responce
-                responce = json.loads(responce)
-                print(responce)
-                context = responce
-            except Exception as e:
-                print(e)
-                
         obj.save()
         
-        student.CG_usage.add(obj)
-        student.save()
+        config['profile'].CT_usage.add(obj)
+        config['profile'].save()
         
         
     return JsonResponse(context)
-
-
-@login_required
-def full_history(request):
-    if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'error.html', {'error':'Access Denied'})
-    else:
-        profile = Students.objects.get(user=request.user)
-    context = {
-        'profile': profile,
-        'records': profile.CG_usage.all().order_by("-created"),
-    }
-    return render(request,'CG/history.html',context)
-
-@login_required
-def view_record(request,id):
-    if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'error.html', {'error':'Access Denied'})
-    else:
-        profile = Students.objects.get(user=request.user)
-    context = {
-        'profile': profile,
-        'record': profile.CG_usage.get(id=id),
-    }
     
-    return render(request,'CG/view.html',context)

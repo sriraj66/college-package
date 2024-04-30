@@ -1,0 +1,904 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked In Optimizer</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    <!-- <link rel="stylesheet" href="{% static 'css/stage.css' %}"> -->
+    <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
+
+    <style>
+        html {
+            font-size: 62.5%;
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        body {
+            padding: 6rem 5% 4rem 5%;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            --c1: #52057b;
+            --c2: #892cdc;
+            --c3: #bc6ff1;
+            --c4: #000000;
+            --bs-pagination-active-bg: var(--c2) !important;
+            --fnt: "Reem Kufi Ink", sans-serif;
+            background: whitesmoke;
+        }
+
+        i {
+            font-style: normal;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .red {
+            color: #f44336;
+        }
+
+        p,
+        textarea {
+            line-height: 1.5;
+        }
+
+        a {
+            color: var(--c2);
+        }
+
+        img {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        hr {
+            margin: 3rem 0;
+            border: none;
+            background: #ddd;
+            height: 1px;
+            width: 100%;
+        }
+
+        hr.small {
+            margin: 1.5rem 0;
+        }
+
+        hr.large {
+            margin: 6rem 0;
+        }
+
+        /* headers / typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            line-height: 1;
+            margin: 0;
+        }
+
+        h1+p,
+        h2+p,
+        h3+p,
+        h4+p {
+            margin-top: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3.6rem;
+            font-weight: normal;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: normal;
+        }
+
+        /* container */
+        .container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #555;
+        }
+
+        /* simple table grid */
+        .row {
+            display: table;
+            table-layout: fixed;
+            width: 100%;
+            margin: 0 0 3rem;
+        }
+
+        .row .row {
+            margin-bottom: 0;
+        }
+
+        .row .row .col {
+            padding: 0 0.75rem;
+        }
+
+        .row .col {
+            display: table-cell;
+            vertical-align: top;
+            padding: 0 1.5rem;
+            position: relative;
+        }
+
+        .row .col:first-child {
+            padding-left: 0;
+        }
+
+        .row .col:last-child {
+            padding-right: 0;
+        }
+
+        @media (max-width: 800px) {
+
+            .row,
+            .row .col {
+                display: block;
+                margin: 0 auto;
+                padding: 0;
+            }
+
+            .row .col {
+                margin: 0 0 3rem;
+            }
+
+            .row .row {
+                display: table;
+            }
+
+            .row .row .col {
+                display: table-cell;
+                padding: 0 0.75rem;
+            }
+
+            .row .row .col:first-child {
+                padding-left: 0;
+            }
+
+            .row .row .col:last-child {
+                padding-right: 0;
+            }
+        }
+
+        @media (max-width: 370px) {
+            .row .row {
+                display: block;
+                margin: 0;
+            }
+
+            .row .row .col {
+                display: block;
+                padding: 0;
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        form label:first-letter {
+            text-transform: uppercase;
+        }
+
+        form button.g-recaptcha,
+        form #recaptcha {
+            padding: 0;
+            margin: 0;
+            background: none;
+            margin: 3rem 0;
+            opacity: 0.9;
+        }
+
+        form span.red,
+        form span.error {
+            display: none;
+            margin: 0.75rem 0 0;
+        }
+
+        form h3 {
+            padding-top: 1.5rem;
+        }
+
+        form h3:first-of-type {
+            padding-top: 0;
+        }
+
+        form input.text,
+        form select,
+        form textarea {
+            padding: 1.5rem;
+            width: 100%;
+            color: #555;
+            border: 1px solid #aaa;
+            outline: 1px solid transparent;
+            backgroun: #fff;
+            border-radius: 3px;
+        }
+
+        form input.text::placeholder,
+        form select::placeholder,
+        form textarea::placeholder {
+            color: #aaa;
+        }
+
+        form input.text:focus,
+        form textarea:focus,
+        form select:focus {
+            outline-color: var(--c2);
+            border-color: var(--c2);
+            background: #fafbfd;
+            color: #111;
+        }
+
+        form .col.error {
+            color: #f44336;
+        }
+
+        form .col.error input.text,
+        form .col.error textarea,
+        form .col.error select {
+            border-color: #f44336;
+        }
+
+        form .col.error span.red,
+        form .col.error span.error {
+            display: block;
+            font-style: italic;
+        }
+
+        form .buttons {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            margin-right: 3rem;
+        }
+
+        form .buttons i {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        form .buttons i:first-child {
+            margin-right: 0.5rem;
+        }
+
+        form .buttons i:hover {
+            opacity: 0.8;
+        }
+
+        form .buttons i.yes {
+            background: #00c853;
+        }
+
+        form .buttons i.no {
+            background: #f44336;
+        }
+
+        /* custom select */
+        .select-container {
+            position: relative;
+        }
+
+        .select-container select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            background: #fff;
+        }
+
+        .select-container select option {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            appearance: none;
+            border: 0;
+        }
+
+        .select-container select ::-ms-expand {
+            display: none;
+        }
+
+        .select-container:after {
+            position: absolute;
+            top: 50%;
+            right: 1.5rem;
+            content: ' ';
+            width: 0;
+            height: 0;
+            margin-top: -3.75px;
+            border: 7.5px solid transparent;
+            border-top: 7.5px solid #666;
+            pointer-events: none;
+        }
+
+        .select-container.on:after {
+            border-top-color: var(--c2);
+        }
+
+        .select-container.on select {
+            background: #fafbfd;
+        }
+
+        .badge {
+            display: inline-block;
+            width: 3.5rem;
+            height: 3.5rem;
+            line-height: 3.5rem;
+            text-align: center;
+            background: #ddd;
+            position: relative;
+            z-index: 9;
+        }
+
+        .badge.circle {
+            border-radius: 50%;
+        }
+
+        /*
+	TIMELINE
+*/
+        .timeline {
+            margin: 6rem 0 3rem;
+            position: relative;
+            text-align: center;
+        }
+
+        .timeline .badge {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in;
+        }
+
+        .timeline i.desc {
+            text-align: center;
+            line-height: 1;
+            display: block;
+            color: #ccc;
+        }
+
+        .timeline:after {
+            content: ' ';
+            position: absolute;
+            top: 1.5rem;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: #ddd;
+            z-index: 2;
+        }
+
+        .timeline .col:after,
+        .timeline .col:before {
+            content: ' ';
+            position: absolute;
+            top: 1.5rem;
+            left: 0;
+            height: 3px;
+            width: 50%;
+            background: transparent;
+            transition: background 0.3s ease;
+            z-index: 3;
+        }
+
+        .timeline .col:before {
+            top: 1rem;
+            left: -0.7rem;
+            height: 1.4rem;
+            width: 1.4rem;
+            background: #ddd;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            z-index: 5;
+        }
+
+        .timeline .col:first-child:before {
+            display: none;
+        }
+
+        .timeline .col.on .badge {
+            background: var(--c2);
+            color: #fff;
+            transform: scale(1.3);
+        }
+
+        .timeline .col.on .desc {
+            color: #555;
+        }
+
+        .timeline .col.on:after {
+            background: var(--c2);
+            animation: timeline forwards 1s ease 1;
+            width: 0%;
+            animation-delay: 0.7s;
+        }
+
+        .timeline .col.on:last-child:after {
+            width: 0%;
+        }
+
+        .timeline .col.ok .badge {
+            background: #4caf50;
+            transform: scale(1);
+        }
+
+        .timeline .col.ok:after {
+            background: #4caf50;
+            animation: timeline2 forwards 0.5s ease 1;
+            width: 100%;
+        }
+
+        .timeline .col.ok:before {
+            background: #4caf50;
+            transition-delay: 0s;
+        }
+
+        @keyframes timeline {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 50%;
+            }
+        }
+
+        @keyframes timeline2 {
+            from {
+                width: 50%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            #timeline .row {
+                display: table;
+            }
+
+            #timeline .row .col {
+                display: table-cell;
+            }
+        }
+
+        /*
+	BUTTONS
+*/
+        /* simple buttons */
+        .button-group {
+            margin: 0 0 3rem;
+        }
+
+        button,
+        .button {
+            border: 0;
+            background: var(--c2);
+            border: 1px solid var(--c2);
+            color: #fff;
+            padding: 1.5rem 3rem;
+            line-height: 1;
+            display: inline-block;
+            margin: 0 0.75rem 0 0;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button:hover,
+        .button:hover {
+            background: var(--c3);
+            color: #fff;
+        }
+
+        button:active,
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        button:focus,
+        .button:focus {
+            background: var(--c3);
+        }
+
+        button.outline,
+        .button.outline {
+            background: transparent;
+            color: var(--c2);
+        }
+
+        button.outline:hover,
+        .button.outline:hover {
+            border-color: var(--c3);
+            color: var(--c3);
+        }
+
+        button.small,
+        .button.small {
+            padding: 0.75rem 1.5rem;
+        }
+
+        button.inline,
+        .button.inline {
+            margin-right: 0;
+            display: inline;
+            padding: 0.375rem 0.75rem;
+        }
+
+
+    </style>
+
+    <style>
+
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+        .form-wraper{
+            text-align: center;
+            width: fit-content;
+            background-color: white;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding: 15px;
+            box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+            -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+            -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
+        }
+
+        h1{
+            font-weight: bold;
+            color: var(--c2);
+        }
+        .back-btn{
+            background-color: var(--c2);
+            letter-spacing: 1.5px;
+            position: fixed;
+            bottom: 1em;
+            right: 1em;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            padding: 10px;
+            transition: all 0.2s ease;
+        }
+        .back-btn:hover{
+            color: var(--c2);
+            background-color: white;
+            border:1px dashed var(--c2);
+        }
+        .back-btn:hover i{
+            transform: translateY(10px);
+        }
+        #exp_sj, #final_out, #final_out_linkedin{
+            text-align: justify;
+            padding: 10px;
+            padding-left: 10px ;
+            font-size: 18px;
+            font-family: sans-serif;
+            letter-spacing: 1.5px;
+            color: #000000;
+        }
+        #exp_sj ul,#final_out ul ,#final_out_linkedin ul{
+            text-decoration: none;
+            list-style:circle;
+        }
+        #exp_sj h4 ,#final_out h4, #final_out_linkedin h4{
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--c2);
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+    <a href="{% url 'cg' %}" class="back-btn"> <i class="fa fa-arrow-left"></i> Back</a>
+
+    <div class="form-wraper">
+        <form autocomplete="on" class="container step-form" id="form">
+            <h1>
+                Career Maping
+            </h1>
+            <p>
+                Continue to press 'continue' buttons to skip through this form
+            </p>
+            <!-- <button class="demo outline" id="demo">Run demo mode</button> -->
+            <div class="timeline" id="timeline">
+                <div class="row">
+                    <div class="col on step_1">
+                        <i class="badge circle">1</i><i class="desc">Self-Assessment</i>
+                    </div>
+                    <div class="col step_2">
+                        <i class="badge circle">2</i><i class="desc">Exploration</i>
+                    </div>
+                    <div class="col step_3 ">
+                        <i class="badge circle">3</i><i class="desc">Goal Setting</i>
+                    </div>
+
+                    <div class="col step_4 ">
+                        <i class="badge circle">4</i><i class="desc">Goal Setting</i>
+                    </div>
+
+                    <div class="col step_5 complete">
+                        <i class="badge circle">5</i><i class="desc">Optimization</i>
+                    </div>
+
+                </div>
+            </div>
+            <div class="step" id="step_1">
+                <h2>
+                    Self-Assessment
+                </h2>
+                <p>
+                    Reflect and score yourself in key areas to guide your professional development:
+                </p>
+                
+                
+                <div class="row">
+                    <div class="col">
+                        <label><strong>I Love </strong> <em>Key personal capabilities</em></label><input class="text"
+                        id="strength" placeholder="e.g.analytical thinking and problem-solving" />
+                    </div>
+                    <div class="col">
+                        <label><strong>Technical Skills</strong> <em> I am Good at</em></label><input class="text"
+                        id="technical_skill" placeholder="e.g., Coding and Machine Learning" />
+                    </div>
+                </div>
+                
+
+                <div class="row">
+                    <div class="col-12">
+                        <label><strong>I like to be in  </strong><em>Possible Money making Markets</em></label><input class="text"
+                           id="future_roll" placeholder="e.g., Job or Startup or IT Industry" />
+                    </div>
+                    
+                </div>
+
+                <button class="continue" id="explore" data-target="step_2">Explore <i class="fas fa-step-forward"></i></button>
+            
+           
+            </div>
+            <div class="step hidden" id="step_2">
+                <h2>
+                    Exploration
+                </h2>
+                <p>
+                    Assess Fit and Opportunities.
+                </p>
+                <p class="hidden">
+                </p>
+                <div class="row">
+                    <div class="col" id="exp_sj">
+                        Generating Some Sujections
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label><strong>I Pick </strong><em><small>Choose the Above listed Job or Enter Your Own</small></em></label><input class="text"
+                          id="ipic"  placeholder="e.g., Cybersecurity Analyst" />
+                    </div>
+                </div>
+                <button class="reset"><i class="fas fa-step-backward"></i> Back</button>
+                <button class="continue" data-target="step_3">Set My Goal <i class="fas fa-step-forward"></i></button>
+            </div>
+            <div class="step hidden" id="step_3">
+                <h2>
+                    Goal Setting
+                </h2>
+                <p>
+                    Where do you see yourself in the short-term (1-3 years) and long-term (5-10 years)? Set specific, measurable, achievable, relevant, and time-bound (SMART) goals for your career progression.
+
+                </p>
+                <div class="row">
+                    <div class="col">
+                        <label>Currently I am At <em>(student @)</em></label><input class="text" id="currently" value="{{profile.college.name}}" placeholder="College or Workplace Name" />
+                    </div>
+                    <div class="col">
+                        <label>Location <em>(according to Location of the College)</em></label><input class="text"
+                           id="location" placeholder="eg., Trichy" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Current <em>(I am Currently)</em></label>
+                        <div class="select-container">
+                            <select id="role">
+                                <option value="Student">
+                                    Student
+                                </option>
+                                <option value="Working">
+                                   Working
+                                </option>
+                                <option value="Internship">
+                                    Internship
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label>Professional Skills</label>
+                        <textarea name="ps" id="ps" placeholder="HackerRank Score : 12000, ..." cols="30" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>list any Global Certification</label>
+                        <textarea name="gc" id="gc" placeholder="Data Science field Achievements, Global Certification in Data Science" cols="30" rows="3"></textarea>
+                    </div>
+                    
+                </div>
+                <button class="reset" data-target="step_2"><i class="fas fa-step-backward"></i> Back</button>
+                <button class="continue" id="final_sub" data-target="step_4">GENERATE <i class="fa fa-pallet"></i></button>
+            </div>
+            
+            <div class="step hidden " id="step_4">
+                <h2>
+                    Career Map
+                </h2>
+                <p>
+                    What skills do you need to succeed in your desired career? Identify gaps in your skill set and create a plan to acquire or strengthen those skills through coursework, internships, workshops, or extracurricular activities.
+                </p>
+                <div id="final_out">
+
+                </div>
+                <button class="reset" data-target="step_3"><i class="fas fa-step-backward"></i> Back</button>
+                <button class="continue" data-target="step_5">Next <i class="fas fa-step-forward"></i></button>
+            
+            </div>
+
+            
+            <div class="step hidden complete " id="step_5">
+                <h2>
+                    Linked In Optimization
+                </h2>
+                <p>
+                    What skills do you need to succeed in your desired career? Identify gaps in your skill set and create a plan to acquire or strengthen those skills through coursework, internships, workshops, or extracurricular activities.
+                </p>
+                <div id="final_out_linkedin">
+                    
+                </div>
+                <button class="reset">Reset</button><button class="outline view-all">View all form steps</button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <script>
+
+        
+        var exp = document.getElementById("explore");
+        var final = document.getElementById("final_sub");
+        exp.addEventListener("click", (e)=>{
+
+            var out = document.getElementById("exp_sj");
+            out.innerHTML = "Exploring the job revelent to you ! <i class='fas fa-spinner fa-spin'></i> "
+            
+            var data = new FormData();
+            data.append("csrfmiddlewaretoken", `{{csrf_token}}`);
+            
+            data.append("strength", document.getElementById("strength").value);
+            data.append("technical_skill", document.getElementById("technical_skill").value);
+            data.append("future_roll", document.getElementById("future_roll").value);
+            console.log(data);  
+           
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '{% url "generate_sa" %}', true);
+
+            xhr.send(data);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var responce = JSON.parse(xhr.responseText);
+                        
+                        out.innerHTML = `${responce.output}`;
+
+
+                    } else {
+                        console.error("Form submission error:", xhr.status);
+                        btn.innerHTML = `Error [${xhr.status}]`;
+                    }
+                }
+            };
+
+        });
+    
+        final.addEventListener("click", (e)=>{
+
+            var out = document.getElementById("final_out");
+            var linkedin = document.getElementById("final_out_linkedin");
+            out.innerHTML = "Generating the Career Maping ! <i class='fas fa-spinner fa-spin'></i> "
+            final.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
+            var data = new FormData();
+            data.append("csrfmiddlewaretoken", `{{csrf_token}}`);
+
+            data.append("ipic", document.getElementById("ipic").value);
+            data.append("currently", document.getElementById("currently").value);
+            data.append("location", document.getElementById("location").value);
+            data.append("role", document.getElementById("role").value);
+            data.append("ps", document.getElementById("ps").value);
+            data.append("gc", document.getElementById("gc").value);
+            console.log(data);  
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '{% url "generate_final_map" %}', true);
+
+            xhr.send(data);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var responce = JSON.parse(xhr.responseText);
+                        out.innerHTML = `${responce.output}`;
+                        linkedin.innerHTML = responce.linkedin;
+                        console.log(responce.output);
+                    } else {
+                        console.error("Form submission error:", xhr.status);
+                        btn.innerHTML = `Error [${xhr.status}]`;
+                    }
+                }
+            };
+
+            });
+
+    </script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gator/1.2.4/gator.min.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src="./script.js"></script>
+    <script src="{% static 'js/stage.js' %}"></script>
+
+
+</body>
+
+</html>
