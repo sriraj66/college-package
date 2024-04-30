@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from CP.models import CoursePlan
-from CG.models import CG
+from CG.models import CareerTool
 from ATS.models import ATS
 from smcg.models import CONTENTS
 import uuid
@@ -78,9 +78,8 @@ class Students(models.Model):
     is_completed = models.BooleanField(default=False,verbose_name="Profile Completed?")
     
     ATS_usage = models.ManyToManyField(ATS, blank=True,verbose_name="ATS History")
-    CG_usage = models.ManyToManyField(CG, blank=True,verbose_name="CG History")
     SMCG_usage = models.ManyToManyField(CONTENTS, blank=True,verbose_name="SMCG History")
-    
+    CT_usage = models.ManyToManyField(CareerTool, blank=True,verbose_name="CT History")
     created = models.DateTimeField(auto_now_add=True)
     
     
@@ -91,7 +90,7 @@ class Students(models.Model):
             return self.college.student_credit
         
     def calculate_credit(self):
-        return self.ATS_usage.count() + self.CG_usage.count() + self.SMCG_usage.count()
+        return self.ATS_usage.count() + self.CT_usage.count() + self.SMCG_usage.count()
 
     def check_credit(self):
         if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
@@ -167,7 +166,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 m2m_changed.connect(update_student_credit, sender=Students.SMCG_usage.through)
 m2m_changed.connect(update_student_credit, sender=Students.ATS_usage.through)
-m2m_changed.connect(update_student_credit, sender=Students.CG_usage.through)
+m2m_changed.connect(update_student_credit, sender=Students.CT_usage.through)
 pre_save.connect(update_college_credit, sender=CollegeAdmin)
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_user_profile, sender=User)

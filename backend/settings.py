@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'CG',
     'CP',
     'utils',
-    'authentication'
+    'authentication',
+    'feed360',
+
 ]
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 MIDDLEWARE = [

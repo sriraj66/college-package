@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Feed 360 &deg; {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+        overflow: hidden;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+    .btn{
+        border-radius: 0;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        max-height: min-content;
+    }
+    th,#recordsindex4 tr{
+        text-align: start;
+        margin-left: 2px;
+        letter-spacing: 1px;
+    }
+    #recordsindex4 th{
+        border-color: var(--c3) !important;
+        color: var(--c2) !important;
+    
+    }
+    #output-container{
+        margin-top: 25px;
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item "><a style="color:var(--c3); text-decoration: none;"href="{% url 'feed360' %}"> <img src="{% static 'defaults/icon/360.png' %}" width="30" style="transform: scale(1);"  alt=""> Feed 360&deg;</a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="">{{form.name}}</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+
+    <div class="row d-flex" style="justify-content: center; align-items: center;">
+        
+    </div>
+
+        <div class="row" style="align-items: center; margin-top: 10px;">
+            {% if form.qr %}
+                <div class="col d-flex" style="justify-content: center; align-items: center;">
+                    <img src="{{form.qr.url}}" height="50" style="transform: scale(2.5);" alt="QR">
+                </div>
+            {% endif %}
+            <div class="col">
+    <form method="post" action="{% url 'create_form' form.id %}">
+        {% csrf_token %}
+
+                <div class="col">
+                    <label class="">Form Name</label>
+                </div>
+                <div class="col">
+                    <input type="text" name="name" id="name" value="{{form.name}}" class="form-control">
+                    </div>
+                    <div class="col">
+                    <button type="submit" class="btn w-100 btn-outline-success">Change <i class="fas fa-recycle text-success"></i></button>
+                    </div>
+                </div>
+    </form>
+
+            </div>
+
+
+    <div class="row container" style="margin-top: 15px;">
+    <br>
+        
+        <div class="clearfix p-1">
+            <h3 class="float-start">Questions</h3>
+            <div class="btn-group float-end">
+                <a href="{% url 'create_question' form.id %}" class="btn btn-outline-success float-end">Add <i class="fa fa-folder-plus text-success"></i></a>
+                <a href="{% url 'view_form' form.id %}" class="btn btn-outline-info float-end">View <i class="fas fa-eye text-info"></i></a>
+                <form action="{% url 'delete_form' form.id %}" method="POST">
+                    {% csrf_token %}
+                <button href="" class="btn btn-outline-danger float-end" type="submit">Delete <i class="fa fa-trash-alt text-danger"></i></button>
+                </form>
+            </div>
+          </div>
+          <br>
+
+        {% if questions %}
+        <table class="table table-striped table-bordered m-t-2">
+            <thead class="table-dark">
+              <tr class="">
+                <th scope="col">Question</th>
+                <td scope="col">Type</td>
+                <td scope="col">Options</td>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for i in questions %}
+              <tr>
+                <th scope="row">{{i.question}}</th>
+                <td>{{i.field_type}}</td>
+                <td style=" display: flex; justify-content: space-between;">
+
+                    <a href="{% url 'edit_question' i.id %}" ><i class="fa fa-pencil text-warning"></i></a>
+
+                    <a href="{% url 'delete_question' i.id %}"><i class="fa fa-trash text-danger"></i></a> </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% endif %}
+    </div>
+
+    <br>
+    <div class="row container">
+        
+        
+          <br>
+
+        {% if responses %}
+        <div class="clearfix p-1">
+            <h3 class="float-start">Responses</h3>            
+        </div>
+
+        <table id="recordsindex4" class="table table-bordered table-hover">
+            <thead class="bg-dark">
+              <tr>
+                <th scope="col">Questions</th>
+                <th scope="col">Responces</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in responses %}
+              <tr>
+                <td>{{i.question}}</td>
+                <td>{{i.response}}</td>
+            </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <br><br>
+            <form id="analysis">
+                {% csrf_token %}
+            <button type="submit" id="analysis_btn" class="btn sub-btn" >SENTIMENTAL ANALYSIS <i class="fa fa-diagnoses"></i></button>
+            </form>    
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row" id="output-container">
+
+
+    </div>
+    {% if form.analysis.all %}
+    <div class="accordion" id="previousAnalysis">
+        <br>
+        <h3>Previous Analysis</h3>
+
+        {% for i in form.analysis.all %}
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="false" aria-controls="collapseOne">
+              Analysis {{i.id}} 
+            </button>
+          </h2>
+          <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#previousAnalysis">
+            <div class="accordion-body">
+                {% autoescape off %}
+                {{ i.report }}
+                {% endautoescape %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        
+      </div>
+      {% endif %}
+</div>
+{% endblock %} {% block script %}
+
+<script>
+    
+    var form = document.getElementById("analysis");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var analysis_btn = document.getElementById("analysis_btn");
+        analysis_btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+        analysis_btn.disable = true;
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+        document.getElementById("output-container").innerHTML = `<hr/><h3>Performing Sentimental Analysis <i class="fa fa-spinner fa-spin"></i></h3>`;
+       
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'sentimental_analysis' form.id %}", true);
+        xhr.send(data);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    analysis_btn.disable = false;
+                    analysis_btn.innerHTML = "SENTIMENTAL ANALYSIS";
+                    var responce = JSON.parse(xhr.responseText);
+                    // load_DOM(responce);
+                    document.getElementById("output-container").innerHTML = responce.output;
+                    console.log(responce);
+                } else {
+                    console.error("Form submission error:", xhr.status);
+                    analysis_btn.innerHTML = `Error [${xhr.status}]`;
+                }
+            }
+        };
+    });
+
+    
+</script>
+
+{% endblock %}

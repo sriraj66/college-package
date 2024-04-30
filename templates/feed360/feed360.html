@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Path Pilot {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> <img src="{% static 'defaults/icon/360.png' %}" width="30" style="transform: scale(1);"  alt=""> Feed 360&deg;</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    
+    <div class="row">
+        <form method="post">
+            {% csrf_token %}
+            <div class="col-12">
+                <button type="submit" class="btn sub-btn" >  Create a new Form <i class="fa fa-plus"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <br>
+
+
+    <div class="row">
+        <br>
+        <h3>Forms <i class="fas fa-file-medical-alt"></i></h3>
+        {% if records %}
+    <table id="recordsindex4" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Form Name</th>
+            <td>Questions</td>
+            <td>Responces</td>
+            <td>Edit</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in records %}
+          <tr>
+          <th>{{i.name}}</td>
+          <td>{{i.questions.count}}</td>
+          <td>{{i.get_responce_count}}</td>
+          <td><a href="{% url 'create_form' i.id %}">View or Edit</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      {% endif %}
+    </div>
+
+
+</div>
+{% endblock %} {% block script %}
+<script>
+    
+    var form = document.getElementById("cg_form");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var btn = document.getElementById("submit");
+        btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
+        btn.disable = true;
+        scrollToTop();
+
+        var data = new FormData();
+        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+
+        data.append("sbranch", e.target.sbranch.value);
+        data.append("sub", e.target.sub.value);
+        data.append("syllabus", e.target.syllabus.value);
+        data.append("dur", e.target.dur.value);
+        data.append("tp", e.target.tp.value);
+
+        document.getElementById("output-container").innerHTML = "";
+        console.log(data);
+
+        document.getElementById(
+            "outtit"
+        ).innerText = `Generating Map For ${e.target.sub.value}.`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '{% url "course_map" %}', true);
+
+        xhr.send(data);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    btn.disable = false;
+                    btn.innerHTML = "Generate";
+                    var responce = JSON.parse(xhr.responseText);
+                    // displayContent(responce);
+                    load_DOM(responce);
+                    document.getElementById(
+                        "outtit"
+                    ).innerText = `Courses Map for ${e.target.sub.value}.`;
+                    console.log(responce);
+                } else {
+                    console.error("Form submission error:", xhr.status);
+                    btn.innerHTML = `Error [${xhr.status}]`;
+                }
+            }
+        };
+    });
+
+    
+</script>
+{% endblock %}

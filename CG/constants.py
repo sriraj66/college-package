@@ -1,125 +1,58 @@
-branch = [
-    "Mechanical Engineering",
-    "Computer Science and Engineering",
-    "BTech Biotechnology",
-    "Civil Engineering",
-    "BTech ECE (Electronics and Communication Engineering)",
-    "Chemical Engineering",
-    "Electrical Engineering",
-    "Electronic Engineering",
-    "Information Technology",
-    "Machine Learning",
-    "Automobile Engineering",
-    "Data Engineering",
-    "Cyber Security",
-    "Economics",
-    "Political Science",
-    "English",
-    "History",
-    "Psychology",
-    "Sociology",
-    "Philosophy",
-    "Geography",
-    "Data Science"
-]
+PROMPT1 = """
+Identify 10 potential career goals and target companies using the Ikigai model, based on My interests and skills.
+Consider your passions, such as {0} as well as 
+skills like {1} and potential money-making markets 
+such as {2}.
+For each potential career goal, conduct an exploration of different industries, job roles, and organizations to gain insights into potential career paths.
 
-degrees = [
-    "Bachelor of Engineering (B.E)",
-    "Bachelor of Technology (B.Tech)",
-    "Bachelor of Computer Application (BCA)",
-    "Bachelor of Architecture (B.Arch)",
-    "Bachelor of Business Administration (BBA)",
-    "Bachelor of Arts (BA)",
-    "BSc Chemistry",
-    "BSc Mathematics",
-    "MBA",
-    "Master of Architecture",
-    "Master of Arts",
-    "Master of Engineering",
-    "Master of Science",
-    "Master of Laws"
-]
+Your sujestions should be structured and well-organized, with separate div, ul, h4 and 
+li elements with class for li for all job roles.
+Ensure that there are no line breaks present.
+Your am response should provide detailed insights into each field,
+including potential job roles and companies relevant to me, To identified career goals.
+"""
 
-years = [f"{i}" for i in range(1,9)]
+PROMPT2 = """
+Based on previous result, I want to Become a {0} 
 
-ft = {
-  "careerGuidanceRoadmap": {
-    "duration": "4 Years",
-    "steps": [
-      {
-        "year1": {
-          "focus": "Build strong foundation in data science and machine learning concepts",
-          "actionItems": [
-            "Complete online courses in data science and machine learning on platforms like Coursera, Udemy, or edX",
-            "Participate in Kaggle competitions to apply knowledge to real-world problems",
-            "Start building a portfolio showcasing data science projects on platforms like GitHub"
-          ]
-        }
-      },
-      {
-        "year2": {
-          "focus": "Specialize in advanced topics within data science and gain practical experience",
-          "actionItems": [
-            "Master advanced machine learning algorithms and techniques",
-            "Internship or part-time work in a data-related role to gain hands-on experience",
-            "Contribute to open-source data science projects"
-          ]
-        }
-      },
-      {
-        "year3": {
-          "focus": "Develop domain expertise and enhance technical skills",
-          "actionItems": [
-            "Focus on a specific domain such as healthcare, finance, or marketing for deeper understanding",
-            "Complete specialization courses in areas like natural language processing or computer vision",
-            "Attend data science conferences and networking events"
-          ]
-        }
-      },
-      {
-        "year4": {
-          "focus": "Prepare for transition to a Data Scientist role and negotiate salary expectations",
-          "actionItems": [
-            "Update resume, LinkedIn profile, and professional portfolio",
-            "Apply for full-time Data Scientist roles and prepare for interviews",
-            "Seek mentorship from experienced data scientists for guidance on job search and career advancement"
-          ]
-        }
-      }
-    ]
-  },
-  "courses": [
-    {
-      "title": "Introduction to Data Science",
-      "platform": "Coursera",
-      "link": "https://www.coursera.org/browse/data-science"
-    },
-    {
-      "title": "Machine Learning A-Z™: Hands-On Python & R In Data Science",
-      "platform": "Udemy",
-      "link": "https://www.udemy.com/course/machinelearning/"
-    },
-    {
-      "title": "Deep Learning Specialization",
-      "platform": "Coursera",
-      "link": "https://www.coursera.org/specializations/deep-learning"
-    },
-    {
-      "title": "Data Exploration",
-      "platform": "Youtube",
-      "link": "https://www.youtube.com/watch?v=OY4eQrekQvs"
-    }
-  ],
-  "profiles": [
-    {
-      "name": "John Doe",
-      "specialization": "Deep Learning",
-      "profileLink": "https://www.linkedin.com/in/johndoe"
-    },
-    {
-      "name": "Jane Smith",
-      "specialization": "Data science",
-      "profileLink": "https://www.linkedin.com/in/janesmith"
-    }
-  ]
-}
+Currently I am {1} at {2}
+Location: {3}
+Current: {4} 
+Professional Skills: {5}, 
+Global Certification: {6},
+
+Set an specific, measurable, achievable, relevant, and time-bound (SMART) 
+Short term goal [1-3 Years] and
+Long Term Goal [5-10 years] in the following Format
+
+Career Designation:
+Location:
+Industry:
+Compensation Level (Range):
+Professional Skills:
+Personal Skills (Soft Skills):
+Domain:
+
+Based on my Short and Long term Goal, I want to Develop my Skill set and need to succeed in my domain,
+Identify the Skill Set and create a plan to acquire or strengthen those skills through coursework,
+internships, workshops, or extracurricular activities  and keep it  as a bullet point.
+
+Output Should be in  structured and well-organized, with separate div, ul, h4 and 
+li elements with class for li for all job roles.
+Ensure that there are no line breaks present.
+your am response should provide detailed insights.
+
+"""
+
+
+PROMPT3 = """
+My self {0},  Here I attach my Information 
+Information : {1},
+Output should contain:
+ - Linked In Head line
+ - About section for LinkedIn Profile with Keywords.
+ - Craft me a good message to send to a LinkedIn connection request message for someone to make them a potential mentor, expressing my interest in their guidance. Keep the tone formal and limit the words to 100 maximum.
+These Elements are inside a single div containing ul,li,h4,p tags with classes.
+Ensure that there are no line breaks present.
+your am response should provide detailed insights.
+"""

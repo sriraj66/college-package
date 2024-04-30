@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Path Pilot {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+        overflow: hidden;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+    .btn{
+        border-radius: 0;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        max-height: min-content;
+    }
+    th{
+        text-align: start;
+        margin-left: 2px;
+        letter-spacing: 1px;
+    }
+
+    .star {
+    font-size: 30px;
+    cursor: pointer;
+    color: gold;
+    margin-left: 2px;
+    margin-right: 4px;
+    transition: all 0.3s ease-in;
+    }
+    .star:hover{
+        color: gold !important;
+        transform: translateY(-2px);
+        transform: scale(1.2);
+    }
+   
+    .radio{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .radio label{
+        font-size: 18px;
+        letter-spacing: 1px;
+        word-spacing: 2px;
+    }
+    .radio label input{
+        background-color: gold;
+    }
+    
+   
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    {% if user.is_staff %}
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item "><a style="color:var(--c3); text-decoration: none;"href="{% url 'feed360' %}"> <img src="{% static 'defaults/icon/360.png' %}" width="30" style="transform: scale(1);"  alt=""> Feed 360&deg;</a></li>
+          <li class="breadcrumb-item"><a style="color:var(--c3); text-decoration: none;"href="{% url 'create_form' form.id %}">  {{form.name}}</a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> View</a></li>
+          
+        </ol>
+      </nav>
+      {% endif %}
+</div>
+
+<div class="container item-center">
+
+    <h3>{{form.name}}</h3>
+
+    <br>
+    
+    <ol class="w-100">
+
+        {% if questions %}
+        <form method="post">
+            {% csrf_token %}
+        {% for i in questions %}
+        
+        <li class="container">
+            
+            <div class="container text-start">
+                <div class="row row-cols-1 row-cols-sm-2">
+                  <div class="col p-1">
+                    {{i.question}}
+                  </div>
+                  <div class="col p-1">
+
+                    {% if i.field_type == "Rating" %}
+                    <div id="star-rating" style="display: flex; justify-content: center; align-items: center;">
+                        <span class="star" onclick="rateStar(1)">&#9733;</span>
+                        <span class="star" onclick="rateStar(2)">&#9733;</span>
+                        <span class="star" onclick="rateStar(3)">&#9733;</span>
+                        <span class="star" onclick="rateStar(4)">&#9733;</span>
+                        <span class="star" onclick="rateStar(5)">&#9733;</span>
+                    </div>
+                    <input id="rating-result" type="text" hidden value="0" name="response{{i.id}}" />
+                    {% elif i.field_type == 'Boolean' %}
+                    <div class="container radio">
+                        <label>
+                            <input type="radio" name="response{{i.id}}" checked value="Yes"> Yes
+                          </label>
+                          <label>
+                            <input type="radio" name="response{{i.id}}" value="No"> No
+                          </label>
+                    </div>
+                    {% else %}
+                    <input type="text" class="form-control" required name="response{{i.id}}" placeholder="Your Answer">
+                    {% endif %}
+                  
+                </div>
+                </div>
+              </div>
+              <br>
+          </li>
+
+        {% endfor %}
+          <div class="btn-group w-100">
+            <button type="submit" class="btn sub-btn">SUBMIT</button>
+            <button type="reset" class="btn btn-outline-danger">RESET</button>
+          </div>
+        </form>
+        {% else %}
+        <p>No question Found</p>
+        {% endif %}
+        
+        
+      </ol>
+
+</div>
+{% endblock %} {% block script %}
+
+<script>
+    function rateStar(rating) {
+    let stars = document.querySelectorAll('.star');
+    stars.forEach((s, index) => {
+        if (index < rating) {
+        s.style.color = 'gold';
+        } else {
+        s.style.color = 'gray';
+        }
+    });
+    document.getElementById('rating-result').value =  rating;
+}
+    rateStar(0);
+</script>
+
+{% endblock %}
