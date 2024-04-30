@@ -9,9 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from django.templatetags.static import static
 from utils.models import *
-from django.contrib.auth import logout
 from authentication.views import load_config
-
+from django.conf import settings
 
 @login_required
 def index(request):
@@ -25,7 +24,7 @@ def index(request):
       'colleges': ChatBot.objects.all(),
       'profile' : profile,
       'complete_triger' : True,
-      
+      'version' : settings.VERSION or 'beta',
   }
   return render(request, 'chatbot/index.html', context=context)
 

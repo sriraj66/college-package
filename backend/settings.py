@@ -17,7 +17,7 @@ with open("config.yml",'r') as config_file:
     config_file.close()
 
 DEBUG = config['debug']
-
+VERSION = config['version']
 del config
 
 ALLOWED_HOSTS = ['*']

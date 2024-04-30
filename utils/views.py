@@ -26,7 +26,7 @@ def edit_profile(request):
                 error(request,"Please Enter The valid Mobile Number or Gender !!",extra_tags='danger')
                 return redirect('edit_profile')
             else:
-                mid = form.save()
+                form.save()
             
 
             return redirect('my_profile')
@@ -52,41 +52,44 @@ def load_student(request):
             df = pd.read_excel(file)
             
             for index, row in df.iterrows():
-                user = User(
-                    username = row['email'],
-                    email = row['email'],
-                    first_name = row['first_name'],
-                    last_name = row['last_name'],
-                )
-                user.set_password(raw_password='Student@123')
-                
-                user.save()
-                
-                
-                profile = Students.objects.get(user=user)
-                profile.degree = row['degree']
-                profile.branch = row['branch']
-                profile.roll = row['roll_num']
-                profile.phone = row['phone']
-                g = row['gender'].lower()
-                
-                if g == 'm' or g == 'male':
-                    profile.gender = 'Male'
-                elif g == 'f' or g == 'female':
-                    profile.gender = 'Female'
-                else:
-                    profile.gender = 'None'
-                
-                profile.college = context['profile'].college
-                profile.save()
-                context['profile'].college.students.add(profile)
-                context['profile'].college.save()
-                
+                try:
+                    user = User(
+                        username = row['email'],
+                        email = row['email'],
+                        first_name = row['first_name'],
+                        last_name = row['last_name'],
+                    )
+                    user.set_password(raw_password='Student@123')
+                    
+                    user.save()
+                    
+                    
+                    profile = Students.objects.get(user=user)
+                    profile.degree = row['degree']
+                    profile.branch = row['branch']
+                    profile.roll = row['roll_num']
+                    profile.phone = row['phone']
+                    g = row['gender'].lower()
+                    
+                    if g == 'm' or g == 'male':
+                        profile.gender = 'Male'
+                    elif g == 'f' or g == 'female':
+                        profile.gender = 'Female'
+                    else:
+                        profile.gender = 'None'
+                    
+                    profile.college = context['profile'].college
+                    profile.save()
+                    context['profile'].college.students.add(profile)
+                    context['profile'].college.save()
+                except Exception as e:
+                    print("Error saving profile")
+                    continue    
                 
             success(request,"Students List Sucessfullt Loded Password : Student@123")
             return redirect("my_students")
         except Exception as e:
-            error(request,e,extra_tags="danger")
+            success(request,e,extra_tags="danger")
             
     
     return render(request,'utils/load_students.html',context)
