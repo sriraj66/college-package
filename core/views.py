@@ -86,9 +86,9 @@ def source_code(request, uuid):
 
     </main>
 
-    <form class="msger-inputarea">
+    <form class="msger-inputarea" autocomplete="off">
       <input type="text" name='query' class="msger-input" placeholder="Enter your message...">
-      <input type="text" name='uuid' value='{uuid}' hidden class="msger-uuid"">
+      <input type="text" name='uuid' value='{uuid}' autocomplete="off" hidden class="msger-uuid"">
 
   <button type=" submit" class="msger-send-btn">Send</button>
     </form>
