@@ -94,7 +94,6 @@
                         {% autoescape off %}
                         {{ i.linked_in }}
                         {% endautoescape %}
-                        {{i.get_absolute_url}}
                         <h3>Options</h3>
                         <form id="pp{{i.id}}">
                             {% csrf_token %}
@@ -132,7 +131,7 @@
                                 e.preventDefault();
                                     
                                 var out = document.getElementById("out{{i.id}}"); 
-                                var btn = document.getAnimations("sub{{i.id}}");
+                                var btn = document.getElementById("sub{{i.id}}");
                                 btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`
                                 out.innerHTML = `Generating <i class="fa fa-spinner fa-spin"></i>`;
 
