@@ -11,6 +11,17 @@
             type="image/x-icon"
         />
 
+        <!-- google -->
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ETG4QFLJEK"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-ETG4QFLJEK');
+        </script>
+
         <!-- datatable -->
         <link
             href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"
@@ -175,6 +186,11 @@
                 margin-top: 1em;
             }
 
+            .accordion-body{
+                background-color: whitesmoke;
+                font-size: 18px;
+                font-weight: lighter;
+            }
             /* media */
 
             @media screen and (max-width: 600px) {
@@ -376,6 +392,16 @@
                                         > <img src="{% static 'defaults/icon/cg.png' %}"  width="35" alt=""> Path Pilot</a
                                     >
                                 </li>
+
+                                <li class="" style="display: flex; justify-content: center; align-items: end;">
+                                    
+                                    <a
+                                        class="dropdown-item"
+                                        href="{% url 'linkedin' %}"
+                                        > <i class="fab fa-staylinked" style="margin-right: 1em; padding-left: 10px;"></i> Linked In</a
+                                    >
+                                </li>
+                                
                                 {% endif %}
                                 <li class="">
                                     <a

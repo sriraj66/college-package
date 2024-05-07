@@ -10,5 +10,6 @@ urlpatterns = [
     path("question/<int:id>/edit",edit_question,name='edit_question'),
     path("question/<int:id>/delete",delete_question,name='delete_question'),
     
-    path("analysis/<int:id>",sentimental_analysis,name='sentimental_analysis')
+    path("analysis/<int:id>",sentimental_analysis,name='sentimental_analysis'),
+    path("analysis/exel",analysis_with_exel,name='analysis_with_exel')
 ]

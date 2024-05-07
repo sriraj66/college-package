@@ -80,18 +80,20 @@
         
     </div>
 
-        <div class="row" style="align-items: center; margin-top: 10px;">
+        <div class="row" style="align-items: center; margin-top: 10px; text-align: center;">
             {% if form.qr %}
-                <div class="col d-flex" style="justify-content: center; align-items: center;">
-                    <img src="{{form.qr.url}}" height="50" style="transform: scale(2.5);" alt="QR">
+                <div onclick="cpyText('{{full_url}}');" class="col d-flex" style="flex-direction: column; justify-content: center; align-items: center;">
+                    <img  src="{{form.qr.url}}" height="100" style="max-height: 500px;" alt="QR">
+                    <p id="cpy_sts" class="text-secondary"><i class="far text-secondary fa-copy"></i> Click to copy </p>
                 </div>
+
             {% endif %}
             <div class="col">
     <form method="post" action="{% url 'create_form' form.id %}">
         {% csrf_token %}
 
-                <div class="col">
-                    <label class="">Form Name</label>
+                <div class="col" style="text-align: start;">
+                    <label class="">Form Name : </label>
                 </div>
                 <div class="col">
                     <input type="text" name="name" id="name" value="{{form.name}}" class="form-control">
@@ -219,6 +221,7 @@
       </div>
       {% endif %}
 </div>
+<div id="cpy_element"></div>
 {% endblock %} {% block script %}
 
 <script>
@@ -255,6 +258,21 @@
     });
 
     
+    function cpyText(text) {
+        var element = document.getElementById("cpy_element");
+        const storage = document.createElement('textarea');
+        storage.value = text;
+        element.appendChild(storage);
+        storage.select();
+        storage.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        element.removeChild(storage);
+        try{
+            document.getElementById("cpy_sts").innerHTML = `<i class="fas fa-check"></i> Url Copied!!`
+        }catch(e){
+            console.log(e)
+        }
+}
 </script>
 
 {% endblock %}

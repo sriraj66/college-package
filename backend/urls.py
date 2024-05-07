@@ -12,6 +12,7 @@ urlpatterns = [
     path("cg/",include("CG.urls")),
     path("cp/",include("CP.urls")),
     path("feed360/",include("feed360.urls")),
+    path("lin/",include("linkedin.urls")),
     
     path('authentication/', include('authentication.urls')),
     path('utils/', include('utils.urls')),

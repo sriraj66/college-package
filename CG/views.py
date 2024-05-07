@@ -24,7 +24,7 @@ def cg(request):
 
 def linked_in(request):
     context = load_config(request)
-    return render(request,'CG/linkedin.html',context)
+    return render(request,'CG/stage.html',context)
 
 def generate_sa(request):
     context = {
@@ -49,7 +49,7 @@ def generate_sa(request):
 def generate_final_map(request):
     context = {
         "output":"",
-        "linkedin":"",
+        # "linkedin":"",
     }
     
     if request.POST:
@@ -65,13 +65,14 @@ def generate_final_map(request):
         responce = ct.generate_final(ipic,role,workspace,loc,ps,gc)
         linkedin = ct.generate_linked_in(config['profile'].name,responce)
         context['output'] = responce
-        context['linkedin'] = linkedin
+        # context['linkedin'] = linkedin
         
         
         obj = CareerTool(
             user = request.user,
             messages = request.session["ct_message"],
             output = responce,
+            goal = ipic,
             linked_in = linkedin,
         )
         obj.save()

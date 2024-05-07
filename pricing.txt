@@ -1,0 +1,21 @@
+Model : gpt-3.5-turbo-0125
+Input : $0.50 / 1M tokens
+= RS : 0.0000417 / 1 token
+
+Output : $1.50 / 1M tokens
+= RS : 0.00012507 / 1 token
+
+
+Tk 10000 * PTK 0.00012507 = RS 1.2507
+Rs 100 = 799552.250739585 TK
+
+Model : davinci-002
+Usage : $2.00 / 1M tokens
+
+Model : DALL·E 3
+IMAGE : $0.040 / image
+
+
+Model : gpt-4-turbo-2024-04-09
+Input : $10.00 / 1M tokens
+Output : $30.00 / 1M tokens

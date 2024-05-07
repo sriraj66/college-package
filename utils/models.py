@@ -98,8 +98,6 @@ class Students(models.Model):
         
         return False
     
-    
-    
 
 class Staffs(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="Staff")
@@ -121,8 +119,9 @@ class Staffs(models.Model):
     ATS_usage = models.ManyToManyField(ATS, blank=True,verbose_name="ATS History")
     CP_usage = models.ManyToManyField(CoursePlan, blank=True,verbose_name="CP History")
     SMCG_usage = models.ManyToManyField(CONTENTS, blank=True,verbose_name="SMCG History")
-    credit_used = models.IntegerField(default=0,verbose_name="Usage")
+    
 
+    credit_used = models.IntegerField(default=0,verbose_name="Usage")
 
     def balance_credit(self):
         try:

@@ -56,10 +56,17 @@
 <div class="container item-center">
     
     <div class="row">
-        <form method="post">
+        <form method="post" action="{% url 'feed360' %}">
             {% csrf_token %}
             <div class="col-12">
-                <button type="submit" class="btn sub-btn" >  Create a new Form <i class="fa fa-plus"></i></button>
+                
+                <div class="btn-group w-100">
+                    <button type="submit" class="btn sub-btn" >  Create a new Form <i class="fa fa-plus"></i></button>
+                    <button type="button"   data-bs-toggle="modal" data-bs-target="#exel_form_modal" class="btn btn-outline-success w-50" >  With Exel file <i class="fa text-success fa-file-excel"></i></button>
+
+                
+                </div>
+                
             </div>
         </form>
     </div>
@@ -77,7 +84,7 @@
             <th scope="col">Form Name</th>
             <td>Questions</td>
             <td>Responces</td>
-            <td>Edit</td>
+            <td>Options</td>
           </tr>
         </thead>
         <tbody>
@@ -86,7 +93,7 @@
           <th>{{i.name}}</td>
           <td>{{i.questions.count}}</td>
           <td>{{i.get_responce_count}}</td>
-          <td><a href="{% url 'create_form' i.id %}">View or Edit</a></td>
+          <td><a href="{% url 'create_form' i.id %}" style="text-decoration: none; color: var(--c2);"><i class="fas fa-cogs"></i>Settings</a></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -95,60 +102,82 @@
       {% endif %}
     </div>
 
+    {% if ExelForm %}
+    
+    <div class="row">
+        <br>
+        <h3>Exel Analysis <i class="far fa-comments"></i></h3>
+    <div class="accordion" id="previousAnalysis">
+
+        {% for i in ExelForm %}
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#file{{i.id}}" aria-expanded="false" aria-controls="file">
+              ID:{{i.id}} @ {{i.file_name}} 
+            </button>
+          </h2>
+          <div id="file{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#previousAnalysis">
+            <div class="accordion-body">
+                {% autoescape off %}
+                {{ i.report }}  
+                {% endautoescape %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+    {% endif %}
 
 </div>
+<div id="cpy_element"></div>
+  
+<div class="modal fade" id="exel_form_modal" tabindex="-1" aria-labelledby="exel_form_modal_label" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <form onsubmit="exel_sts()" action="{% url 'analysis_with_exel' %}" enctype="multipart/form-data" method="post">
+
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exel_form_modal_label">Upload Your Exel Sheet</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+                {% csrf_token %}
+                <input type="file" name="exel" id="excelFile" required onchange="updateAcceptAttribute()"  name="exel_file" accept=".xlsx, .xls" class="form-control">
+            
+
+        </div>
+        <div class="modal-footer">
+            <button type="button"  class="btn btn-danger" data-bs-dismiss="modal">Close <i class="fas fa-times text-light"></i></button>
+            <button type="submit" id="exl_btn"  class="btn btn-success">Upload <i class="fas text-light fa-file-upload"></i></button>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+  
+
+
+
 {% endblock %} {% block script %}
 <script>
-    
-    var form = document.getElementById("cg_form");
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        var btn = document.getElementById("submit");
-        btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`;
-        btn.disable = true;
-        scrollToTop();
 
-        var data = new FormData();
-        data.append("csrfmiddlewaretoken", e.target.csrfmiddlewaretoken.value);
+function exel_sts(){
 
-        data.append("sbranch", e.target.sbranch.value);
-        data.append("sub", e.target.sub.value);
-        data.append("syllabus", e.target.syllabus.value);
-        data.append("dur", e.target.dur.value);
-        data.append("tp", e.target.tp.value);
+    document.getElementById("exl_btn").innerHTML = `Analysing <i class="fas text-light fa-spinner fa-spin"></i>`;
+}
 
-        document.getElementById("output-container").innerHTML = "";
-        console.log(data);
-
-        document.getElementById(
-            "outtit"
-        ).innerText = `Generating Map For ${e.target.sub.value}.`;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", '{% url "course_map" %}', true);
-
-        xhr.send(data);
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    btn.disable = false;
-                    btn.innerHTML = "Generate";
-                    var responce = JSON.parse(xhr.responseText);
-                    // displayContent(responce);
-                    load_DOM(responce);
-                    document.getElementById(
-                        "outtit"
-                    ).innerText = `Courses Map for ${e.target.sub.value}.`;
-                    console.log(responce);
-                } else {
-                    console.error("Form submission error:", xhr.status);
-                    btn.innerHTML = `Error [${xhr.status}]`;
-                }
-            }
-        };
-    });
-
-    
+function updateAcceptAttribute() {
+      var fileInput = document.getElementById('excelFile');
+      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+      if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+        alert('Please select an Excel file (XLSX or XLS format).');
+        fileInput.value = ''; // Clear the file input
+        return false;
+      }
+      return true;
+    }
 </script>
 {% endblock %}

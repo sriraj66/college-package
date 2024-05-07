@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Path Pilot {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+    .prompt div{
+        border: 1px dashed var(--c2);
+        background-color: white;
+        border-radius: 5px;
+        padding: 15px;
+        letter-spacing: 1.2px;
+        transition: all 0.5s ease-in;
+        text-align: justify;
+        
+    }
+    .prompt div h4{
+        text-decoration: underline;
+        color: var(--c2);
+        text-transform: capitalize;
+        letter-spacing: 1.5px;
+
+    }
+    .prompt div li{
+        list-style: none;
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> <i class="fab fa-staylinked"></i> Linkedin</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    <br>
+    
+    {% if cm %}
+    <div class="row">
+        <h3>Mapping on Path Pilot <i class="fas fa-history"></i></h3>
+        <div class="accordion w-100 accordion-flush" id="accordionExample">
+            {% for i in cm %}            
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="false" aria-controls="collapseOne{{i.id}}">
+                  PP-{{i.id}} &ensp; <strong>@{{i.goal}}</strong>&ensp; on {{i.created}}
+                </button>
+              </h2>
+              <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    
+                    <div id="output{{i.id}}">
+                        {% autoescape off %}
+                        {{ i.linked_in }}
+                        {% endautoescape %}
+                        {{i.get_absolute_url}}
+                        <h3>Options</h3>
+                        <form id="pp{{i.id}}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" placeholder="Recipient Name" class="form-control" name="name" id="name">
+
+                                </div>
+                                <div class="col">
+                                    <select name="mode" id="" class="form-control">
+                                        {% for j in modes %}
+                                        <option value="{{j}}">{{j}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <textarea name="bio" id="bio" cols="30" rows="6" placeholder="Bio of the Recipient" class="form-control"></textarea>
+                            </div>
+
+                            <br><div class="prompt" id="out{{i.id}}">
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-success w-75" id="sub{{i.id}}" type="submit" >GENERATE</button>
+                                    <button class="btn btn-danger" type="reset">RESET</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <script>
+                            document.getElementById("pp{{i.id}}").addEventListener("submit", function(e){
+                                e.preventDefault();
+                                    
+                                var out = document.getElementById("out{{i.id}}"); 
+                                var btn = document.getAnimations("sub{{i.id}}");
+                                btn.innerHTML = `<i class="fa fa-spinner fa-spin"></i>`
+                                out.innerHTML = `Generating <i class="fa fa-spinner fa-spin"></i>`;
+
+                                var formData = new FormData(document.getElementById("pp{{i.id}}"))
+                                
+                                var xhr = new XMLHttpRequest();
+                                xhr.open("POST", '{% url "generate_linkedin_prompt" i.id %}', true);
+                                xhr.onload = function () {
+                                if (xhr.status >= 200 && xhr.status < 300) {
+                                    console.log(xhr.responseText);
+                                    var responce = JSON.parse(xhr.responseText);
+                                    out.innerHTML = responce.output;
+                                    btn.innerHTML = "GENERATE"
+                                } else {
+                                    console.error("Request failed. Status: " + xhr.status);
+                                    }
+                                };
+
+                                xhr.onerror = function () {
+                                    console.error("Request failed");
+                                };
+
+                                xhr.send(formData);
+                                    
+
+                            });
+                        </script>
+                        
+
+                        <div id="credit"></div>
+                        <br>
+                    </div>
+                    
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+    {% else %}
+    <h3>No Record Found. Get started with <a href="{% url 'cg' %}">Path Pilot</a></h3>
+    {% endif %}
+
+    <br>
+</div>
+<div id="cpy_element"></div>
+  
+
+{% endblock %} {% block script %}
+<script>
+
+function exel_sts(){
+
+    document.getElementById("exl_btn").innerHTML = `Analysing <i class="fas text-light fa-spinner fa-spin"></i>`;
+}
+
+function updateAcceptAttribute() {
+      var fileInput = document.getElementById('excelFile');
+      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+      if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+        alert('Please select an Excel file (XLSX or XLS format).');
+        fileInput.value = ''; // Clear the file input
+        return false;
+      }
+      return true;
+    }
+
+function generate_linkedin_prompt(this,id,url){
+    alert(id)
+    var formData = new FormData(document.getElementById("ats_form"));
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST",url, true);
+
+    xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        console.log(xhr.responseText);
+        var responce = JSON.parse(xhr.responseText);
+        console.log(responce);
+        
+    } else {
+        console.error("Request failed. Status: " + xhr.status);
+    }
+    };
+
+    xhr.onerror = function () {
+        console.error("Request failed");
+    };
+
+    xhr.send(formData);
+}
+    
+</script>
+{% endblock %}

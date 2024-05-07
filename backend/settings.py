@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'utils',
     'authentication',
     'feed360',
-
+    'linkedin',
 ]
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 MIDDLEWARE = [

@@ -61,4 +61,19 @@ class Career_Tool:
 
         return output
     
+    def write_modes(self,name,bio,mode,con):
+        self.prompt = PROMPT4.format(mode,name,bio,con)
+        self.messages.append({"role": "user", "content": self.prompt})
+        response = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=self.messages
+        )
+        output =  response.choices[0].message.content
+        
+        self.messages.append({"role":"assistant","content":output})
+        
+        self.request.session["ct_message"] = self.messages
+
+        return output
+    
     

@@ -8,6 +8,7 @@ For each potential career goal, conduct an exploration of different industries, 
 Your sujestions should be structured and well-organized, with separate div, ul, h4 and 
 li elements with class for li for all job roles.
 Important Wrap all contents inside <div> element no text should be out of the div.
+Dont give prefix Numbers inside <li>
 dont use ```html all these. return only single div
 Ensure that there are no line breaks present.
 Your am response should provide detailed insights into each field,
@@ -53,10 +54,23 @@ PROMPT3 = """
 My self {0},  Here I attach my Information 
 Information : {1},
 Output should contain:
- - Linked In Head line
- - About section for LinkedIn Profile with Keywords.
- - Craft me a good message to send to a LinkedIn connection request message for someone to make them a potential mentor, expressing my interest in their guidance. Keep the tone formal and limit the words to 100 maximum.
-These Elements are inside a single div containing seperate div inside p heading h4 tags with classes.
+ - Linked In Head line minimus of 3 lines
+ - About section for LinkedIn Profile with Keywords minimum of 4 lines.
+ - Craft me a good message to send to a LinkedIn connection request message for someone to make them a potential mentor, expressing my interest in their guidance. Keep the tone formal and limit the words to 100 maximum.End with Regards.
+
+These Elements are inside a single div containing seperate div inside ul,li,p heading h4 tags with classes.
+Ensure that there are no line breaks present.
+your response should provide detailed insights.
+Important Wrap all contents inside <div> element no text should be out of the div.
+dont use ```html all these. return only single div
+"""
+
+
+PROMPT4 = """
+Write a 3 line {0} note to {1}
+Reciptant Bio :  {2}.
+For My Bio : Extract The Headline and Bio For this Context {3}.
+These Elements are inside a single div containing seperate div inside ul,li,p heading h4 tags with classes.
 Ensure that there are no line breaks present.
 your response should provide detailed insights.
 Important Wrap all contents inside <div> element no text should be out of the div.

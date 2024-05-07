@@ -15,6 +15,16 @@
     <!-- <link rel="stylesheet" href="{% static 'css/stage.css' %}"> -->
     <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
 
+    <!-- Google Tags -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1R2HFTPX8J"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-1R2HFTPX8J');
+    </script>
     <style>
         html {
             font-size: 62.5%;
@@ -27,7 +37,6 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
             font-size: 1.4rem;
             line-height: 1;
         }
@@ -47,7 +56,6 @@
             --c3: #bc6ff1;
             --c4: #000000;
             --bs-pagination-active-bg: var(--c2) !important;
-            --fnt: "Reem Kufi Ink", sans-serif;
             background: whitesmoke;
         }
 
@@ -571,12 +579,18 @@
     </style>
 
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Josefin+Sans:ital,wght@1,500&family=Lato:ital@0;1&family=Montserrat:wght@600&family=Poppins:wght@300&family=Reem+Kufi+Ink&display=swap");
 
         body{
             display: flex;
             justify-content: center;
             align-items: center;
-            
+            font-family: var(--fnt);
+            font-weight: lighter;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            --fnt: "Reem Kufi Ink", sans-serif;
+            transition: all 0.36s ease-in;    
         }
 
         .form-wraper{
@@ -615,24 +629,38 @@
         .back-btn:hover i{
             transform: translateY(10px);
         }
-        #exp_sj, #final_out, #final_out_linkedin{
-            text-align: justify;
-            padding: 10px;
-            font-size: 16px;
-            font-family: sans-serif;
-            letter-spacing: 1.1px;
-            color: #000000;
+        
+        .output div{
+            padding: 0.5em;
+            background-color: whitesmoke;
+            box-shadow: 1px 1px 1px  rgba(253, 167, 254, 0.249)
         }
-        #exp_sj ul,#final_out ul ,#final_out_linkedin ul{
-            text-decoration: none;
-            list-style:symbols('-');
-        }
-        #exp_sj h4 ,#final_out h4, #final_out_linkedin h4{
-            font-size: 26px;
-            font-weight: bold;
-            color: var(--c2);
+        .output div h4{
+            font-size: 1.8em;
+            color: var(--c3);
+            letter-spacing: 1.2px;
+            padding: 0.6em;
         }
 
+        .output div ul{
+            text-decoration: none;
+            list-style:inside;
+            text-align: start;
+            list-style-type:decimal;
+            list-style-position: outside;
+            color: #000000;
+            font-size: 15px;
+            line-height: 1.8em;
+            letter-spacing: 1.01px;
+        }
+        .output div ul li{
+            border-bottom: 1px dashed grey;
+            padding: .4em;
+
+        }
+        .output div ul li:hover{
+            background-color: white;
+        }
 
     </style>
 
@@ -640,7 +668,7 @@
 
 <body>
 
-    <a href="{% url 'cg' %}" class="back-btn"> <i class="fa fa-arrow-left"></i> Back</a>
+    <a href="{% url 'cg' %}" id="back" class="back-btn"> <i class="fa fa-arrow-left"></i> Back</a>
 
     <div class="form-wraper">
         <form autocomplete="on" class="container step-form" id="form">
@@ -663,13 +691,10 @@
                         <i class="badge circle">3</i><i class="desc">Goal Setting</i>
                     </div>
 
-                    <div class="col step_4 ">
-                        <i class="badge circle">4</i><i class="desc">Goal Setting</i>
+                    <div class="col step_4 complete">
+                        <i class="badge circle">4</i><i class="desc">Careet Map</i>
                     </div>
 
-                    <div class="col step_5 complete">
-                        <i class="badge circle">5</i><i class="desc">Optimization</i>
-                    </div>
 
                 </div>
             </div>
@@ -702,7 +727,7 @@
                     
                 </div>
 
-                <button class="continue" id="explore" data-target="step_2">Explore <i class="fas fa-step-forward"></i></button>
+                <button class="continue"  id="explore" data-target="step_2">Explore <i class="fas fa-step-forward"></i></button>
             
            
             </div>
@@ -716,19 +741,10 @@
                 <p class="hidden">
                 </p>
                 <div class="row">
-                    <div class="col" id="exp_sj">
-                        Generating Some Sujections
+                    <div class="col output" id="exp_sj">
+                        
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label><strong>I Pick </strong><em><small>Choose the Above listed Job or Enter Your Own</small></em></label><input class="text"
-                          id="ipic"  placeholder="e.g., Cybersecurity Analyst" />
-                    </div>
-                </div>
-                <br>
-                <button class="reset"><i class="fas fa-step-backward"></i> Back</button>
-                <button class="continue" data-target="step_3">Set My Goal <i class="fas fa-step-forward"></i></button>
             </div>
             <div class="step hidden" id="step_3">
                 <h2>
@@ -781,36 +797,21 @@
                 <button class="continue" id="final_sub" data-target="step_4">GENERATE <i class="fa fa-pallet"></i></button>
             </div>
             
-            <div class="step hidden " id="step_4">
+            <div class="step hidden complete" id="step_4">
                 <h2>
                     Career Map
                 </h2>
                 <p>
                     What skills do you need to succeed in your desired career? Identify gaps in your skill set and create a plan to acquire or strengthen those skills through coursework, internships, workshops, or extracurricular activities.
                 </p>
-                <div id="final_out">
+                <div id="final_out" class="output">
 
                 </div>
                 <br>
-                <button class="reset" data-target="step_3"><i class="fas fa-step-backward"></i> Back</button>
-                <button class="continue" data-target="step_5">Next <i class="fas fa-step-forward"></i></button>
-            
             </div>
 
             
-            <div class="step hidden complete " id="step_5">
-                <h2>
-                    Linked In Optimization
-                </h2>
-                <p>
-                    What skills do you need to succeed in your desired career? Identify gaps in your skill set and create a plan to acquire or strengthen those skills through coursework, internships, workshops, or extracurricular activities.
-                </p>
-                <div id="final_out_linkedin">
-                    
-                </div>
-                <br>
-                <button class="reset">Reset</button><button class="outline view-all">View all form steps</button>
-            </div>
+            
         </form>
     </div>
 
@@ -824,6 +825,7 @@
         exp.addEventListener("click", (e)=>{
 
             var out = document.getElementById("exp_sj");
+            
             out.innerHTML = "Exploring the job revelent to you ! <i class='fas fa-spinner fa-spin'></i> "
             
             var data = new FormData();
@@ -845,6 +847,16 @@
                         var responce = JSON.parse(xhr.responseText);
                         
                         out.innerHTML = `${responce.output}`;
+                        document.getElementById("step_2").innerHTML += `
+                <div class="row">
+                    <div class="col-12">
+                        <label><strong>I Pick </strong><em><small>Choose the Above listed Job or Enter Your Own</small></em></label><input class="text"
+                          id="ipic"  placeholder="e.g., Cybersecurity Analyst" />
+                    </div>
+                </div>
+                <br>
+                <button class="reset"><i class="fas fa-step-backward"></i> Back</button>
+                <button class="continue" data-target="step_3">Set My Goal <i class="fas fa-step-forward"></i></button>`;
 
 
                     } else {
@@ -859,7 +871,7 @@
         final.addEventListener("click", (e)=>{
 
             var out = document.getElementById("final_out");
-            var linkedin = document.getElementById("final_out_linkedin");
+            var s4 = document.getElementById("step_4");
             out.innerHTML = "Generating the Career Maping ! <i class='fas fa-spinner fa-spin'></i> "
             final.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             var data = new FormData();
@@ -875,7 +887,7 @@
 
             var xhr = new XMLHttpRequest();
             xhr.open("POST", '{% url "generate_final_map" %}', true);
-
+            
             xhr.send(data);
 
             xhr.onreadystatechange = function () {
@@ -883,8 +895,12 @@
                     if (xhr.status === 200) {
                         var responce = JSON.parse(xhr.responseText);
                         out.innerHTML = `${responce.output}`;
-                        linkedin.innerHTML = responce.linkedin;
-                        console.log(responce.output);
+                        s4.innerHTML += `
+                        
+                        <button class="reset" data-target="step_3"><i class="fa-solid fa-repeat"></i> Reset</button>            
+                        <button onclick = "document.getElementById('back').click()" class="continue">Finish <i class="fa fa-check"></i></button>
+
+                        `;
                     } else {
                         console.error("Form submission error:", xhr.status);
                         btn.innerHTML = `Error [${xhr.status}]`;
@@ -901,6 +917,9 @@
     <script src="./script.js"></script>
     <script src="{% static 'js/stage.js' %}"></script>
 
+    <script>
+        // document.getElementById("explore1").click();
+    </script>
 
 </body>
 

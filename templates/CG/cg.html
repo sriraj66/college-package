@@ -49,18 +49,19 @@
 
 <div class="container item-center">
     <div class="row" style="padding: 10px">
-        <a href="{% url 'linked_in' %}" class="btn sub-btn"> Career Maping </a>
+        <a href="{% url 'linked_in' %}" class="btn sub-btn"> Career Maping <i class="fas fa-street-view"></i> </a>
         <br>
     </div>
     <br><br><br>
+    {% if ct %}
     <div class="row">
-        <h3>History</h3>
+        <h3>History <i class="fas fa-history"></i></h3>
         <div class="accordion w-100 accordion-flush" id="accordionExample">
             {% for i in ct %}            
             <div class="accordion-item">
               <h2 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="false" aria-controls="collapseOne{{i.id}}">
-                  PP@{{i.id}} - {{i.created}}
+                  PP-{{i.id}} &ensp; <strong>@{{i.goal}}</strong>&ensp; on {{i.created}}
                 </button>
               </h2>
               <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
@@ -69,7 +70,6 @@
                     <div id="output{{i.id}}">
                         {% autoescape off %}
                             {{ i.output }}
-                            {{ i.linked_in }}
                         {% endautoescape %}
                         <div id="credit"></div>
                         <br>
@@ -82,6 +82,10 @@
             {% endfor %}
           </div>
     </div>
+    {% else %}
+    <h3>No Record Found. Click The above button for Map Feneration.</h3>
+    {% endif %}
+
 </div>
 
 <script>

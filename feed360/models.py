@@ -1,6 +1,7 @@
 from django.db import models
-from utils.models import Staffs,Students,User
+from utils.models import Staffs,Students
 from django.urls import reverse
+import os
 
 FIELD_TYPE = (
     ('Text','Text'),
@@ -64,5 +65,15 @@ class Response(models.Model):
     def __str__(self) -> str:
         return self.response
     
-    
-    
+class Analysis_with_exel(models.Model):
+    staff = models.ForeignKey(Staffs,related_name="Exel_form_staffs",on_delete=models.CASCADE)
+    file = models.FileField(upload_to='feed360/from_exel',blank=True)
+    report = models.TextField(default="")
+    created = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-created']
+     
+    @property
+    def file_name(self):
+        
+        return os.path.basename(self.file.name)

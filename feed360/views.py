@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from authentication.views import load_config
 from django.contrib.auth.decorators import login_required
-from .models import Form,Response,Questions
+from .models import Form,Response,Questions,Analysis_with_exel
 from feed360 import models
 from .forms import *
 from django.contrib.messages import success,error,warning
@@ -11,7 +11,6 @@ import qrcode
 from io import BytesIO
 from django.core.files.base import ContentFile
 import pandas as pd
-
 from .analysis import Analysis
 
 def generate_qr_image(url):
@@ -62,7 +61,7 @@ def feed360(request):
         return redirect("create_form",form.id)
     
     context['records'] = Form.objects.filter(staff=context['profile'])
-    
+    context['ExelForm'] = Analysis_with_exel.objects.filter(staff=context['profile'])
     
     return render(request, 'feed360/feed360.html',context)
 
@@ -81,7 +80,7 @@ def create_form(request,id):
     domain = request.build_absolute_uri('/')
     url_path = form.get_absolute_url()
     full_url = f'{domain.rstrip("/")}{url_path}'
-
+    context['full_url'] = full_url
     if not form.qr:
         qr = generate_qr_image(full_url)
         
@@ -250,4 +249,32 @@ def sentimental_analysis(request,id):
     
     
     return JsonResponse(context)
+
+
+@login_required
+def analysis_with_exel(request):
+    context = load_config(request)
+
+    if request.POST:
+        file = request.FILES.get("exel")
+        
+        df = pd.read_excel(file)
+        df = df.dropna(axis=1, how='all')
+        df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+        
+        obj = Analysis_with_exel(
+            staff = context['profile'],
+            file = file,
+        )
+        obj.save()
+        
+        ana = Analysis(id=obj.id,df=df,file=True)
+        
+        obj.report = ana.analysis()
+        obj.save()
+        success(request,"Analysis Done !")
+        
+    else:
+        success(request,"Invalid Request !!",extra_tags="danger")
     
+    return redirect("feed360")

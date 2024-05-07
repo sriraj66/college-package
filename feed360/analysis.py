@@ -1,5 +1,5 @@
 from openai import OpenAI
-from .models import Form
+from .models import Form,Analysis_with_exel
 
 
 PROMPT = """
@@ -16,9 +16,13 @@ Your analysis should have the flexibility to accommodate diverse types of feedba
 
 class Analysis:
     
-    def __init__(self,id,df):
-        self.form = Form.objects.get(id=id)
-        self.api_key = self.form.staff.college.api_key
+    def __init__(self,id,df,file=False):
+        if file is False:
+            self.form = Form.objects.get(id=id)
+        else:
+            self.form = Analysis_with_exel.objects.get(id=id)
+
+        self.api_key = self.form.staff.college.api_key            
         self.client = OpenAI(api_key=self.api_key)
         self.messages = [
             {"role": "system", "content": "You are a data_scientist. and do Sentimntal analysis for the given Data Frame."},
