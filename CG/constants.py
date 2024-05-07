@@ -39,14 +39,12 @@ Domain:
 Based on my Short and Long term Goal, I want to Develop my Skill set and need to succeed in my domain,
 Identify the Skill Set and create a plan to acquire or strengthen those skills through coursework,
 internships, workshops, or extracurricular activities  and keep it  as a bullet point.
-
-Output Should be in  structured and well-organized, with separate div, ul, h4 and 
-li elements with class for li for all job roles.
+Output Should be in  structured and well-organized, with separate miltiple div inside single div and 
+ul,li elements with class for all li for all job roles.
 Ensure that there are no line breaks present.
 your am response should provide detailed insights.
 Important Wrap all contents inside <div> element no text should be out of the div.
 dont use ```html all these. return only single div
-
 """
 
 
