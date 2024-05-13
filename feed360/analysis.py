@@ -4,7 +4,7 @@ from .models import Form,Analysis_with_exel
 
 PROMPT = """
 Conduct a comprehensive sentiment analysis on the given data frame, comprising feedback records from srudents or Users.
-Identify and categorize the positive and negative comments from the feedback, while also suggesting improvements.
+Identify and categorize the positive and negative comments from the feedback, while also suggesting improvements. and give positive persentage and negative percentage.
 Organize this information using div elements exclusively.
 Your analysis should be structured and well-organized, with separate div, ul, h4 and li elements with class for li for positive comments, negative comments, and improvement suggestions.
 Important Wrap all contents inside <div> element no text should be out of the div.

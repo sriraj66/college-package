@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Resume Builder {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> <i class="fab fa-affiliatetheme"></i> &nbsp;Resume Builder</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    <div class="row">
+        <form action = "{% url 'rb' %}" method="post">
+            {% csrf_token %}
+        <button class="btn sub-btn" >Create a New Resume <i class="fab fa-creative-commons-sampling-plus"></i></button>
+        </form>
+    </div>
+    <br><br>
+
+    {% if rb %}
+    <div class="row">
+        <h3>Generated Resumes <i class="fas fa-history"></i></h3>
+        <div class="accordion w-100 accordion-flush" id="accordionExample">
+            {% for i in rb %}            
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{i.id}}" aria-expanded="false" aria-controls="collapseOne{{i.id}}">
+                  RB-{{i.id}} &ensp; <strong>@{{i.role}}</strong>&ensp; on {{i.created}}
+                </button>
+              </h2>
+              <div id="collapseOne{{i.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <form  action="{% url 'delete_resume' i.id %}" method="POST">
+                    <div class="btn-group w-100">
+                    <a class="btn btn-warning text-light " href="{% url 'create_resume' i.id %}">Edit</a>
+                    <a class="btn btn-info text-light" href="{% url 'resume_templates' i.uid %}">View</a>
+                        {% csrf_token %}
+                    <button class="btn btn-danger ">Delete</button>
+
+                    </div>
+                </form>
+                <br>
+                    <form action="{% url 'resume_templates' i.uid %}" method="post">
+                        {% csrf_token %}
+                        <select name="tid" class="form-select" id="tid">
+                            {% for j in temps %}
+                            <option value="{{j.0}}">{{j.1}}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <div class="row">
+                            <div class="btn-group w-100">
+                                <button class="btn btn-success w-75" id="sub{{i.id}}" type="submit" >GENERATE</button>
+                                <button class="btn btn-danger" type="reset">RESET</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+    </div>
+    {% else %}
+    {% endif %}
+
+</div>
+{% endblock %} {% block script %}
+<script>
+    
+</script>
+{% endblock %}

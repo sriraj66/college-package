@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'authentication',
     'feed360',
     'linkedin',
-    'resumebuilder'
+    'resumebuilder',
 ]
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 MIDDLEWARE = [

@@ -1,0 +1,44 @@
+{% if rb.get_edu %}
+
+<style>
+  @media screen and (max-width: 600px) {
+        .table {
+          overflow: hidden;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        #edu-tab th:nth-child(1),
+        #edu-tab th:nth-child(2),
+        #edu-tab th:nth-child(3),
+        #edu-tab td:nth-child(1)
+        #edu-tab td:nth-child(2),
+        #edu-tab td:nth-child(3)
+        
+        {
+            display: none;
+        }
+    }
+</style>
+
+<style>
+</style>
+<table class="table table-bordered" id="edu-tab">
+    <thead>
+      <tr>
+        <th scope="col">School</th>
+        <th scope="col">Option</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in rb.get_edu %}
+      <tr>
+        <th scope="row">{{i.school}}</th>
+        <td><button hx-post="{% url 'delete_edu' rb.id i.id %}" 
+            hx-target="#edu-list"
+            hx-swap="innerHTML" class="btn btn-flat-danger"><i class="far fa-trash-alt text-danger "></i></button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

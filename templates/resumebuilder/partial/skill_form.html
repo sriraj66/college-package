@@ -1,0 +1,19 @@
+<form 
+    hx-post="{% url 'create_skill' rb.id %}" 
+    hx-swap="innerHTML" 
+    hx-on="htmx:afterRequest: this.remove()"
+    hx-trigger="click from:#save_skills" 
+    hx-target="#skill-list">
+    
+    <div class="row" style="background-color: whitesmoke;">
+    
+        <div class="col-11">
+            <input type="text" placeholder="Enter the Skill" name="skill" class="form-control">
+        </div>
+        <div class="col-1 d-flex" style="justify-content: center; align-items: center;">
+            <button class="btn btn-flat-danger" hx-on="click: this.closest('form').remove()" ><i class="far fa-trash-alt text-danger "></i></button>
+        </div>
+    
+    </div>
+
+</form>

@@ -1,0 +1,23 @@
+{% if rb.get_pro %}
+<style>
+</style>
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Option</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in rb.get_pro %}
+      <tr>
+        <th scope="row">{{i.title}}</th>
+        
+        <td><button hx-post="{% url 'delete_pro' rb.id i.id %}" 
+            hx-target="#edu-list"
+            hx-swap="innerHTML" class="btn btn-flat-danger"><i class="far fa-trash-alt text-danger "></i></button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

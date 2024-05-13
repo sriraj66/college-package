@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Resume Builder {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href="{% url '' %}"> <img src="{% static 'defaults/icon/pp.png' %}" width="30" style="transform: scale(1.5);"  alt=""> Profes Pro</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+    <div class="row" style="margin: 10px">
+        <div class="col-md">
+            <form
+                action="POST"
+                id="cg_form"
+                enctype="multipart/form-data"
+                class=""
+            >
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for=""><h3>Course Information</h3></label>
+                </div>
+                <div class="form-group">
+                    <label for="">Students Branch</label>
+                    <input
+                        type="text"
+                        name="sbranch"
+                        id="sbranch"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Subject Name</label>
+                    <input
+                        type="text"
+                        name="sub"
+                        id="sub"
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Syllabus</label>
+                    <textarea
+                        name="syllabus"
+                        class="form-control"
+                        id="syllabus"
+                        cols="30"
+                        rows="5"
+                        placeholder="Lesson Wise Topics"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Total Class Periods</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="tp"
+                        id="tp"
+                        placeholder="Total class periods"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="">Duration</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="dur"
+                        id="dur"
+                        placeholder="in min"
+                    />
+                </div>
+
+                <div
+                    class="btn-group"
+                    style="
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                    "
+                >
+                    <button
+                        class="sub-btn"
+                        id="submit"
+                        style="width: 80%"
+                        type="submit"
+                    >
+                        Generate
+                    </button>
+                    <button
+                        type="reset"
+                        class="btn btn-outline-danger"
+                        style="width: 20%"
+                    >
+                        RESET
+                    </button>
+                </div>
+            </form>
+
+            <br /><br />
+        </div>
+        <div class="col-md">
+            <p id="outtit">course Map Comes here...</p>
+            <div id="output-container"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="container col-md" id="courses"></div>
+        <div class="container col-md" id="profiles"></div>
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+    
+
+</script>
+{% endblock %}

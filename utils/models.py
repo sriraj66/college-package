@@ -53,9 +53,7 @@ class CollegeAdmin(models.Model):
             return 0
 
         
-    def save(self, *args, **kwargs):
-        
-        super().save(*args, **kwargs)
+    
 
 class Students(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="student")
@@ -71,7 +69,7 @@ class Students(models.Model):
     phone = models.CharField(max_length=12,verbose_name='Phone Number',blank=True)
     gender = models.CharField(max_length=15,choices=GENDER,default="None")
     
-    college = models.ForeignKey(CollegeAdmin,blank=True,null=True,on_delete=models.CASCADE,related_name='student_college')
+    college = models.ForeignKey(CollegeAdmin,null=True,on_delete=models.CASCADE,related_name='student_college')
     
     credit_used = models.IntegerField(default=0,verbose_name="Usage")
     
@@ -82,6 +80,8 @@ class Students(models.Model):
     CT_usage = models.ManyToManyField(CareerTool, blank=True,verbose_name="CT History")
     created = models.DateTimeField(auto_now_add=True)
     
+    def __str__(self):
+        return f"{self.user.username} "
     
     def balance_credit(self):
         try:
@@ -109,11 +109,11 @@ class Staffs(models.Model):
     branch = models.CharField(max_length=100,verbose_name='Department',blank=True)
     phone = models.CharField(max_length=12,verbose_name='Phone Number',blank=True)
     gender = models.CharField(max_length=15,choices=GENDER,default="None")
-    college = models.ForeignKey(CollegeAdmin,blank=True,on_delete=models.CASCADE,related_name='staff_college',null=True)
+    college = models.ForeignKey(CollegeAdmin,on_delete=models.CASCADE,related_name='staff_college',null=True)
     
     
     is_smcg = models.BooleanField(default=False,verbose_name="Admin SocialMedia Post")
-
+    is_admin = models.BooleanField(default=False,verbose_name="Admin")
     is_completed = models.BooleanField(default=False,verbose_name="Profile Completed?")
 
     ATS_usage = models.ManyToManyField(ATS, blank=True,verbose_name="ATS History")
@@ -123,6 +123,13 @@ class Staffs(models.Model):
 
     credit_used = models.IntegerField(default=0,verbose_name="Usage")
 
+
+    def __str__(self):
+        if self.user.is_superuser:
+            return f"SUPER : {self.user.username}"
+        else : 
+            return f"{self.user.username} - {self.college.short_name}"
+            
     def balance_credit(self):
         try:
             return self.college.a_credit - self.credit_used
@@ -154,6 +161,7 @@ from django.db.models.signals import *
 def create_user_profile(sender, instance, created, **kwargs):
     
     if created:
+        print("Creating user profile for ",instance.username,instance.is_staff)
         if instance.is_staff or instance.is_superuser:
             Staffs.objects.create(user=instance,name=instance.first_name+" "+instance.last_name)
         else:
@@ -161,13 +169,12 @@ def create_user_profile(sender, instance, created, **kwargs):
         
         print(f"Profile created for {instance.username}")
 
-
+  
 
 m2m_changed.connect(update_student_credit, sender=Students.SMCG_usage.through)
 m2m_changed.connect(update_student_credit, sender=Students.ATS_usage.through)
 m2m_changed.connect(update_student_credit, sender=Students.CT_usage.through)
 pre_save.connect(update_college_credit, sender=CollegeAdmin)
-post_save.connect(create_user_profile, sender=User)
 post_save.connect(create_user_profile, sender=User)
 
 

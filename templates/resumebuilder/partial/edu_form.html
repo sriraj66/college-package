@@ -1,0 +1,81 @@
+<style>
+    .form-control{
+        outline: none !important;
+        border: none;
+    }
+    .form-control:required{
+        border-color: red;
+    }
+    .form-control:focus{
+        outline: none !important;
+        border: none !important;
+
+    }
+</style>
+<form 
+    hx-post="{% url 'create_edu' rb.id %}" 
+    hx-swap="innerHTML"
+    hx-target="#edu-list">
+    
+    <div class="row" style="background-color: whitesmoke; border-radius: 6px;">
+    
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="school" required id="school" placeholder="">
+                    <label for="school">School Name</label>
+                  </div>
+                  
+            </div>
+            <div class="col-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="course" required id="course" placeholder="">
+                    <label for="course">Course Name</label>
+                  </div>
+            </div>
+        </div>
+
+
+        
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="place" id="place" required placeholder="">
+                    <label for="place">Place</label>
+                  </div>
+            </div>
+            
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="yog" id="yog" required placeholder="">
+                    <label for="yog">Year of Completion</label>
+                  </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="per" id="per" required placeholder="">
+                    <label for="per">Percentage or Grade</label>
+                  </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" name="is_completed" type="checkbox"checked id="is_completed">
+                    <label class="form-check-label" for="is_completed">
+                      Did you Completed this Course?
+                    </label>
+                  </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="btn-group w-100">
+        <button type="submit" class="btn btn-success w-75" >Add&nbsp;&nbsp;<i class="far fa-save text-light"></i></button>
+        <button type="reset" class="btn btn-danger w-25">RESET</button>
+    </div>
+
+</form>

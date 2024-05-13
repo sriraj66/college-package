@@ -1,0 +1,58 @@
+<style>
+    .form-control{
+        outline: none !important;
+        border: none;
+    }
+    .form-control:required{
+        border-color: red;
+    }
+    .form-control:focus{
+        outline: none !important;
+        border: none !important;
+
+    }
+</style>
+<form 
+    hx-post="{% url 'create_pro' rb.id %}" 
+    hx-swap="innerHTML"
+    hx-target="#pro-list">
+    
+    <div class="row" style="background-color: whitesmoke; border-radius: 6px;">
+    
+
+        <div class="row">
+            <div class="col-6">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="title" required id="title" placeholder="">
+                    <label for="title">Title</label>
+                  </div>
+                  
+            </div>
+            <div class="col-6">
+                <div class="form-floating mb-3">
+                    <input type="url" class="form-control" name="url" placeholder="" id="url">
+                    <label for="url">URL</label>
+                  </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <textarea placeholder="" cols="30" style="height: 100px;" class="form-control" name="desc" id="desc" required >
+
+                        </textarea>
+                        <label for="desc">Description</label>
+                      </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+    <div class="btn-group w-100">
+        <button type="submit" class="btn btn-success w-75" >Add&nbsp;&nbsp;<i class="far fa-save text-light"></i></button>
+        <button type="reset" class="btn btn-danger w-25">RESET</button>
+    </div>
+
+</form>

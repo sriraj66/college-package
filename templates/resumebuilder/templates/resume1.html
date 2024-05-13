@@ -1,0 +1,320 @@
+{% extends 'resumebuilder/_resume.html' %}
+
+{% block style %}
+<!-- partial:index.partial.html -->
+<link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+
+<style>
+
+  body {
+    --c2 : #54AFE4;
+    min-height: 100%;
+    background: #eee;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    color: #222;
+    font-size: 14px;
+    line-height: 26px;
+    padding-bottom: 50px;
+  }
+
+  .container {
+    max-width: 800px;
+    width: 90%;
+    background: #fff;
+    margin: 0px auto 0px;
+    box-shadow: 1px 1px 2px #DAD7D7;
+    border-radius: 3px;
+    padding: 40px;
+    margin-top: 50px;
+  }
+
+  .header {
+    margin-bottom: 30px;
+  }
+
+  .header .full-name {
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .header .first-name {
+    font-weight: 700;
+  }
+
+  .header .last-name {
+    font-weight: 300;
+  }
+
+  .header .contact-info {
+    margin-bottom: 20px;
+  }
+
+  .header .email,
+  .header .phone {
+    color: #999;
+    font-weight: 300;
+  }
+
+  .header .separator {
+    height: 10px;
+    display: inline-block;
+    border-left: 2px solid #999;
+    margin: 0px 10px;
+  }
+
+  .header .position {
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    text-decoration: underline;
+  }
+
+  .details {
+    line-height: 20px;
+  }
+
+  .details .section {
+    margin-bottom: 40px;
+  }
+
+  .details .section:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  .details .section__title {
+    letter-spacing: 2px;
+    color: #54AFE4;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .details .section__list-item {
+    margin-bottom: 40px;
+  }
+
+  .details .section__list-item:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .details .left,
+  .details .right {
+    vertical-align: top;
+    display: inline-block;
+  }
+
+  .details .left {
+    width: 60%;
+  }
+
+  .details .right {
+    text-align: right;
+    width: 39%;
+  }
+
+  .details .name {
+    font-weight: bold;
+  }
+
+  .details a {
+    text-decoration: none;
+    color: var(--c2);
+    font-style: italic;
+  }
+
+  .details a:hover {
+    text-decoration: underline;
+    color: #000;
+  }
+
+  .details .skills__item {
+    margin-bottom: 10px;
+  }
+
+  .details .skills__item .right input {
+    display: none;
+  }
+
+  .details .skills__item .right label {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #C3DEF3;
+    border-radius: 20px;
+    margin-right: 3px;
+  }
+
+  .details .skills__item .right input:checked+label {
+    background: #79A9CE;
+  }
+  
+  .badge{
+    list-style: none;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+  .badge li{
+    border: 1px solid #54AFE4;
+    border-radius: 12px;
+    font-size: small;
+    letter-spacing: 0.3px;
+    margin: 5px;
+    padding: 8px 8px;
+  }
+  .social{
+    position: relative;
+    float: right;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 2px;
+    font-size: 15px;
+    color: var(--c2);
+    width: 25%;
+  }
+  .social a{
+    color: var(--c2);
+  }
+</style>
+{% endblock %}
+
+
+{% block main %}
+
+<div class="container">
+  {% if rb.get_social %}
+  <div class="social">
+    {% for i in rb.get_social %}
+    <a href="{{i.url}}" target="_blank"><i class="fab {{i.name}}"></i></a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="header">
+    <div class="full-name">
+      <span class="first-name">{{rb.user.first_name}}</span>
+      <span class="last-name">{{rb.user.last_name}}</span>
+    </div>
+    
+    <div class="contact-info">
+      <span class="email">Email: </span>
+      <span class="email-val">{{rb.user.email}}</span>
+      <span class="separator"></span>
+      <span class="phone">Phone: </span>
+      <span class="phone-val">{{pro.phone}}</span>
+    </div>
+
+    <div class="about">
+      <span class="position"><strong>@ {{rb.role}}</strong> </span>
+      <span class="desc">
+      {{rb.bio}}
+      </span>
+    </div>
+  </div>
+  <div class="details">
+    {% if rb.get_skills %}
+    <div class="section">
+      <div class="section__title">
+        Skills
+      </div>
+      <div class="section__list">
+        <div class="section__list-item">
+          <ul class="badge">
+            {% for i in rb.get_skills %}
+            <li>{{i.skill}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if rb.get_ach %}
+    <div class="section">
+      <div class="section__title">Achivements</div>
+      <div class="section__list">
+        {% for i in rb.get_ach %}
+        <div class="section__list-item">
+
+          <div class="left">
+            <div class="name">{{i.title}}</div>
+            <div class="addr">{{i.desc}}</div>
+            <div class="duration">{{i.place}}</div>
+          </div>
+          <div class="right">
+            <div class="name">{{i.date}}</div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    {% endif %}
+    
+    {% if rb.get_edu %}
+    <div class="section">
+      <div class="section__title">Education</div>
+      <div class="section__list">
+        {% for i in rb.get_edu %}
+        <div class="section__list-item">
+
+          <div class="left">
+            <div class="name">{{i.school}}</div>
+            <div class="name">{{i.course}}</div>
+            <div class="addr">{{i.place}} </div>
+            <div class="duration"><strong>Score : </strong>{{i.per}}</div>
+          </div>
+          <div class="right">
+            <div class="name">{{i.yog}} {% if not i.is_completed %}<strong style="color: red;" >*</strong> {% endif %}</div>
+            <div class="desc"></div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    {% endif %}
+
+    {% if rb.get_pro %}
+    <div class="section">
+      <div class="section__title">Projects</div>
+      <div class="section__list">
+        {% for i in rb.get_pro %}
+        <div class="section__list-item">
+          <div class="name">{{i.title}}</div>
+          <div class="text">
+            {{i.description}}
+          </div>
+          <a href="{{i.url}}" target="_blank">link</a>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    {% endif %}
+    
+    {% if rb.get_lang %}
+    <div class="section">
+      <div class="section__title">
+        Languages
+      </div>
+      <div class="section__list">
+        <div class="section__list-item">
+          <ul class="badge">
+            {% for i in rb.get_lang %}
+            <li>{{i.name}} - {{i.fluency}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+  <p class="created" >{{rb.created.date}}</p>
+
+</div>
+{% endblock %}
