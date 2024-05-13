@@ -1,0 +1,22 @@
+
+<form
+    hx-post="{% url 'create_lang' rb.id %}" 
+    hx-swap="innerHTML"
+    hx-target="#lang-list"
+>
+
+    <div class="row">
+        <div class="col-6">
+            {{lang_form.name}}
+        </div>
+        <div class="col-6">
+            {{lang_form.fluency}}
+        </div>
+    </div>
+
+    <div class="btn-group w-100">
+        <button type="submit" class="btn btn-success w-75" >Add&nbsp;&nbsp;<i class="far fa-save text-light"></i></button>
+        <button type="reset" class="btn btn-danger w-25">RESET</button>
+    </div>
+
+</form>

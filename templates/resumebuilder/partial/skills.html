@@ -1,0 +1,11 @@
+{% for i in rb.get_skills %}
+
+<div class="col badge" 
+    hx-post="{% url 'delete_skill' rb.id i.id %}" 
+    hx-target="#skill-list"
+    hx-swap="innerHTML"
+    >
+    <p>{{i.skill}}</p>
+</div>
+
+{% endfor %}

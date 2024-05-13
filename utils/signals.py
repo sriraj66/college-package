@@ -27,7 +27,8 @@ def update_student_credit(sender, instance, **kwargs):
         
 
 def update_college_credit(sender, instance, **kwargs):
-    
-    instance.student_credit = instance.CPS()
-    print(instance.student_credit)
-    print(instance.students.count())
+    try:
+        
+        instance.student_credit = instance.CPS()
+    except Exception as e:
+        print(e)

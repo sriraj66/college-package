@@ -121,8 +121,8 @@
             {% if not user.is_staff %}
             <tr>
                 <td>Path Pilot</td>
-                <td>{{profile.CG_usage.count}}</td>
-                <td><a href="{% url 'cg_history' %}">View all</a></td>
+                <td>{{profile.CT_usage.count}}</td>
+                <td><a href="{% url 'cg' %}">View all</a></td>
             </tr>
             {% else %}
             <tr>

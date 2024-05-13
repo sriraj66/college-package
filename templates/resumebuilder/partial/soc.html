@@ -1,0 +1,25 @@
+{% if rb.get_social %}
+<style>
+</style>
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Social Links</th>
+        <th scope="col">Option</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in rb.get_social %}
+      <tr>
+        <th scope="row">
+        <a href="{{i.url}}" target="_blank"><i class="fab {{i.name}}"></i></a>
+        </th>
+        
+        <td><button hx-post="{% url 'delete_soc' rb.id i.id %}" 
+            hx-target="#soc-list"
+            hx-swap="innerHTML" class="btn btn-flat-danger"><i class="far fa-trash-alt text-danger "></i></button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

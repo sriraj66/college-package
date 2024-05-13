@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Resume Builder {% endblock %}
+ 
+{% block style %}
+<style>
+    .item-center {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    .output-container {
+        background-color: whitesmoke;
+    }
+    .roadmap-container {
+        border: 1px dotted rgba(128, 128, 128, 0.351);
+        padding: 5px;
+    }
+    h6 a {
+        color: var(--c3);
+    }
+    h3 {
+        color: var(--c2);
+        border-bottom: 1px dotted var(--c2);
+        font-family: var(--fnt);
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    .year-container p strong {
+        color: green;
+        text-decoration: underline;
+    }
+    li a {
+        color: var(--c3);
+    }
+    
+    .blink-animation {
+        transition: all 1s step-end;
+    }
+    #skill-list {
+        text-align: center;
+        justify-items: center;
+    }
+    #skill-list .badge{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    form{
+        background-color: whitesmoke;
+    }
+    #skill-list .badge p{
+        font-size: 15px;
+        letter-spacing: .5px;
+        border: 1px solid var(--c2);
+        
+        color: var(--c2);
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+        width: min-content;
+        border-radius: 6px;
+
+    }
+    #skill-list .badge p:hover{
+        background-color: whitesmoke;
+    }
+
+</style>
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container">
+    
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a style="color:var(--c1); text-decoration: none;"href="{% url 'index' %}"> <i class="fas fa-home"></i></a></li>
+    
+          <li class="breadcrumb-item"><a style="color:var(--c3); text-decoration: none;"href="{% url 'rb' %}"> <i class="fab fa-affiliatetheme"></i> &nbsp;Resume Builder</a></li>
+          <li class="breadcrumb-item active"><a style="color:var(--c3); text-decoration: none;"href=""> @{{rb.role}}</a></li>
+          
+        </ol>
+      </nav>
+</div>
+
+<div class="container item-center">
+
+    <div class="row">
+        {% include 'resumebuilder/partial/edit.html' %}
+        <button id="submitButton"  class="btn w-100 btn-success">Save</button>
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Skills Section <small style="color: grey; font-size: 10px;" >click to remove</small> </h4>
+        <br>
+        <div id="skill-list" class="row">
+            {% include 'resumebuilder/partial/skills.html' %}
+        </div>
+        <br>
+        <div class="row" id="skill_form_wrap">
+        {% include 'resumebuilder/partial/skill_form.html' %}
+        </div>
+        <br>
+        <div class="btn-group w-100">
+            <button id="addskill" hx-get="{% url 'create_skill' rb.id %}" hx-target="#skill_form_wrap" hx-swap="beforeend"  class="btn w-25 btn-info text-light"><i class="fas fa-plus text-light"></i></button>
+            <button id="save_skills"  class="btn w-50 btn-success">Save&nbsp;&nbsp;<i class="far fa-save text-light"></i></button>
+
+        </div>
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Education Section <small style="color: grey; font-size: 10px;" >click to remove</small> </h4>
+        <br>
+        <div id="edu-list" class="row">
+        {% include 'resumebuilder/partial/edu.html' %}        
+
+        </div>
+        <br>
+
+        <div class="row" id="edu_form_wrap">
+        {% include 'resumebuilder/partial/edu_form.html' %}        
+        </div>
+        
+      
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Achivement Section </h4>
+        <br>
+        <div id="ach-list" class="row">
+        {% include 'resumebuilder/partial/ach.html' %}        
+        </div>
+        <br>
+
+        <div class="row" id="exp_form_wrap">
+        {% include 'resumebuilder/partial/ach_form.html' %}        
+        </div>
+        
+      
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Project's Section </h4>
+        <br>
+        <div id="pro-list" class="row">
+        {% include 'resumebuilder/partial/pro.html' %}        
+        </div>
+        <br>
+
+        <div class="row" id="pro_form_wrap">
+        {% include 'resumebuilder/partial/pro_form.html' %}        
+        </div>
+        
+      
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Social Links </h4>
+        <br>
+        <div id="soc-list" class="row">
+        {% include 'resumebuilder/partial/soc.html' %}        
+        </div>
+        <br>
+
+        <div class="row" id="soc_form_wrap">
+        {% include 'resumebuilder/partial/soc_form.html' %}        
+        </div>
+        
+      
+    </div>
+
+    <br>
+    <hr>
+    <div class="row">
+        <h4 style="text-align: center; color: var(--c2);" >Languages </h4>
+        <br>
+        <div id="lang-list" class="row">
+        {% include 'resumebuilder/partial/lang.html' %}        
+        </div>
+        <br>
+
+        <div class="row" id="lang_form_wrap">
+        {% include 'resumebuilder/partial/lang_form.html' %}        
+        </div>
+        
+        <div class="row mt-5">
+            <a href="{% url 'resume_templates' rb.uid %}" class="btn sub-btn w-100">View Resume</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %} {% block script %}
+
+
+
+
+<script>
+    document.getElementById('submitButton').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent form submission to observe animation
+        var button = document.getElementById('submitButton');
+        
+        
+        button.innerHTML = `Saved !! <i class="fas fa-spinner text-light fa-spin"></i> `;
+        button.disabled = true;
+        button.classList.add('blink-animation');
+        
+        // Reset animation and button after 2 seconds
+        setTimeout(function() {
+            button.innerHTML = "Save";
+            button.disabled = false;
+            button.classList.remove('blink-animation');
+        }, 2000);
+    });
+</script>
+
+
+{% endblock %}

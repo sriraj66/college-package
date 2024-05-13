@@ -22,6 +22,9 @@
         gtag('config', 'G-ETG4QFLJEK');
         </script>
 
+        <!-- htmx -->
+        <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
         <!-- datatable -->
         <link
             href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"
@@ -178,10 +181,11 @@
                 border: 1px solid var(--c2);
             }
 
-            .sub-btn:hover {
+            .sub-btn:hover, .sub-btn:hover i {
                 background-color: var(--c2);
-                color: white;
+                color: white !important;
             }
+            
             .dropdown-menu{
                 margin-top: 1em;
             }
@@ -218,7 +222,10 @@
         </style>
         <style>
             
-
+            .errorlist{
+                color: red;
+                
+            }
             .fas {
                 margin-left: 5px;
                 margin-right: 5px;
@@ -282,7 +289,7 @@
         {% block style %} {% endblock %}
     </head>
 
-    <body>
+    <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
         <div class="container">
             <nav class="navbar">
                 <div class="container-fluid">
@@ -299,7 +306,7 @@
 
                     <div class="d-flex">
 
-                        {% if user.is_superuser %}
+                        {% if user.is_superuser or profile.is_admin %}
                         <div class="dropdown">
 
                             <button
@@ -358,7 +365,7 @@
                                 ></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                {% if user.is_superuser %}
+                                {% if user.is_staff and profile.is_admin %}
                                 <li class="">
                                     <a
                                         class="dropdown-item"
@@ -398,7 +405,16 @@
                                     <a
                                         class="dropdown-item"
                                         href="{% url 'linkedin' %}"
-                                        > <i class="fab fa-staylinked" style="margin-right: 1em; padding-left: 10px;"></i> Linked In</a
+                                        > 
+                                        <i class="fab fa-staylinked" style="margin-right: 1em; padding-left: 10px;"></i> Linked In</a>
+                                </li>
+                                
+                                <li class="" style="display: flex; justify-content: center; align-items: end;">
+                                    
+                                    <a
+                                        class="dropdown-item"
+                                        href="{% url 'rb' %}"
+                                        > <i class="fab fa-affiliatetheme" style="margin-right: 1em; padding-left: 10px;"></i> Resume Builder</a
                                     >
                                 </li>
                                 
@@ -407,7 +423,7 @@
                                     <a
                                         class="dropdown-item"
                                         href="{% url 'ats'  %}"
-                                        ><img src="{% static 'defaults/icon/ats.png' %}"  width="35" alt="">Aplicant Tracking System</a
+                                        ><img src="{% static 'defaults/icon/ats.png' %}"  width="35" alt="">Application Tracking System</a
                                     >
                                 </li>
                                 

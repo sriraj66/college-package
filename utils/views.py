@@ -40,10 +40,9 @@ def edit_profile(request):
 
 @login_required
 def load_student(request):
-    
-    if not request.user.is_superuser:
+    context = load_config(request)    
+    if not request.user.is_superuser and not context['profile'].is_admin:
         return redirect("err","Not Authorized !!")
-    context = load_config(request)
     
     if request.POST:
         try:
@@ -97,7 +96,7 @@ def load_student(request):
 def my_students(request):
     context = load_config(request)
     
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not context['profile'].is_admin:
         return redirect("err","Invalid Access!!")
     
     context['records'] = CollegeAdmin.objects.get(user=request.user).students.all()

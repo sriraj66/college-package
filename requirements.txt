@@ -127,6 +127,7 @@ overrides==7.7.0
 packaging==23.2
 pandas==2.2.2
 pathlib==1.0.1
+pdfkit==1.0.0
 pdfminer.six==20231228
 pdfplumber==0.11.0
 pillow==10.2.0

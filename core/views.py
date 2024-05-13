@@ -31,7 +31,7 @@ def index(request):
 @login_required
 def college_form(request):
     context = load_config(request)
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not context['profile'].is_admin:
       return render(request, 'error.html', {'error':"Access Restricted!!"})
     
     if request.method == 'POST':
