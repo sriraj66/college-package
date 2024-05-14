@@ -1,4 +1,4 @@
-<form id="edit" hx-trigger="click from:#submitButton" hx-post="{% url 'create_resume' rb.id %}" hx-swap="outerHTML" hx-target="this">
+<form id="edit" hx-encoding="multipart/form-data" hx-trigger="click from:#submitButton" hx-post="{% url 'create_resume' rb.id %}" hx-swap="outerHTML" hx-target="this">
     {% csrf_token %}
     {{ form.as_table }}
     <br>
