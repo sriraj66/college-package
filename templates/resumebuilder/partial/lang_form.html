@@ -3,6 +3,8 @@
     hx-post="{% url 'create_lang' rb.id %}" 
     hx-swap="innerHTML"
     hx-target="#lang-list"
+    hx-on::after-request="this.reset()"
+
 >
 
     <div class="row">

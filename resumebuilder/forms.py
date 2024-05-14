@@ -17,7 +17,7 @@ class ResumeForm(forms.ModelForm):
         model = Resume
         fields = ['img', 'role', 'bio']
         widgets = {
-            'img': forms.ClearableFileInput(attrs={'class': 'form-control', 'style': 'margin-bottom:5px;'}),
+            'img': forms.FileInput(attrs={'class': 'form-control', 'style': 'margin-bottom:5px;'}),
             'role': forms.TextInput(attrs={'class': 'form-control', 'style': 'margin-bottom: 10px; padding: 5px;', 'placeholder': "Eg., Frontend Developer"}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': '3', 'style': 'margin-bottom: 10px; padding: 5px;'}),
         }

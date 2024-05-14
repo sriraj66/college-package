@@ -8,103 +8,113 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     
-    {% block style %}
-    {% endblock %}
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .back-btn{
-                letter-spacing: 1.5px;
-                position: fixed;
-                bottom: 1em;
-                right: 1em;
-                text-align: center;
-                text-decoration: none;
-                padding: 10px 15px;
-                transition: all 0.5s linear;
-                color: var(--c2);
-                font-weight: 600;
-                border: none;
-            }
-            .back-btn:hover, .print:hover{
-                color: var(--c2);
-                background-color: white;
-                border:1px solid var(--c2);
-            }
-            
-
-            .print{
-                background-color: var(--c2);
-                letter-spacing: 1.5px;
-                position: fixed;
-                bottom: 1em;
-                right: 50%;
-                transform: translateX(10px);
-                text-align: center;
-                text-decoration: none;
-                padding: 10px 15px;
-                transition: all 0.2s ease;
-                color: white;
-                font-weight: 600;
-                border: none;
-            }
-            .created{
-                position: relative;
-                float: right;
-                font-size: 10px;
-                color: grey;
-                right: 0;
-                bottom: 0;
-            }
-            #resume_base {
-                height: 100%;
-                width: 100%;
-                margin: 0; 
+    <div id="styles">
+        
+    
+        <style >
+            * {
+                margin: 0;
                 padding: 0;
+                box-sizing: border-box;
             }
-            @media print{
-                @page {
-                    margin-top: 1cm;
+            body{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .back-btn{
+                    letter-spacing: 1.5px;
+                    position: fixed;
+                    bottom: 1em;
+                    right: 1em;
+                    text-align: center;
+                    text-decoration: none;
+                    padding: 10px 15px;
+                    transition: all 0.5s linear;
+                    color: var(--c2);
+                    font-weight: 600;
+                    border: none;
+                }
+                .back-btn:hover, .print:hover{
+                    color: var(--c2);
+                    background-color: white;
+                    border:1px solid var(--c2);
+                }
+                
+    
+                .print{
+                    background-color: var(--c2);
+                    letter-spacing: 1.5px;
+                    position: fixed;
+                    bottom: 1em;
+                    right: 50%;
+                    transform: translateX(10px);
+                    text-align: center;
+                    text-decoration: none;
+                    padding: 10px 15px;
+                    transition: all 0.2s ease;
+                    color: white;
+                    font-weight: 600;
+                    border: none;
+                }
+                .created{
+                    position: relative;
+                    float: right;
+                    font-size: 10px;
+                    color: grey;
+                    right: 0;
+                    bottom: 0;
+                }
+                #resume_base {
+                    height: 100%;
+                    width: 100%;
+                    margin: 0; 
                     padding: 0;
                 }
-                body * {
-                    visibility: hidden;
-                    padding: 0;
-                    margin: 0;
+                
+                .share{
+                    color: grey;
+                    position: fixed;
+                    bottom: 6px;
+                    left: 6px;
+                    font-size: small;
+    
                 }
-                #resume_base div{
-                    width: 100% !important;
-                }
-                #resume_base, #resume_base * {
-                    visibility: visible;
-                }
-                .container{
-                    margin-top: 0;
-                    box-shadow: none;
-                }
-            }
-            .share{
-                color: grey;
-                position: fixed;
-                bottom: 6px;
-                left: 6px;
-                font-size: small;
-
-            }
         </style>
+    
+    </div>
 </head>
 <body>
     
     <div id="resume_base">
+        <style>
+            @media print{
+                @page {
+                    margin-top:0;
+                    padding: 0;
+                }
+                *{
+                    box-shadow: none !important;
+
+                }
+                body * {
+                    background-color: white;
+                }
+                #resume_base div{
+                    width: 100% !important;
+                    border: 0;
+
+                }
+                #resume_base{
+                    border: 0;
+                    margin: 0;
+                    background-color: transparent;
+                }
+                
+            }
+        </style>
+        {% block style %}
+        {% endblock %}
         {% block main %}
         {% endblock %}
     </div>
@@ -126,8 +136,14 @@
     <script>
     
     function generatePDF() {
-        window.print()
+        var printContents = document.getElementById("resume_base").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
     }
+    
+    
 
 
     </script>

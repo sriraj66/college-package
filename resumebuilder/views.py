@@ -12,7 +12,7 @@ def rb(request):
     context = load_config(request)
     
     context['rb'] = Resume.objects.filter(user=request.user)
-    context['temps'] = [[1,"Simple Resume Template"],]
+    context['temps'] = [[1,"Simple Resume Template"],[2,'Minimal Resume Template']]
     
     if request.POST:
         
@@ -68,7 +68,7 @@ def create_resume(request,id):
     
     if request.method == 'POST':
 
-        form = ResumeForm(request.POST, instance=instance,user = request.user)
+        form = ResumeForm(request.POST,request.FILES, instance=instance,user = request.user)
         if form.is_valid():
             form.save()
             context['form'] = form           

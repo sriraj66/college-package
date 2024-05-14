@@ -3,6 +3,7 @@
     hx-post="{% url 'create_soc' rb.id %}" 
     hx-swap="innerHTML"
     hx-target="#soc-list"
+    hx-on::after-request="this.reset()"
 >
 
     <div class="row">
