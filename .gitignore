@@ -33,3 +33,5 @@ secret_key.txt
 
 test.py
 eb.yaml
+config.yaml
+config.yml
