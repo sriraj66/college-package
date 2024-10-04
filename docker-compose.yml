@@ -10,11 +10,11 @@ services:
     expose:
       - "8000"  
     ports:
+      - "8000:8000"  
       - "8001:8000"  
       - "8002:8000"  
       - "8003:8000"  
       - "8004:8000"  
-      - "8005:8000"  
     deploy:
       replicas: 5   
     restart: always
