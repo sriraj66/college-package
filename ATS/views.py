@@ -43,6 +43,7 @@ def ats_ev(request):
         media_path = obj.file.url
 
         obj.responce = run(clg.api_key,media_path,jd)
+        profile.reduce_credits(2)
         context = json.loads(obj.responce)
         obj.rating = context['score']
         obj.save()

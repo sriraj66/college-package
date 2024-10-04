@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Argumental Interview {% endblock %}
+ 
+{% block main %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    <video id="video" width="640" height="480" autoplay muted></video>
+                </div>
+                <div class="col-6">
+                    <button id="startListening" class="btn btn-primary">Start Listening</button>
+                    <p id="transcript"></p>
+                </div>
+            </div>
+            <div class="container mt-3 w-100" style="display: flex; justify-content: center; align-items: center;">
+                <form action="{% url 'interview_check' interview.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success w-100">Start Interview</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Access the user's camera and stream it to the video element
+    function startVideoStream() {
+        const video = document.getElementById('video');
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing the camera: ', err);
+            });
+    }
+
+    let recognition;
+    let isListening = false;
+
+    function startRecognition() {
+       
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+            isListening = true;
+            statusEl.textContent = 'Listening... Speak now!';
+        };
+
+        recognition.onresult = event => {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    transcript += event.results[i][0].transcript + ' ';
+                }
+            }
+            transcript = transcript.replace(".","")
+            document.getElementById('transcript').innerHTML += transcript;  
+        };
+
+        recognition.onerror = event => {
+            console.error(event.error);
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+        };
+
+            recognition.start();
+        }
+
+    document.getElementById('startListening').addEventListener('click', () => {
+        startRecognition();
+        document.getElementById('startListening').innerText ='Listening'
+    });
+
+    window.onload = startVideoStream;
+</script>
+
+{% endblock %}

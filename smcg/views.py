@@ -12,6 +12,7 @@ from authentication.views import load_config
 def generate_social_media_content(request):
     user = User.objects.get(id=request.user.id)
     new_typ = TYPE.copy()
+    new_goal = GOAL.copy()
     try:
         
         if user.is_staff or user.is_superuser:
@@ -21,6 +22,12 @@ def generate_social_media_content(request):
         else:
             profile = Students.objects.get(user=user)
             new_typ.remove("Image")
+            new_typ.remove("Story")
+            new_typ.remove("Infographic")
+            new_typ.remove("Testimonial")
+            new_goal.remove("Convince")
+            new_goal.remove("Important_days")
+            new_goal.remove("Holidays")
     
     except Exception as e:
         return redirect("err",e)
@@ -32,12 +39,14 @@ def generate_social_media_content(request):
         return redirect("err","No Credit Left!!")
     
     context['platform']=PLATFORM
-    context['goals']= GOAL
+    context['goals']= new_goal
     context['types']= new_typ
     context['idea']= IDEA
     context['uids'] =ChatBot.objects.filter(college= profile.college) or ["None"]
-      
+    
     del new_typ
+    context['profile'].reduce_credits(1)
+
     return render(request,"smcg/smcg.html",context)
 
 
@@ -51,6 +60,7 @@ def generate_image(id,key,responce,desc,header):
     obj = GenerateImage(id=id,key=key,content=responce,extra=desc)
     gen_img =  obj.combine_images(header)
     print("Image Generated...")
+    
     return gen_img
     
 
@@ -105,6 +115,8 @@ def gen_smcg(request):
                             responce=context['output'],
                             is_image=is_image)
             con.save()
+            profile.reduce_credits(2)
+            
             print("Is Image : ",is_image)
             if is_image is True and uuid is not None:
                 header = profile.college.banner.url 
@@ -112,6 +124,8 @@ def gen_smcg(request):
                 print("Out : ",out)
                 if out == True:
                     print("Image Saved")
+                    profile.reduce_credits(10)
+                    
                     context["image"] = CONTENTS.objects.get(id=con.id).output_image.url
                     print(context["image"])
                     print(context)

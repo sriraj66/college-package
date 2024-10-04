@@ -1,0 +1,8 @@
+Need to implement Fully mock intervies
+create for students and assigned by staffs.
+cehck for tab navigations and many security features
+= > currently done interview flow and result
+
+
+
+PRIORITY to check for the credits

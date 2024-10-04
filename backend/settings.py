@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'feed360',
     'linkedin',
     'resumebuilder',
+    'mockinterview'
 ]
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 MIDDLEWARE = [

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Argumental Interview {% endblock %}
+ 
+{% block main %}
+
+<style>
+    .btn{
+        border-radius: 0;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        max-height: min-content;
+    }
+</style>
+
+<div class="container">
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+            <div class="col-6">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" value="{{user.email}}" class="form-control" id="exampleInputEmail1"  disabled aria-describedby="emailHelp">
+              </div>
+              <div class="col-6">
+                <label for="exampleInputEmail1" class="form-label">Name</label>
+                <input type="text"value="{{user.get_full_name}}" class="form-control" id="exampleInputEmail1"  disabled aria-describedby="emailHelp">
+              </div>
+            </div>
+            <br>
+            <form  method="post">{% csrf_token %}
+            <div class="col-12">
+                <label for="resume">Upload your resume</label>
+                <input type="file" onchange="updateAcceptAttribute()" accept=".pdf,.docx" id="resume" name="resume" class="form-control" required id="">
+            </div>
+
+            <div class="mt-3 btn-group w-100">
+                <button type="submit" id="fullscreen-btn" class="btn w-75 btn-outline-success">SUBMIT</button>
+                <button type="reset" class="btn btn-outline-danger">RESET</button>
+            </div>
+        </form>
+        </div>
+        
+    </div>
+
+</div>
+
+
+{% if interviews %}
+<div class="container mt-3">
+    <h2>Inverviews for You</h2>
+    <table class="table w-100 table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ROLE</th>
+                <th>OPTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in interviews %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.role}}</td>
+                <td><a href="{% url 'interview_check' i.id %}">Attend</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<script>
+    function updateAcceptAttribute() {
+      var fileInput = document.getElementById('resume');
+      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+      if (fileExtension !== 'pdf' && fileExtension !== 'docx') {
+        alert('Please select an file with PDF or DOCX format).');
+        fileInput.value = ''; 
+        return false;
+      }
+      return true;
+    }
+
+    
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,94 @@
+{% extends "base.html" %} 
+{% load static %}
+{% block title %} My Profile {% endblock %} 
+{% block style%}
+
+<style>
+    .item-center,.avatar {
+        border: 0.5px dashed var(--c2);
+        border-radius: 5px;
+        padding: 1em;
+        background-color: white;
+    }
+    
+    .avatar{
+        width: 60%;
+        
+    }
+    td{
+        text-align: start;
+    }
+    .profile{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-group{
+        width: 100%;
+    }
+
+    
+
+</style>
+
+{% endblock %} 
+
+
+{% block main %}
+
+<div class="container item-center">
+
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-1">
+        
+        <div class="col">
+            <form enctype="multipart/form-data" method="post">
+
+                {% csrf_token %}
+                <ul>
+                    <h4><strong>Instructions</strong></h4>
+                    <li><a download="" href="https://neuraa.s3.us-east-2.amazonaws.com/studemts.xlsx"><i class="fas fa-file-download"></i> click to downlode format</a>
+                    </li>
+                    <li>
+                        <p>Default password Would be Student@123</p>
+                    </li>
+                    <li>
+                        <p>gender must be ['m',"M",'f','F']</p>
+                    </li>
+                    <li>
+                        <p>All Fields are Mandatory no Empty Cell is allowed</p>
+                    </li>
+                    <li>
+                        <p>Dont load the Duplicate datas or alredy loded exel file </p>
+                    </li>
+                </ul>
+                <br>
+                <div class="form-group">
+                    <label for="">Exel File </label>                
+                    <input type="file" required onchange="updateAcceptAttribute()" name="exel" accept=".xlsx, .xls" id="excelFile" class="form-control">
+                </div>
+
+                <br>
+                <button type="submit" class="btn sub-btn">Load Staffs <i class="fas fa-users"></i></button>
+
+            </form>
+        </div>
+
+        
+    </div>
+    
+</div>
+<script>
+    function updateAcceptAttribute() {
+      var fileInput = document.getElementById('excelFile');
+      var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+      if (fileExtension !== 'xlsx' && fileExtension !== 'xls') {
+        alert('Please select an Excel file (XLSX or XLS format).');
+        fileInput.value = ''; // Clear the file input
+        return false;
+      }
+      return true;
+    }
+    </script>
+{% endblock %}
+

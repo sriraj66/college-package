@@ -35,6 +35,7 @@ def generate_linkedin_prompt(request,id):
         
         cg = cg_tool(request,context['profile'].college.api_key)
         res = cg.write_modes(name,bio,mode,ct.linked_in)
+        context['profile'].reduce_credits(1,service='li')
         
         output['output'] = res 
         
