@@ -10,6 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
-COPY entrypoint.sh .
+COPY entrypoint.sh /app/
 
-ENTRYPOINT ["sh", "entrypoint.sh"]
+ENTRYPOINT ["sh", "/app/entrypoint.sh"]
