@@ -31,7 +31,7 @@ class CollegeAdmin(models.Model):
     c_credit = models.IntegerField(default=0,verbose_name='Usage')
 
     student_credit = models.IntegerField(default=0,verbose_name='credit per Student')
-    # staff_credit = models.IntegerField(default=0,verbose_name='credit per Student')
+    staff_credit = models.IntegerField(default=100,verbose_name='credit per Staff')
 
     staffs = models.ManyToManyField('Staffs',verbose_name='Staffs',blank=True)
     students = models.ManyToManyField('Students',verbose_name='Students',blank=True)
@@ -47,8 +47,7 @@ class CollegeAdmin(models.Model):
     def CPS(self):
         student_count = self.students.count()
         if student_count > 0:
-            print("CPS:", self.a_credit," / ", student_count)
-            return int(self.a_credit / student_count)
+            return int(self.a_credit / (student_count))
         else:
             return 0
 
@@ -78,6 +77,7 @@ class Students(models.Model):
     ATS_usage = models.ManyToManyField(ATS, blank=True,verbose_name="ATS History")
     SMCG_usage = models.ManyToManyField(CONTENTS, blank=True,verbose_name="SMCG History")
     CT_usage = models.ManyToManyField(CareerTool, blank=True,verbose_name="CT History")
+    linkedin_usage = models.PositiveIntegerField(default=0,verbose_name="Linked In Usage")
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -90,13 +90,19 @@ class Students(models.Model):
             return self.college.student_credit
         
     def calculate_credit(self):
-        return self.ATS_usage.count() + self.CT_usage.count() + self.SMCG_usage.count()
+        return self.ATS_usage.count() + self.CT_usage.count() + self.SMCG_usage.count() + self.linkedin_usage
 
     def check_credit(self):
         if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
             return True
         
         return False
+    
+    def reduce_credits(self,amt=2   ,service=None):
+        self.credit_used+=amt
+        if service == 'li':
+            self.linkedin_usage+=amt
+        self.save()
     
 
 class Staffs(models.Model):
@@ -119,7 +125,6 @@ class Staffs(models.Model):
     ATS_usage = models.ManyToManyField(ATS, blank=True,verbose_name="ATS History")
     CP_usage = models.ManyToManyField(CoursePlan, blank=True,verbose_name="CP History")
     SMCG_usage = models.ManyToManyField(CONTENTS, blank=True,verbose_name="SMCG History")
-    
 
     credit_used = models.IntegerField(default=0,verbose_name="Usage")
 
@@ -132,13 +137,17 @@ class Staffs(models.Model):
             
     def balance_credit(self):
         try:
-            return self.college.a_credit - self.credit_used
+            return self.college.staff_credit - self.credit_used
         except Exception as e:
-            return self.college.student_credit
+            return self.college.staff_credit
         
     def calculate_credit(self):
         return self.ATS_usage.count() + self.CP_usage.count() + self.SMCG_usage.count()
-
+    
+    def reduce_credits(self,amt=2):
+        self.credit_used+=amt
+        self.save()
+    
     def check_credit(self):
         if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
             return True

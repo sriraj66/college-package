@@ -13,7 +13,8 @@ urlpatterns = [
     path("cp/",include("CP.urls")),
     path("feed360/",include("feed360.urls")),
     path("lin/",include("linkedin.urls")),
-    path("RB/",include("resumebuilder.urls")),
+    path("rb/",include("resumebuilder.urls")),
+    path("moci/",include("mockinterview.urls")),
     
     path('authentication/', include('authentication.urls')),
     path('utils/', include('utils.urls')),

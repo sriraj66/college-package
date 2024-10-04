@@ -22,6 +22,9 @@
         gtag('config', 'G-ETG4QFLJEK');
         </script>
 
+        <!-- face api -->
+        <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1/dist/face-api.js"></script>
+
         <!-- htmx -->
         <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 
@@ -60,7 +63,7 @@
                 font-weight: lighter;
                 overflow-x: hidden;
                 scroll-behavior: smooth;
-                transition: all 0.36s ease-in;
+                transition: all 0.26s ease-in;
             }
 
             .form-control {
@@ -338,14 +341,18 @@
                                     <hr class="dropdown-divider" />
                                 </li>
                                 <li>
-                                    <form action="{% url 'logout' %}" method="post">
-                                        {% csrf_token %}
-                                        <button
+                                        <a
                                         class="dropdown-item"
-                                        href="{% url 'logout' %}"
+                                        href="{% url 'load_staffs' %}"
                                         ><i class="fas fa-users"></i>
-                                        Load Staff</button>
-                                    </form>
+                                        Load Staff</a>
+                                    
+                                </li>
+                                <li></li>
+                                    <a class="dropdown-item" href="{% url 'my_staffs' %}"
+                                        ><i class="fas fa-users"></i>
+                                        View Staffs</a
+                                    >
                                 </li>
                             </ul>
                         </div>
@@ -399,6 +406,15 @@
                                         > <img src="{% static 'defaults/icon/cg.png' %}"  width="35" alt=""> Path Pilot</a
                                     >
                                 </li>
+
+                                <!-- <li class="" style="display: flex; justify-content: center; align-items: end;">
+                                    
+                                    <a
+                                        class="dropdown-item"
+                                        href="{% url 'mi' %}"
+                                        > <img src="{% static 'defaults/icon/cg.png' %}"  width="35" alt=""> Mock Interview</a
+                                    >
+                                </li> -->
 
                                 <li class="" style="display: flex; justify-content: center; align-items: end;">
                                     

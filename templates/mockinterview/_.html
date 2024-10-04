@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Mock Interview {% endblock %}
+
+{% block main %}
+<style>
+    .btn {
+        border-radius: 0;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        max-height: min-content;
+    }
+
+    .btn-grp {
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    textarea {
+        border: none;
+        font-size: 20px;
+        border-radius: 10px;
+        outline: none;
+        padding: 1em;
+        margin-bottom: 10px;
+    }
+
+    #transcription {
+        background-color: white;
+        padding: .6em;
+        color: black;
+        text-align: justify;
+        margin-top: 10px;
+        width: 100%;
+        min-height: 100px;
+        white-space: pre-wrap;
+    }
+
+    .card-body {
+        text-transform: capitalize;
+    }
+
+    .ai {
+        padding: 10px;
+        text-transform: capitalize;
+        line-height: 1.5;
+        background-color: whitesmoke;
+        text-align: center;
+        border: 1px solid grey;
+        border-radius: 6px;
+        font-size: 19px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-weight: 400;
+        letter-spacing: 1.1px;
+    }
+
+    #status {
+        border-radius: 16% 17% 17% 14% / 48% 50% 50% 52%;
+        border: 1px solid gray;
+        padding: 10px;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .camera-container {
+        position: fixed;
+        bottom: 4em;
+        right: 2em;
+        background-color: black;
+        border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #video {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 6px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    #face-status {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        padding: 1px;
+    }
+
+    .blursc {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        text-align: center;
+        display: flex;
+        cursor: none;
+        overflow: hidden;
+        pointer-events: all;
+        user-select: none;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .blursc * {
+        pointer-events: none;
+    }
+
+    #speed-status {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        font-weight: bold;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    @media (max-width: 768px) {
+        .camera-container {
+            bottom: 4em;
+            right: 1em;
+        }
+
+        #video {
+            width: 150px;
+            height: auto;
+        }
+
+        #face-status {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+
+
+<div class="container" id="wraper-block">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title text-center p-3" style="font-family: var(--fnt);">
+                <h3>Welcome to Argumental Mock Interview</h3>
+            </div>
+        </div>
+        <form id="transcription-form" action="{% url 'process' id %}" method="post">
+
+            <div class="card-body">
+                <p>{{ response.ai }}</p>
+                <div class="ai">
+                    <p>{{ response.question }}</p>
+                </div>
+                <div class="btn-grp mt-4">
+                    <div id="status">.</div>
+                    <button id="stop-btn" type="button" hidden class="btn btn-primary">Stop</button>
+                    <button class="btn btn-primary" type="submit" id="submit-ans">Submit</button>
+                </div>
+            </div>
+            <div class="card-footer">
+                {% csrf_token %}
+                <input id="transcription" name="transcription" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<div class="camera-container">
+    <video id="video" width="640" height="480" autoplay muted></video>
+    <div id="face-status">Detecting face...</div>
+</div>
+
+<div class="blursc" id="gstus">loading...</div>
+
+<div id="speed-status"></div>
+
+
+<script>
+    let recognition;
+    let isListening = false;
+    let countdownInterval;
+    let stream;
+    let f_inter;
+
+    function initializeRecognition() {
+        const gstus = document.getElementById("gstus");
+        const statusEl = document.getElementById('status');
+        const transcriptionEl = document.getElementById('transcription');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            statusEl.textContent = 'SpeechRecognition API not supported in this browser.';
+            return;
+        }
+
+        if (!recognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            let finalTranscript = '';
+
+            recognition.onstart = () => {
+                isListening = true;
+                statusEl.innerHTML = `Listening... <img width=25 src='{% static "defaults/icon/relation.gif" %}' alt="Listening">`;
+            };
+
+            recognition.onresult = event => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                const cleanFinalTranscript = finalTranscript.replace(/[^\w\s]/g, ' ');
+                const cleanInterimTranscript = interimTranscript.replace(/[^\w\s]/g, ' ');
+                transcriptionEl.value = cleanFinalTranscript + cleanInterimTranscript;
+            };
+
+            recognition.onerror = event => {
+                console.error(event.error);
+                statusEl.textContent = `Error occurred in recognition: ${event.error}`;
+            };
+        }
+
+        recognition.start();
+    }
+
+    function stopRecognition() {
+        if (isListening) {
+            recognition.stop();
+            isListening = false;
+        }
+    }
+
+    function startCountdown(seconds) {
+        const statusEl = document.getElementById('status');
+        let timeRemaining = seconds;
+        statusEl.innerHTML = `Ready to answer <small style='font-size:10px;'>${timeRemaining}s</small>`;
+
+        countdownInterval = setInterval(() => {
+            timeRemaining--;
+            if (timeRemaining <= 0) {
+                clearInterval(countdownInterval);
+                statusEl.textContent = 'Initializing...';
+                initializeRecognition();
+            } else {
+                statusEl.innerHTML = `Speak in ${timeRemaining}s`;
+            }
+        }, 1000);
+    }
+
+    async function main() {
+        const gstus = document.getElementById("gstus");
+        gstus.innerHTML = `loading <i class="fas fa-spinner fa-spin"></i>`;
+        gstus.classList.add('blursc');
+        await setupCamera();
+        const model = await blazeface.load();
+        detectFace(model);
+        startCountdown(5);
+        gstus.classList.remove("blursc");
+        gstus.innerHTML = ``;
+        measureInternetSpeed();
+    }
+
+    function detectTabChange() {
+        const gstus = document.getElementById("gstus");
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'hidden') {
+                gstus.classList.add('blursc');
+                gstus.innerHTML = `<p><strong class='text-danger' >⚠️Suspicious Activity [Tab change detected]</strong></p>`;
+                if (f_inter) {
+                    clearInterval(f_inter);
+                }
+            }
+        });
+    }
+
+    function init() {
+        // detectTabChange();
+        main();
+        const submitBtn = document.getElementById("submit-ans");
+        const stopBtn = document.getElementById('stop-btn');
+
+        if (submitBtn) {
+            submitBtn.addEventListener("click", () => {
+                stopBtn.click();
+                const gstus = document.getElementById("gstus");
+                gstus.innerHTML = `processing <i class="fas fa-spinner fa-spin"></i>`;
+                gstus.classList.add('blursc');
+            });
+        }
+
+        if (stopBtn) {
+            stopBtn.addEventListener("click", () => {
+                stopRecognition();
+                if (f_inter) {
+                    clearInterval(f_inter);
+                }
+            });
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+
+    async function setupCamera() {
+        const video = document.getElementById('video');
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: {}
+        });
+        video.srcObject = stream;
+        return new Promise((resolve) => {
+            video.onloadedmetadata = () => {
+                resolve(video);
+            };
+        });
+    }
+
+    async function detectFace(model) {
+        const video = document.getElementById('video');
+        const faceStatus = document.getElementById('face-status');
+        const gstus = document.getElementById("gstus");
+        let warning = 0;
+        const returnTensors = false;
+
+        f_inter = setInterval(async () => {
+            const predictions = await model.estimateFaces(video, returnTensors);
+            if (predictions.length > 0) {
+                faceStatus.innerText = 'Face detected';
+                faceStatus.style.color = 'green';
+                gstus.innerHTML = ``;
+                gstus.classList.remove('blursc');
+            } else {
+                faceStatus.innerText = 'No face detected';
+                warning++;
+                gstus.innerHTML = `<p><strong class='text-warning' >No Face Detected !!</strong></p>`;
+                gstus.classList.add('blursc');
+                faceStatus.style.color = 'red';
+            }
+            if (warning > 5) {
+                document.getElementById("stop-btn").click();
+                gstus.innerHTML = `<p><strong class='text-danger' >⚠️Suspicious Activity</strong></p>`;
+            }
+        }, 1000);
+    }
+
+    function measureInternetSpeed() {
+        const image = new Image();
+        const speedStatus = document.getElementById('speed-status');
+        const start = new Date().getTime();
+
+        image.onload = () => {
+            const end = new Date().getTime();
+            const duration = end - start;
+            updateSpeedStatus(duration);
+        };
+
+        image.src = 'https://www.google.com/images/phd/px.gif' + '?cache=' + new Date().getTime(); // Prevent caching
+    }
+
+    function updateSpeedStatus(duration) {
+        const speedStatus = document.getElementById('speed-status');
+        speedStatus.textContent = `${duration} ms`;
+
+        if (duration < 30) {
+            speedStatus.style.backgroundColor = 'green';
+        } else if (duration < 60) {
+            speedStatus.style.backgroundColor = 'yellow';
+        } else {
+            speedStatus.style.backgroundColor = 'red';
+        }
+    }
+</script>
+
+
+{% endblock %}

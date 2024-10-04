@@ -39,6 +39,7 @@ def generate_sa(request):
         
         ct = Career_Tool(request,api_key=config['profile'].college.api_key)
         responce = ct.self_assement(strength, technical_skill, future_roll)
+        # context['profile'].reduce_credits(2)
         
         
         context['output'] = responce
@@ -65,6 +66,9 @@ def generate_final_map(request):
         responce = ct.generate_final(ipic,role,workspace,loc,ps,gc)
         linkedin = ct.generate_linked_in(config['profile'].name,responce)
         context['output'] = responce
+        
+        
+        
         # context['linkedin'] = linkedin
         
         
@@ -79,6 +83,7 @@ def generate_final_map(request):
         
         config['profile'].CT_usage.add(obj)
         config['profile'].save()
+        config['profile'].reduce_credits(4)
         
         
     return JsonResponse(context)

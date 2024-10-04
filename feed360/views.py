@@ -240,6 +240,10 @@ def sentimental_analysis(request,id):
             ana.save()
             form.analysis.add(ana)
             form.save()
+            
+            config = load_config(request)
+            config['profile'].reduce_credits(3)
+            
                 
         except Exception as e:
             success(request,str(e),extra_tags="danger")
@@ -273,6 +277,8 @@ def analysis_with_exel(request):
         obj.report = ana.analysis()
         obj.save()
         success(request,"Analysis Done !")
+        context['profile'].reduce_credits(4)
+
         
     else:
         success(request,"Invalid Request !!",extra_tags="danger")

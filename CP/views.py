@@ -60,6 +60,7 @@ def course_map(request):
         obj.save()
         staff.CP_usage.add(obj)
         staff.save()
+        staff.reduce_credits(5)
         
     return JsonResponse(context)
 
