@@ -13,11 +13,11 @@ server {
 }
 
 upstream backend {
-    server localhost:8001; 
-    server localhost:8002; 
-    server localhost:8003; 
-    server localhost:8004; 
-    server localhost:8005; 
+    server 0.0.0.0:8000; 
+    server 0.0.0.0:8001; 
+    server 0.0.0.0:8002; 
+    server 0.0.0.0:8003;
+    server 0.0.0.0:8004;
 }
 
 server {
