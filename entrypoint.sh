@@ -1,5 +1,5 @@
 #!/bin/sh
-
+pip3 install gunicorn==20.1.0
 python manage.py migrate --no-input
 python manage.py makemigrations --no-input
 python manage.py migrate --no-input
