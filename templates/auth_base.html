@@ -26,6 +26,7 @@
                 --fnt: "Reem Kufi Ink", sans-serif;
                 font-family: var(--fnt);
                 font-weight: lighter;
+                overflow-x:hidden;
 
             }
             .form-control{
@@ -33,13 +34,7 @@
                 margin-bottom: 10px;
             }
 
-            .navbar {
-                background-color: white;
-                border-radius: 4px;
-                box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
-                -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
-                -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
-            }
+            
             .navbar-brand {
                 font-family: var(--fnt);
                 font-size: 22px;
@@ -51,15 +46,7 @@
             a:hover {
                 color: var(--c1) !important;
             }
-            .logout {
-                color: var(--c2);
-                font-family: var(--fnt);
-                letter-spacing: 1px;
-            }
-            .logout:hover {
-                border-bottom: 1px solid var(--c2);
-                transition: step-end;
-            }
+            
             .list-group li {
                 text-align: center;
                 text-transform: capitalize;
@@ -87,14 +74,6 @@
                 justify-content: center;
             }
 
-            thead {
-                text-align: center;
-            }
-            table {
-            }
-            tbody {
-                text-align: center;
-            }
 
             .list-group-item a,
             .uid {
@@ -127,17 +106,14 @@
                 background-color: var(--c2);
                 color: white;
             }
-            .navbar-brand{
-                width: 100%;
-                text-align: center;
-            }
+            
             .item-center{
                 background-color: #fff;
                 border: 1px dashed var(--c2);
                 padding:15px;
                 border-radius: 5px;
-                width: 50%;
-                min-width: 450px;
+                min-width: 350px;
+                max-width: 650px;
                 box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
                 -webkit-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
                 -moz-box-shadow: 19px 14px 83px -10px rgba(215, 0, 255, 0.35);
@@ -163,7 +139,6 @@
                 border-radius: 3px;
                 font-size: medium;
                 width: 100%;
-                min-width: 300px;
                 border: 1px solid var(--c2);
                 text-align: start;
                 padding: 6px;
@@ -194,6 +169,14 @@
             .sub-btn:hover{
                 color: white !important;
             }
+            nav{
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
 
         </style>
         <script
@@ -207,25 +190,21 @@
         {% block style %} {% endblock %}
     </head>
     <body>
-        <div class="container">
-            <nav class="navbar">
-                <div class="container-fluid">
-                    {% block nav %}
+        
+        <nav class="">
+                <a class="navbar-brand" href="/">
+                    <img
+                        src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png"
+                        alt=""
+                        width="36"
+                        height="30"
+                        class="d-inline-block align-text-top"
+                    />
+                    &nbsp;N E U R A A
+                </a>
+            
+        </nav>
 
-                    <a class="navbar-brand" href="#">
-                        <img
-                            src="https://www.mjvinnovation.com/wp-content/uploads/2021/07/mjv_blogpost_redes_neurais_ilustracao_cerebro-01-1024x1020.png"
-                            alt=""
-                            width="36"
-                            height="30"
-                            class="d-inline-block align-text-top"
-                        />
-                        &nbsp;N E U R A A
-                    </a>
-                    {% endblock %}
-                </div>
-            </nav>
-        </div>
         <br /><br />
         {% if messages %}
         <div class="container item-center">
