@@ -8,8 +8,9 @@ class Achivement(models.Model):
     place = models.CharField(max_length=255,verbose_name="Place")
     date = models.CharField(max_length=255,verbose_name="Date")
     desc = models.CharField(max_length=255,default="",verbose_name="Description")
+    
     def __str__(self) -> str:
-        return f"{self.org} - {self.place}"
+        return f"{self.title} - {self.place}"
     
     class Meta:
         ordering = ['-id']
