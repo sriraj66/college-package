@@ -93,9 +93,8 @@ class Students(models.Model):
         return self.ATS_usage.count() + self.CT_usage.count() + self.SMCG_usage.count() + self.linkedin_usage
 
     def check_credit(self):
-        if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
+        if self.balance_credit() > 0 :
             return True
-        
         return False
     
     def reduce_credits(self,amt=2   ,service=None):
@@ -139,7 +138,7 @@ class Staffs(models.Model):
         try:
             return self.college.staff_credit - self.credit_used
         except Exception as e:
-            return self.college.staff_credit
+            return 0
         
     def calculate_credit(self):
         return self.ATS_usage.count() + self.CP_usage.count() + self.SMCG_usage.count()
@@ -149,7 +148,7 @@ class Staffs(models.Model):
         self.save()
     
     def check_credit(self):
-        if self.calculate_credit() <= self.college.student_credit and self.balance_credit() > 0:
+        if self.balance_credit() > 0:
             return True
         
         return False
@@ -159,8 +158,6 @@ class Logs(models.Model):
     
     log = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    
-    
     
 
 

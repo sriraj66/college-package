@@ -503,16 +503,24 @@
         <br />
         <div class="container">
             {% if messages %} {% for i in messages %}
-            <div class="alert alert-{{i.tags}}">{{i}}</div>
-            <br />
+            <div class="alert alert-{{i.tags}} alert-dismissible fade show" role="alert">
+                {{i}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div><br>
             {% endfor %} {% endif %}
         </div>
         <br />
 
         {% if  not profile.check_credit %}
         <div class="container">
-            <div class="alert alert-danger">Your Credit Balance is {{profile.balance_credit}} </div>
-            <div class="alert alert-warning">please contact <a>{{profile.college.user.email}}</a></div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Your Credit Balance is {{profile.balance_credit}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                Please contact <a>{{profile.college.user.email}}</a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div><br>
         </div>
         {% endif %}
 
